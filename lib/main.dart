@@ -4,6 +4,7 @@ import 'package:web_auto/page/about_us.dart';
 import 'package:web_auto/page/contact_us.dart';
 import 'package:web_auto/page/firstPage.dart';
 import 'package:web_auto/page/home_page.dart';
+import 'package:web_auto/page/product_list.dart';
 
 class AllMainController extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         getPages: [
           GetPage(name: '/FirstPage', page: () => FirstPage()),
           GetPage(name: '/MyHomePage', page: () => MyHomePage()),
+          GetPage(name: '/ProductListPage', page: () => ProductListPage()),
           GetPage(name: '/AboutUsPage', page: () => AboutUsPage()),
           GetPage(name: '/ContactUsPage', page: () => ContactUsPage()),
         ],

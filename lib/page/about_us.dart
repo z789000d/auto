@@ -86,7 +86,7 @@ class AboutUsPage extends StatelessWidget {
   Widget aboutUsImageWidget() {
     return Obx(
       () => Container(
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.all(40),
         child: GridView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.all(10),

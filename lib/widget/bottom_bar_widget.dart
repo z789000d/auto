@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:web_auto/page/contact_us.dart';
+import 'package:web_auto/page/product_list.dart';
 
 import '../page/about_us.dart';
 import '../page/home_page.dart';
@@ -17,6 +18,9 @@ class BottomController extends GetxController {
     }
     if (index == 1) {
       Get.to(AboutUsPage());
+    }
+    if (index == 2) {
+      Get.to(ProductListPage());
     }
     if (index == 5) {
       Get.to(ContactUsPage());

@@ -4,6 +4,7 @@ import 'package:web_auto/page/contact_us.dart';
 import 'package:web_auto/page/home_page.dart';
 
 import '../page/about_us.dart';
+import '../page/product_list.dart';
 
 class TopBarController extends GetxController {
   final buttonStates = <bool>[false, false, false, false, false, false].obs;
@@ -18,6 +19,9 @@ class TopBarController extends GetxController {
     }
     if (index == 1) {
       Get.to(AboutUsPage());
+    }
+    if (index == 2) {
+      Get.to(ProductListPage());
     }
     if (index == 5) {
       Get.to(ContactUsPage());

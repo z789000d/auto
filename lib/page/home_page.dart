@@ -149,6 +149,7 @@ class MyHomePage extends StatelessWidget {
           controller.setCurrentIndex(-1);
         },
         child: Container(
+          margin: EdgeInsets.all(40),
           decoration: BoxDecoration(
             border: Border.all(
               color: controller.currentIndex.value == index
@@ -172,7 +173,7 @@ class MyHomePage extends StatelessWidget {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 20),
                     child: Text(
-                      '圖片$index',
+                      '產品$index',
                       style: TextStyle(
                           fontSize: 20,
                           color: controller.currentIndex.value == index

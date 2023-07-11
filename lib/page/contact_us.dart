@@ -10,10 +10,36 @@ import '../main.dart';
 import '../widget/bottom_bar_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
+
 class ContactUsController extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
   final RxDouble nowConstraintsHeight = 0.0.obs;
 
+  late GoogleMapController mapController;
+
+  final LatLng center = const LatLng(24.808042175428966, 121.0045145269872);
+  final Set<Marker> markers = Set();
+
+  void onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    markers.add(Marker(
+      //add first marker
+      markerId: MarkerId("鋸開自動化機械"),
+      position: center, //position of marker
+      infoWindow: InfoWindow(
+        //popup info
+        title: '鋸開自動化機械',
+        snippet: '新竹市千甲路191號',
+      ),
+      icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+    ));
+  }
 }
 
 class ContactUsPage extends StatelessWidget {
@@ -36,22 +62,29 @@ class ContactUsPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       TopBar(),
-                      Text(
-                        '聯絡我們',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.blue,
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Text(
+                          '聯絡我們',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          html.window.open('https://www.google.com/maps/place/300%E6%96%B0%E7%AB%B9%E5%B8%82%E6%9D%B1%E5%8D%80%E5%8D%83%E7%94%B2%E8%B7%AF191%E8%99%9F/@24.8078474,121.002004,17z/data=!3m1!4b1!4m6!3m5!1s0x34683665d50c0411:0x1f9f911e0006914f!8m2!3d24.8078474!4d121.0045789!16s%2Fg%2F11c5jzrg_c?hl=zh-TW&entry=ttu','_blank');
-                        },
-                        child: Container(
-                          color: Colors.blue,
-                          width: Get.width / 3,
-                          height: Get.height / 3,
+                      Container(
+                        margin: EdgeInsets.only(left: 10,right: 10,bottom: 10,top: 30),
+                        color: Colors.blue,
+                        width: Get.height / 2,
+                        height: Get.height / 2,
+                        child: GoogleMap(
+                          onMapCreated: controller.onMapCreated,
+                          initialCameraPosition: CameraPosition(
+                            target: controller.center,
+                            zoom: 15.0,
+                          ),
+                          markers: controller.markers,
                         ),
                       ),
                       Container(
