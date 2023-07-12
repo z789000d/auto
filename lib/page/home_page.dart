@@ -63,7 +63,7 @@ class MyHomePage extends StatelessWidget {
                     TopBar(),
                     Container(
                       height: 350,
-                      width: MediaQuery.of(context).size.width,
+                      width: Get.width / 1.5,
                       child: CarouselSlider(
                         options: CarouselOptions(
                           onPageChanged: (index, reason) {

@@ -6,6 +6,7 @@ import 'package:web_auto/page/contact_us.dart';
 import 'package:web_auto/page/product_list.dart';
 
 import '../page/about_us.dart';
+import '../page/catalogue_list.dart';
 import '../page/home_page.dart';
 
 class BottomController extends GetxController {
@@ -21,6 +22,9 @@ class BottomController extends GetxController {
     }
     if (index == 2) {
       Get.to(ProductListPage());
+    }
+    if (index == 4) {
+      Get.to(CatalogueListPage());
     }
     if (index == 5) {
       Get.to(ContactUsPage());

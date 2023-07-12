@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/page/catalogue_list.dart';
 import 'package:web_auto/page/contact_us.dart';
 import 'package:web_auto/page/home_page.dart';
 
@@ -22,6 +23,9 @@ class TopBarController extends GetxController {
     }
     if (index == 2) {
       Get.to(ProductListPage());
+    }
+    if (index == 4) {
+      Get.to(CatalogueListPage());
     }
     if (index == 5) {
       Get.to(ContactUsPage());
