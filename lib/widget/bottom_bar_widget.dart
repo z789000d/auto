@@ -8,6 +8,7 @@ import 'package:web_auto/page/product_list.dart';
 import '../page/about_us.dart';
 import '../page/catalogue_list.dart';
 import '../page/home_page.dart';
+import '../page/news_page.dart';
 
 class BottomController extends GetxController {
   final buttonStates = List.generate(6, (_) => false).obs;
@@ -22,6 +23,9 @@ class BottomController extends GetxController {
     }
     if (index == 2) {
       Get.to(ProductListPage());
+    }
+    if (index == 3) {
+      Get.to(NewsPage());
     }
     if (index == 4) {
       Get.to(CatalogueListPage());
@@ -48,7 +52,7 @@ class BottomWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-      color: Colors.grey[200],
+      color: Colors.blue,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

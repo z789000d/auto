@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:web_auto/page/catalogue_list.dart';
 import 'package:web_auto/page/contact_us.dart';
 import 'package:web_auto/page/home_page.dart';
+import 'package:web_auto/page/news_page.dart';
 
 import '../page/about_us.dart';
 import '../page/product_list.dart';
@@ -24,6 +25,9 @@ class TopBarController extends GetxController {
     if (index == 2) {
       Get.to(ProductListPage());
     }
+    if (index == 3) {
+      Get.to(NewsPage());
+    }
     if (index == 4) {
       Get.to(CatalogueListPage());
     }
@@ -39,13 +43,13 @@ class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
+      color: Colors.blue,
       padding: EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 30),
       child: Row(
         children: [
           Container(
             margin: EdgeInsets.only(left: 20, right: 20),
-            child: Icon(Icons.landscape_rounded),
+            child: Image(image: AssetImage('assets/images/logo.png')),
           ),
           Expanded(
             child: Row(
