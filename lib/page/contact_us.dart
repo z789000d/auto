@@ -24,6 +24,12 @@ class ContactUsController extends GetxController {
     mapController = controller;
   }
 
+  final companyNameController = TextEditingController();
+  final companyWebController = TextEditingController();
+  final companyCountryController = TextEditingController();
+  final companyEmailController = TextEditingController();
+  final companyContentController = TextEditingController();
+
   @override
   void onInit() {
     super.onInit();
@@ -39,6 +45,12 @@ class ContactUsController extends GetxController {
       ),
       icon: BitmapDescriptor.defaultMarker, //Icon for Marker
     ));
+  }
+
+  @override
+  void onClose() {
+    companyNameController.dispose(); // Dispose the controller
+    super.onClose();
   }
 }
 
@@ -74,7 +86,8 @@ class ContactUsPage extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 10,right: 10,bottom: 10,top: 30),
+                        margin: EdgeInsets.only(
+                            left: 10, right: 10, bottom: 10, top: 30),
                         color: Colors.blue,
                         width: Get.height / 2,
                         height: Get.height / 2,
@@ -123,7 +136,8 @@ class ContactUsPage extends StatelessWidget {
                             Text(
                               '電子郵件:tinh@ms12.hinet.net',
                               textAlign: TextAlign.start,
-                            )
+                            ),
+                            inputEdit()
                           ],
                         ),
                       ),
@@ -136,6 +150,199 @@ class ContactUsPage extends StatelessWidget {
           );
         }),
       ),
+    );
+  }
+
+  Widget inputEdit() {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 30),
+          alignment: Alignment.center,
+          width: 300,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                child: Text(
+                  '公司名稱:',
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 20),
+                  child: TextField(
+                    controller: controller.companyNameController,
+                    style: TextStyle(fontSize: 12.0),
+                    decoration: InputDecoration(
+                      hintText: '輸入公司名稱',
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          width: 300,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                child: Text(
+                  '公司網站:',
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 20, top: 10),
+                  child: TextField(
+                    controller: controller.companyWebController,
+                    style: TextStyle(fontSize: 12.0),
+                    decoration: InputDecoration(
+                      hintText: '輸入公司網站',
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          width: 300,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                child: Text(
+                  '國家:',
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 20, top: 10),
+                  child: TextField(
+                    controller: controller.companyCountryController,
+                    style: TextStyle(fontSize: 12.0),
+                    decoration: InputDecoration(
+                      hintText: '輸入公司網站',
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          width: 300,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                child: Text(
+                  'email:',
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 20, top: 10),
+                  child: TextField(
+                    controller: controller.companyEmailController,
+                    style: TextStyle(fontSize: 12.0),
+                    decoration: InputDecoration(
+                      hintText: '輸入email',
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          width: 300,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                child: Text(
+                  '內容:',
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 20, top: 10),
+                  child: TextField(
+                    controller: controller.companyContentController,
+                    style: TextStyle(fontSize: 12.0),
+                    decoration: InputDecoration(
+                      hintText: '輸入內容',
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Container(
+            width: 80,
+            child: Text(
+              '送出',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
