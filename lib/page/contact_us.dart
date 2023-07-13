@@ -52,6 +52,48 @@ class ContactUsController extends GetxController {
     companyNameController.dispose(); // Dispose the controller
     super.onClose();
   }
+
+  void sendEmail() {
+    if (companyNameController.value.text == "") {
+      showDialog('請輸入公司名稱');
+      return;
+    }
+    if (companyCountryController.value.text == "") {
+      showDialog('請輸入國家');
+      return;
+    }
+    if (companyEmailController.value.text == "") {
+      showDialog('請輸入email');
+      return;
+    }
+    if (companyContentController.value.text == "") {
+      showDialog('請輸入內容');
+      return;
+    }
+
+    showDialog('送出成功');
+
+    companyNameController.text = "";
+    companyWebController.text = "";
+    companyCountryController.text = "";
+    companyEmailController.text = "";
+    companyContentController.text = "";
+  }
+
+  void showDialog(String text) {
+    Get.dialog(
+      AlertDialog(
+        title: Text(''),
+        content: Text(text),
+        actions: [
+          TextButton(
+            child: Text("Close"),
+            onPressed: () => Get.back(),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class ContactUsPage extends StatelessWidget {
@@ -165,6 +207,14 @@ class ContactUsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
+                width: 10,
+                child: Text(
+                  '*',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              Container(
                 width: 80,
                 child: Text(
                   '公司名稱:',
@@ -199,6 +249,14 @@ class ContactUsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                width: 10,
+                child: Text(
+                  ' ',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
               Container(
                 width: 80,
                 child: Text(
@@ -235,6 +293,14 @@ class ContactUsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
+                width: 10,
+                child: Text(
+                  '*',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              Container(
                 width: 80,
                 child: Text(
                   '國家:',
@@ -269,6 +335,14 @@ class ContactUsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                width: 10,
+                child: Text(
+                  '*',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
               Container(
                 width: 80,
                 child: Text(
@@ -305,6 +379,14 @@ class ContactUsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
+                width: 10,
+                child: Text(
+                  '*',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              Container(
                 width: 80,
                 child: Text(
                   '內容:',
@@ -333,8 +415,11 @@ class ContactUsPage extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            controller.sendEmail();
+          },
           child: Container(
+            margin: EdgeInsets.only(top: 20),
             width: 80,
             child: Text(
               '送出',
