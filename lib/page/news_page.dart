@@ -14,6 +14,7 @@ class NewsController extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
   final RxDouble nowConstraintsHeight = 0.0.obs;
   final textList = <String>[].obs;
+  final RxInt hoveredIndex = RxInt(-1);
 
   @override
   void onInit() {
@@ -63,15 +64,27 @@ class NewsPage extends StatelessWidget {
                         itemCount: controller.textList.length,
                         itemBuilder: (context, index) {
                           final text = controller.textList[index];
-                          return Container(
-                            margin: EdgeInsets.all(10),
-                            // 設定底部間距
-                            decoration: BoxDecoration(
-                              border: Border(
+                          return MouseRegion(
+                            onEnter: (_) {
+                              print('aaa ${index}');
+                              controller.hoveredIndex.value = index;
+                            },
+                            onExit: (_) {
+                              controller.hoveredIndex.value = -1;
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(10),
+                              // 設定底部間距
+                              decoration: BoxDecoration(
+                                border: Border(
                                   bottom: BorderSide(
-                                      width: 1, color: Colors.grey)), // 添加底線
+                                    width: 1,
+                                    color: Colors.grey,
+                                  ),
+                                ), // 添加底線
+                              ),
+                              child: textWidget(text, index),
                             ),
-                            child: Text(text),
                           );
                         },
                       ),
@@ -85,5 +98,16 @@ class NewsPage extends StatelessWidget {
         );
       }),
     );
+  }
+
+  Widget textWidget(String text, int index) {
+    return Obx(() => Text(
+          text,
+          style: TextStyle(
+            fontWeight: controller.hoveredIndex.value == index
+                ? FontWeight.bold
+                : FontWeight.normal,
+          ),
+        ));
   }
 }
