@@ -7,6 +7,8 @@ import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../widget/bottom_bar_widget.dart';
 
 class ParentPage extends StatelessWidget {
+  ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +18,7 @@ class ParentPage extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [TopBar(), childWidget(), BottomWidget()],
@@ -30,5 +33,13 @@ class ParentPage extends StatelessWidget {
 
   Widget childWidget() {
     return Container();
+  }
+
+  void scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 100),
+      curve: Curves.easeInOut,
+    );
   }
 }
