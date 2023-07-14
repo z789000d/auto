@@ -26,9 +26,38 @@ class ProductDetailController extends GetxController {
 
   final currentPageIndex = 0.obs;
 
+  RxList<ProductModel> productModelList = <ProductModel>[].obs;
+
+  final pageViewImage = <String>[
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+  ];
+
+  RxInt currentIndex = RxInt(-1);
+
+  void setCurrentIndex(int index) {
+    currentIndex.value = index;
+  }
+
   @override
   void onInit() {
     super.onInit();
+
+    for (var i = 0; i < 10; i++) {
+      productModelList.add(ProductModel(
+          id: i.toString(),
+          category: i.toString(),
+          name: "產品$i",
+          images: pageViewImage,
+          description: "描述$i",
+          videoLink: "連結$i"));
+    }
   }
 
   @override
@@ -102,6 +131,7 @@ class ProductDetailPage extends StatelessWidget {
                       ),
                     ),
                     tableText(Get.context!),
+                    buildProductList(),
                     BottomWidget()
                   ],
                 ),
@@ -234,6 +264,104 @@ class ProductDetailPage extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildProductList() {
+    return Column(
+      children: [
+        Container(
+          child: Padding(
+            padding: EdgeInsets.all(15),
+            child: Text(
+              '相關產品:',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(5), // 添加圆角
+          ),
+          height: 210,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.productModelList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return listViewItem(index);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget listViewItem(index) {
+    return Obx(
+      () => MouseRegion(
+        onEnter: (event) {
+          controller.setCurrentIndex(index);
+        },
+        onExit: (event) {
+          controller.setCurrentIndex(-1);
+        },
+        child: GestureDetector(
+          onTap: () {
+            print("aaaaaaa ${controller.productModelList[index]}");
+            Get.to(ProductDetailPage(), arguments: {
+              'productModel': controller.productModelList[index]
+            });
+          },
+          child: Container(
+            width: 200,
+            height: 200,
+            margin: EdgeInsets.all(40),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: controller.currentIndex.value == index
+                    ? Colors.blue
+                    : Colors.transparent,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(5), // 添加圆角
+            ),
+            child: Container(
+              child: Column(
+                children: [
+                  Expanded(
+                      child: Image.network(
+                          controller.productModelList[index].images[0])),
+                  Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: controller.currentIndex.value == index
+                            ? Colors.blue
+                            : Colors.grey, // 添加圆角
+                      ),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        controller.productModelList[index].name,
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: controller.currentIndex.value == index
+                                ? Colors.white
+                                : Colors.black),
+                      )),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

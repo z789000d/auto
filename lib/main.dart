@@ -29,6 +29,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         initialRoute: '/',
+        defaultTransition: Transition.native,
+        transitionDuration: Duration.zero,
+        // Set transition duration to zero
         getPages: [
           GetPage(name: '/FirstPage', page: () => FirstPage()),
           GetPage(name: '/MyHomePage', page: () => MyHomePage()),
@@ -36,7 +39,9 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/ProductDetailPage', page: () => ProductDetailPage()),
           GetPage(name: '/NewsPage', page: () => NewsPage()),
           GetPage(name: '/CataloguePage', page: () => CatalogueListPage()),
-          GetPage(name: '/CatalogueItemListPage', page: () => CatalogueItemListPage()),
+          GetPage(
+              name: '/CatalogueItemListPage',
+              page: () => CatalogueItemListPage()),
           GetPage(name: '/AboutUsPage', page: () => AboutUsPage()),
           GetPage(name: '/ContactUsPage', page: () => ContactUsPage()),
         ],

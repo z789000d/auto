@@ -9,6 +9,9 @@ import '../page/frontend/home_page.dart';
 import '../page/frontend/product_list.dart';
 
 class TopBarController extends GetxController {
+  final RxDouble nowConstraintsWidth = 0.0.obs;
+  final RxDouble nowConstraintsHeight = 0.0.obs;
+
   final buttonStates = <bool>[false, false, false, false, false, false].obs;
 
   void updateButtonState(int index, bool isHovered) {
@@ -42,79 +45,93 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      padding: EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 30),
-      child: Row(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 20, right: 20),
-            child: Image(image: AssetImage('assets/images/logo.png')),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                buildButton('首頁', topBarController, 0),
-                buildButton('關於我們', topBarController, 1),
-                buildButton('產品介紹', topBarController, 2),
-                buildButton('最新消息', topBarController, 3),
-                buildButton('電子型錄', topBarController, 4),
-                buildButton('聯絡我們', topBarController, 5),
-              ],
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        topBarController.nowConstraintsWidth.value = constraints.maxWidth;
+        topBarController.nowConstraintsHeight.value = constraints.maxHeight;
+        return buildRowOfButtons();
+      },
+    );
+  }
+
+  Widget buildRowOfButtons() {
+    return Obx(
+      () => Container(
+        color: Colors.blue,
+        width: Get.width,
+        height: 150,
+        padding: EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 30),
+        child: ListView(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 20, right: 20),
+              child: Image(image: AssetImage('assets/images/logo.png')),
             ),
-          ),
-        ],
+            Container(
+              width: (Get.width / 1.5) < 600 ? 600 : Get.width / 1.5,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  buildButton('首頁', topBarController, 0),
+                  buildButton('關於我們', topBarController, 1),
+                  buildButton('產品介紹', topBarController, 2),
+                  buildButton('最新消息', topBarController, 3),
+                  buildButton('電子型錄', topBarController, 4),
+                  buildButton('聯絡我們', topBarController, 5),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget buildButton(String title, TopBarController controller, int index) {
-    return GetX<TopBarController>(
-      init: controller,
-      builder: (_) {
-        bool isHovered = _.buttonStates[index];
-        print('改');
-        return MouseRegion(
-          onEnter: (_) {
-            controller.updateButtonState(index, true);
-            print('enter');
-          },
-          onExit: (_) {
-            controller.updateButtonState(index, false);
-            print('exit');
-          },
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              controller.clickButton(index);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Visibility(
-                  visible: isHovered,
-                  replacement: SizedBox(
-                    width: 60,
-                    height: 1,
-                  ),
-                  child: Container(
-                    width: 60,
-                    height: 1,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+    bool isHovered = controller.buttonStates[index];
+    print('改');
+    return MouseRegion(
+      onEnter: (_) {
+        controller.updateButtonState(index, true);
+        print('enter');
       },
+      onExit: (_) {
+        controller.updateButtonState(index, false);
+        print('exit');
+      },
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          controller.clickButton(index);
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            Visibility(
+              visible: isHovered,
+              replacement: SizedBox(
+                width: 60,
+                height: 1,
+              ),
+              child: Container(
+                width: 60,
+                height: 1,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
