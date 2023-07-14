@@ -2,12 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
-import '../main.dart';
-import '../widget/bottom_bar_widget.dart';
-
-class PageControllerMixin extends GetxController {
+class HomeBackendControllerMixin extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
   final RxDouble nowConstraintsHeight = 0.0.obs;
 
@@ -42,8 +40,8 @@ class PageControllerMixin extends GetxController {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final PageControllerMixin controller = Get.put(PageControllerMixin());
+class HomeBackendPage extends StatelessWidget {
+  final HomeBackendControllerMixin controller = Get.put(HomeBackendControllerMixin());
 
   @override
   Widget build(BuildContext context) {

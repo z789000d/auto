@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:web_auto/page/catalogue_list.dart';
-import 'package:web_auto/page/contact_us.dart';
-import 'package:web_auto/page/home_page.dart';
-import 'package:web_auto/page/news_page.dart';
+import 'package:web_auto/page/frontend/news_page.dart';
 
-import '../page/about_us.dart';
-import '../page/product_list.dart';
+import '../page/frontend/about_us.dart';
+import '../page/frontend/catalogue_list.dart';
+import '../page/frontend/contact_us.dart';
+import '../page/frontend/home_page.dart';
+import '../page/frontend/product_list.dart';
 
 class TopBarController extends GetxController {
   final buttonStates = <bool>[false, false, false, false, false, false].obs;

@@ -2,17 +2,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/model/catalogue_model.dart';
 import 'package:web_auto/model/product_model.dart';
-import 'package:web_auto/page/product_detail_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
-import '../main.dart';
-import '../widget/bottom_bar_widget.dart';
 
-class ProductListController extends GetxController {
+import '../../widget/bottom_bar_widget.dart';
+import 'catalogue_item_list.dart';
+
+class CatalogueController extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
   final RxDouble nowConstraintsHeight = 0.0.obs;
 
-  RxList<ProductModel> productModel = <ProductModel>[].obs;
+  RxList<CatalogueModel> catalogueModel = <CatalogueModel>[].obs;
 
   final pageViewImage = <String>[
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
@@ -28,15 +29,9 @@ class ProductListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     for (var i = 0; i < 10; i++) {
-      productModel.add(ProductModel(
-          id: i.toString(),
-          category: i.toString(),
-          name: "產品$i",
-          images: pageViewImage,
-          description: "描述$i",
-          videoLink: "連結$i"));
+      catalogueModel.add(CatalogueModel(
+          id: i.toString(), name: "型錄$i", images: pageViewImage));
     }
   }
 
@@ -47,8 +42,8 @@ class ProductListController extends GetxController {
   }
 }
 
-class ProductListPage extends StatelessWidget {
-  final ProductListController controller = Get.put(ProductListController());
+class CatalogueListPage extends StatelessWidget {
+  final CatalogueController controller = Get.put(CatalogueController());
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +64,7 @@ class ProductListPage extends StatelessWidget {
                       TopBar(),
                       SizedBox(height: 20),
                       Text(
-                        '產品介紹',
+                        '電子型錄',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.normal,
@@ -123,9 +118,9 @@ class ProductListPage extends StatelessWidget {
         },
         child: GestureDetector(
           onTap: () {
-            print("aaaaaaa ${controller.productModel[index]}");
-            Get.to(ProductDetailPage(),
-                arguments: {'productModel': controller.productModel[index]});
+            print("aaaaaaa ${controller.catalogueModel[index]}");
+            Get.to(CatalogueItemListPage(),
+                arguments: {'catalogueModel': controller.catalogueModel[index]});
           },
           child: Container(
             margin: EdgeInsets.all(40),
@@ -143,7 +138,7 @@ class ProductListPage extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Image.network(
-                          controller.productModel[index].images[0])),
+                          controller.catalogueModel[index].images[0])),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
@@ -154,7 +149,7 @@ class ProductListPage extends StatelessWidget {
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 20),
                       child: Text(
-                        controller.productModel[index].name,
+                        controller.catalogueModel[index].name,
                         style: TextStyle(
                             fontSize: 20,
                             color: controller.currentIndex.value == index

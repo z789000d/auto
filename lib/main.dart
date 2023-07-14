@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:web_auto/page/about_us.dart';
-import 'package:web_auto/page/catalogue_list.dart';
-import 'package:web_auto/page/contact_us.dart';
-import 'package:web_auto/page/firstPage.dart';
-import 'package:web_auto/page/home_page.dart';
-import 'package:web_auto/page/news_page.dart';
-import 'package:web_auto/page/product_detail_page.dart';
-import 'package:web_auto/page/product_list.dart';
+import 'package:web_auto/page/frontend/about_us.dart';
+import 'package:web_auto/page/frontend/catalogue_item_list.dart';
+import 'package:web_auto/page/frontend/catalogue_list.dart';
+import 'package:web_auto/page/frontend/contact_us.dart';
+import 'package:web_auto/page/frontend/firstPage.dart';
+import 'package:web_auto/page/frontend/home_page.dart';
+import 'package:web_auto/page/frontend/news_page.dart';
+import 'package:web_auto/page/frontend/product_detail_page.dart';
+import 'package:web_auto/page/frontend/product_list.dart';
 
 class AllMainController extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
@@ -35,12 +36,13 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/ProductDetailPage', page: () => ProductDetailPage()),
           GetPage(name: '/NewsPage', page: () => NewsPage()),
           GetPage(name: '/CataloguePage', page: () => CatalogueListPage()),
+          GetPage(name: '/CatalogueItemListPage', page: () => CatalogueItemListPage()),
           GetPage(name: '/AboutUsPage', page: () => AboutUsPage()),
           GetPage(name: '/ContactUsPage', page: () => ContactUsPage()),
         ],
         title: '鋸開自動化機械有限公司',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
         home: FirstPage());

@@ -4,50 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/model/catalogue_model.dart';
 import 'package:web_auto/model/product_model.dart';
-import 'package:web_auto/page/catalogue_item_list.dart';
-import 'package:web_auto/page/product_detail_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
-import '../main.dart';
-import '../widget/bottom_bar_widget.dart';
 
-class CatalogueController extends GetxController {
+import '../../widget/bottom_bar_widget.dart';
+
+class CatalogueItemController extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
   final RxDouble nowConstraintsHeight = 0.0.obs;
 
-  RxList<CatalogueModel> catalogueModel = <CatalogueModel>[].obs;
+  Rx<CatalogueModel> catalogueModel =
+      CatalogueModel(id: '', name: '', images: []).obs;
 
-  final pageViewImage = <String>[
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-  ];
-
-  @override
-  void onInit() {
-    super.onInit();
-    for (var i = 0; i < 10; i++) {
-      catalogueModel.add(CatalogueModel(
-          id: i.toString(), name: "型錄$i", images: pageViewImage));
-    }
-  }
+  final currentPageIndex = 0.obs;
 
   RxInt currentIndex = RxInt(-1);
 
   void setCurrentIndex(int index) {
     currentIndex.value = index;
   }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
 }
 
-class CatalogueListPage extends StatelessWidget {
-  final CatalogueController controller = Get.put(CatalogueController());
+class CatalogueItemListPage extends StatelessWidget {
+  final CatalogueItemController controller = Get.put(CatalogueItemController());
 
   @override
   Widget build(BuildContext context) {
+    controller.catalogueModel.value =
+        Get.arguments['catalogueModel']; // 獲取傳遞的參數
     return Scaffold(
       body: Center(
         child: LayoutBuilder(
@@ -65,7 +53,7 @@ class CatalogueListPage extends StatelessWidget {
                       TopBar(),
                       SizedBox(height: 20),
                       Text(
-                        '電子型錄',
+                        controller.catalogueModel.value.name,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.normal,
@@ -100,7 +88,7 @@ class CatalogueListPage extends StatelessWidget {
                     2
                 : (controller.nowConstraintsWidth.value) /
                     (controller.nowConstraintsHeight.value)),
-        itemCount: controller.pageViewImage.length,
+        itemCount: controller.catalogueModel.value.images.length,
         itemBuilder: (context, index) {
           return gridViewItem(index);
         },
@@ -118,11 +106,7 @@ class CatalogueListPage extends StatelessWidget {
           controller.setCurrentIndex(-1);
         },
         child: GestureDetector(
-          onTap: () {
-            print("aaaaaaa ${controller.catalogueModel[index]}");
-            Get.to(CatalogueItemListPage(),
-                arguments: {'catalogueModel': controller.catalogueModel[index]});
-          },
+          onTap: () {},
           child: Container(
             margin: EdgeInsets.all(40),
             decoration: BoxDecoration(
@@ -139,7 +123,7 @@ class CatalogueListPage extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Image.network(
-                          controller.catalogueModel[index].images[0])),
+                          controller.catalogueModel.value.images[index])),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
@@ -150,7 +134,7 @@ class CatalogueListPage extends StatelessWidget {
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 20),
                       child: Text(
-                        controller.catalogueModel[index].name,
+                        '目錄 $index',
                         style: TextStyle(
                             fontSize: 20,
                             color: controller.currentIndex.value == index

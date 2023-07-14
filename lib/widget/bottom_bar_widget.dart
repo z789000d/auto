@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:web_auto/page/contact_us.dart';
-import 'package:web_auto/page/product_list.dart';
+import 'package:web_auto/page/frontend/product_list.dart';
 
-import '../page/about_us.dart';
-import '../page/catalogue_list.dart';
-import '../page/home_page.dart';
-import '../page/news_page.dart';
+import '../page/frontend/about_us.dart';
+import '../page/frontend/catalogue_list.dart';
+import '../page/frontend/contact_us.dart';
+import '../page/frontend/home_page.dart';
+import '../page/frontend/news_page.dart';
 
 class BottomController extends GetxController {
   final buttonStates = List.generate(6, (_) => false).obs;

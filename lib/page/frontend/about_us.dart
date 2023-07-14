@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
-import '../main.dart';
-import '../widget/bottom_bar_widget.dart';
+import '../../main.dart';
+import '../../widget/bottom_bar_widget.dart';
 
 class AboutController extends GetxController {
   final RxDouble nowConstraintsWidth = 0.0.obs;
