@@ -2,14 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
 import '../../widget/bottom_bar_widget.dart';
 
 class PageControllerMixin extends GetxController {
-  final RxDouble nowConstraintsWidth = 0.0.obs;
-  final RxDouble nowConstraintsHeight = 0.0.obs;
-
   final CarouselController buttonCarouselController = CarouselController();
   final currentPageIndex = 0.obs;
   final pageViewImage = <String>[
@@ -41,100 +39,71 @@ class PageControllerMixin extends GetxController {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends ParentPage {
   final PageControllerMixin controller = Get.put(PageControllerMixin());
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        controller.nowConstraintsWidth.value = constraints.maxWidth;
-        controller.nowConstraintsHeight.value = constraints.maxHeight;
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    TopBar(),
-                    Container(
-                      height: 350,
-                      width: Get.width / 1.5,
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          onPageChanged: (index, reason) {
-                            controller.currentPageIndex.value = index;
-                          },
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 4),
-                        ),
-                        items: controller.pageViewImage.map((image) {
-                          return Image.network(image);
-                        }).toList(),
-                        carouselController: controller.buttonCarouselController,
-                      ),
-                    ),
-                    Container(
-                      height: 20,
-                      child: Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (int i = 0;
-                                i < controller.pageViewImage.length;
-                                i++)
-                              Container(
-                                margin: EdgeInsets.all(4),
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: i == controller.currentPageIndex.value
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Obx(
-                      () => GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount:
-                                controller.nowConstraintsWidth.value < 720
-                                    ? 1
-                                    : 3,
-                            mainAxisSpacing: 20,
-                            crossAxisSpacing: 8,
-                            childAspectRatio: controller
-                                        .nowConstraintsWidth.value <
-                                    720
-                                ? (controller.nowConstraintsWidth.value) /
-                                    (controller.nowConstraintsHeight.value) *
-                                    2
-                                : (controller.nowConstraintsWidth.value) /
-                                    (controller.nowConstraintsHeight.value)),
-                        itemCount: controller.pageViewImage.length,
-                        itemBuilder: (context, index) {
-                          return gridViewItem(index);
-                        },
-                      ),
-                    ),
-                    BottomWidget()
-                  ],
-                ),
-              ),
+  Widget childWidget() {
+    return Column(
+      children: [
+        Container(
+          height: 350,
+          width: Get.width / 1.5,
+          child: CarouselSlider(
+            options: CarouselOptions(
+              onPageChanged: (index, reason) {
+                controller.currentPageIndex.value = index;
+              },
+              enlargeCenterPage: true,
+              scrollDirection: Axis.horizontal,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 4),
             ),
-          ],
-        );
-      }),
+            items: controller.pageViewImage.map((image) {
+              return Image.network(image);
+            }).toList(),
+            carouselController: controller.buttonCarouselController,
+          ),
+        ),
+        Container(
+          height: 20,
+          child: Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (int i = 0; i < controller.pageViewImage.length; i++)
+                  Container(
+                    margin: EdgeInsets.all(4),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: i == controller.currentPageIndex.value
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        Obx(
+          () => GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 8,
+                childAspectRatio: Get.width.obs.value < 720
+                    ? (Get.width.obs.value) / (Get.height.obs.value) * 2
+                    : (Get.width.obs.value) / (Get.height.obs.value)),
+            itemCount: controller.pageViewImage.length,
+            itemBuilder: (context, index) {
+              return gridViewItem(index);
+            },
+          ),
+        ),
+      ],
     );
   }
 

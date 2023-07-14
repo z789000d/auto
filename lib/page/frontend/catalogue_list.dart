@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/model/catalogue_model.dart';
 import 'package:web_auto/model/product_model.dart';
+import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
 import '../../widget/bottom_bar_widget.dart';
 import 'catalogue_item_list.dart';
 
 class CatalogueController extends GetxController {
-  final RxDouble nowConstraintsWidth = 0.0.obs;
-  final RxDouble nowConstraintsHeight = 0.0.obs;
-
   RxList<CatalogueModel> catalogueModel = <CatalogueModel>[].obs;
 
   final pageViewImage = <String>[
@@ -42,46 +40,26 @@ class CatalogueController extends GetxController {
   }
 }
 
-class CatalogueListPage extends StatelessWidget {
+class CatalogueListPage extends ParentPage {
   final CatalogueController controller = Get.put(CatalogueController());
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-          controller.nowConstraintsWidth.value = constraints.maxWidth;
-          controller.nowConstraintsHeight.value = constraints.maxHeight;
-          return Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      TopBar(),
-                      SizedBox(height: 20),
-                      Text(
-                        '電子型錄',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      productListImageWidget(),
-                      BottomWidget(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        }),
-      ),
+  Widget childWidget() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(height: 20),
+        Text(
+          '電子型錄',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.normal,
+            color: Colors.blue,
+          ),
+        ),
+        SizedBox(height: 20),
+        productListImageWidget(),
+      ],
     );
   }
 
@@ -90,15 +68,12 @@ class CatalogueListPage extends StatelessWidget {
       () => GridView.builder(
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: controller.nowConstraintsWidth.value < 720 ? 1 : 3,
+            crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
             mainAxisSpacing: 20,
             crossAxisSpacing: 8,
-            childAspectRatio: controller.nowConstraintsWidth.value < 720
-                ? (controller.nowConstraintsWidth.value) /
-                    (controller.nowConstraintsHeight.value) *
-                    2
-                : (controller.nowConstraintsWidth.value) /
-                    (controller.nowConstraintsHeight.value)),
+            childAspectRatio: Get.width.obs.value < 720
+                ? (Get.width.obs.value) / (Get.height.obs.value) * 2
+                : (Get.width.obs.value) / (Get.height.obs.value)),
         itemCount: controller.pageViewImage.length,
         itemBuilder: (context, index) {
           return gridViewItem(index);
@@ -119,8 +94,9 @@ class CatalogueListPage extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             print("aaaaaaa ${controller.catalogueModel[index]}");
-            Get.to(CatalogueItemListPage(),
-                arguments: {'catalogueModel': controller.catalogueModel[index]});
+            Get.to(CatalogueItemListPage(), arguments: {
+              'catalogueModel': controller.catalogueModel[index]
+            });
           },
           child: Container(
             margin: EdgeInsets.all(40),

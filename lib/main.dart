@@ -10,12 +10,6 @@ import 'package:web_auto/page/frontend/news_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
 
-class AllMainController extends GetxController {
-  final RxDouble nowConstraintsWidth = 0.0.obs;
-  final RxDouble nowConstraintsHeight = 0.0.obs;
-}
-
-final AllMainController allMainController = Get.put(AllMainController());
 
 void main() {
   runApp(const MyApp());

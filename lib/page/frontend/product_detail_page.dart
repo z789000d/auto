@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
 import '../../main.dart';
@@ -11,9 +12,6 @@ import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 
 class ProductDetailController extends GetxController {
-  final RxDouble nowConstraintsWidth = 0.0.obs;
-  final RxDouble nowConstraintsHeight = 0.0.obs;
-
   final CarouselController buttonCarouselController = CarouselController();
   Rx<ProductModel> productModel = ProductModel(
           id: '',
@@ -66,80 +64,63 @@ class ProductDetailController extends GetxController {
   }
 }
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends ParentPage {
   final ProductDetailController controller = Get.put(ProductDetailController());
 
   @override
-  Widget build(BuildContext context) {
+  Widget childWidget() {
     controller.productModel.value = Get.arguments['productModel']; // 獲取傳遞的參數
-    return Scaffold(
-      body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        controller.nowConstraintsWidth.value = constraints.maxWidth;
-        controller.nowConstraintsHeight.value = constraints.maxHeight;
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    TopBar(),
-                    Container(
-                      height: 350,
-                      width: Get.width / 1.5,
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          onPageChanged: (index, reason) {
-                            controller.currentPageIndex.value = index;
-                          },
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 4),
-                        ),
-                        items:
-                            controller.productModel.value.images.map((image) {
-                          return Image.network(image);
-                        }).toList(),
-                        carouselController: controller.buttonCarouselController,
-                      ),
-                    ),
-                    Container(
-                      height: 20,
-                      child: Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (int i = 0;
-                                i < controller.productModel.value.images.length;
-                                i++)
-                              Container(
-                                margin: EdgeInsets.all(4),
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: i == controller.currentPageIndex.value
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    tableText(Get.context!),
-                    buildProductList(),
-                    BottomWidget()
-                  ],
-                ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Obx(
+          () => Container(
+            height: 350,
+            width: Get.width.obs.value / 1.5,
+            child: CarouselSlider(
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  controller.currentPageIndex.value = index;
+                },
+                enlargeCenterPage: true,
+                scrollDirection: Axis.horizontal,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 4),
               ),
+              items: controller.productModel.value.images.map((image) {
+                return Image.network(image);
+              }).toList(),
+              carouselController: controller.buttonCarouselController,
             ),
-          ],
-        );
-      }),
+          ),
+        ),
+        Container(
+          height: 20,
+          child: Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (int i = 0;
+                    i < controller.productModel.value.images.length;
+                    i++)
+                  Container(
+                    margin: EdgeInsets.all(4),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: i == controller.currentPageIndex.value
+                          ? Colors.blue
+                          : Colors.grey,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        tableText(Get.context!),
+        buildProductList(),
+      ],
     );
   }
 
@@ -316,7 +297,6 @@ class ProductDetailPage extends StatelessWidget {
         },
         child: GestureDetector(
           onTap: () {
-            print("aaaaaaa ${controller.productModelList[index]}");
             Get.to(ProductDetailPage(), arguments: {
               'productModel': controller.productModelList[index]
             });

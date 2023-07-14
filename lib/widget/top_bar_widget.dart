@@ -9,9 +9,6 @@ import '../page/frontend/home_page.dart';
 import '../page/frontend/product_list.dart';
 
 class TopBarController extends GetxController {
-  final RxDouble nowConstraintsWidth = 0.0.obs;
-  final RxDouble nowConstraintsHeight = 0.0.obs;
-
   final buttonStates = <bool>[false, false, false, false, false, false].obs;
 
   void updateButtonState(int index, bool isHovered) {
@@ -45,20 +42,14 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        topBarController.nowConstraintsWidth.value = constraints.maxWidth;
-        topBarController.nowConstraintsHeight.value = constraints.maxHeight;
-        return buildRowOfButtons();
-      },
-    );
+    return buildRowOfButtons();
   }
 
   Widget buildRowOfButtons() {
     return Obx(
       () => Container(
         color: Colors.blue,
-        width: Get.width,
+        width: Get.width.obs.value,
         height: 150,
         padding: EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 30),
         child: ListView(
