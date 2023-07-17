@@ -30,6 +30,8 @@ class CatalogueItemController extends GetxController {
 class CatalogueItemListPage extends ParentPage {
   final CatalogueItemController controller = Get.put(CatalogueItemController());
 
+  CatalogueItemListPage({super.key});
+
   @override
   Widget childWidget() {
     controller.catalogueModel.value =

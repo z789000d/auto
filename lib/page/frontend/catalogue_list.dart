@@ -57,6 +57,8 @@ class CatalogueController extends GetxController {
 class CatalogueListPage extends ParentPage {
   final CatalogueController controller = Get.put(CatalogueController());
 
+  CatalogueListPage({super.key});
+
   @override
   Widget childWidget() {
     return Column(

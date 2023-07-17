@@ -49,6 +49,8 @@ class NewsController extends GetxController {
 class NewsPage extends ParentPage {
   final NewsController controller = Get.put(NewsController());
 
+  NewsPage({super.key});
+
   @override
   Widget childWidget() {
     return Column(

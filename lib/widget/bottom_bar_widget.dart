@@ -53,6 +53,8 @@ class BottomController extends GetxController {
 class BottomWidget extends StatelessWidget {
   final BottomController bottomController = Get.put(BottomController());
 
+  BottomWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

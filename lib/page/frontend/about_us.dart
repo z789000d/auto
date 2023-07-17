@@ -24,6 +24,8 @@ class AboutController extends GetxController {
 class AboutUsPage extends ParentPage {
   final AboutController controller = Get.put(AboutController());
 
+  AboutUsPage({super.key});
+
   @override
   Widget childWidget() {
     return Column(

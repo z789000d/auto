@@ -7,7 +7,9 @@ import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../widget/bottom_bar_widget.dart';
 
 class ParentPage extends StatelessWidget {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+
+  ParentPage({super.key});
 
   @override
   Widget build(BuildContext context) {

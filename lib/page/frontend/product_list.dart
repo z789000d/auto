@@ -65,6 +65,8 @@ class ProductListController extends GetxController {
 class ProductListPage extends ParentPage {
   final ProductListController controller = Get.put(ProductListController());
 
+  ProductListPage({super.key});
+
   @override
   Widget childWidget() {
     return Column(

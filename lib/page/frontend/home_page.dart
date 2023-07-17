@@ -59,6 +59,8 @@ class PageControllerMixin extends GetxController {
 class MyHomePage extends ParentPage {
   final PageControllerMixin controller = Get.put(PageControllerMixin());
 
+  MyHomePage({super.key});
+
   @override
   Widget childWidget() {
     return Column(

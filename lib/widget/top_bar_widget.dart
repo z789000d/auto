@@ -47,6 +47,8 @@ class TopBarController extends GetxController {
 class TopBar extends StatelessWidget {
   final TopBarController topBarController = Get.put(TopBarController());
 
+  TopBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return buildRowOfButtons();

@@ -67,6 +67,8 @@ class ProductDetailController extends GetxController {
 class ProductDetailPage extends ParentPage {
   final ProductDetailController controller = Get.put(ProductDetailController());
 
+  ProductDetailPage({super.key});
+
   @override
   Widget childWidget() {
     controller.productModel.value = Get.arguments['productModel']; // 獲取傳遞的參數

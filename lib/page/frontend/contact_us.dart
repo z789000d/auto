@@ -98,6 +98,8 @@ class ContactUsController extends GetxController {
 class ContactUsPage extends ParentPage {
   final ContactUsController controller = Get.put(ContactUsController());
 
+  ContactUsPage({super.key});
+
   @override
   Widget childWidget() {
     return Column(

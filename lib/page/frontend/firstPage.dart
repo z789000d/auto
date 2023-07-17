@@ -19,11 +19,12 @@ class FirstController extends GetxController {
       isVisible.value = true;
     });
   }
-
 }
 
 class FirstPage extends StatelessWidget {
   final FirstController controller = Get.put(FirstController());
+
+  FirstPage({super.key});
 
   @override
   Widget build(BuildContext context) {
