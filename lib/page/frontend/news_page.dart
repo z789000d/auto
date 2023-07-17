@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/model/news_page_model.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
@@ -10,22 +11,38 @@ import '../../main.dart';
 import '../../model/product_model.dart';
 import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
+import '../../widget/change_page_widget.dart';
 
 class NewsController extends GetxController {
-  final textList = <String>[].obs;
+  RxList<NewsModel> newModel = <NewsModel>[].obs;
+  RxList<NewsModel> newShowModel = <NewsModel>[].obs;
+
   final RxInt hoveredIndex = RxInt(-1);
+  final nowPageIndex = 1.obs;
 
   @override
   void onInit() {
     super.onInit();
-    for (var i = 0; i < 10; i++) {
-      textList.add("最新消息$i");
+    for (var i = 0; i < 12; i++) {
+      newModel.add(NewsModel(news: "最新消息$i"));
     }
+
+    setNewsValue(1);
   }
 
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void setNewsValue(int index) {
+    nowPageIndex.value = index - 1;
+    int startIndex = (index - 1) * 10;
+    int endIndex = startIndex + 9;
+    if (endIndex + 1 > newModel.length) {
+      endIndex = newModel.length - 1;
+    }
+    newShowModel.value = newModel.sublist(startIndex, endIndex + 1);
   }
 }
 
@@ -46,12 +63,19 @@ class NewsPage extends ParentPage {
             color: Colors.blue,
           ),
         ),
-        Obx(
-          () => ListView.builder(
+        newsItemWidget(),
+      ],
+    );
+  }
+
+  Widget newsItemWidget() {
+    return Obx(
+      () => Column(
+        children: [
+          ListView.builder(
             shrinkWrap: true,
-            itemCount: controller.textList.length,
+            itemCount: controller.newShowModel.length,
             itemBuilder: (context, index) {
-              final text = controller.textList[index];
               return MouseRegion(
                 onEnter: (_) {
                   print('aaa ${index}');
@@ -71,13 +95,18 @@ class NewsPage extends ParentPage {
                       ),
                     ), // 添加底線
                   ),
-                  child: textWidget(text, index),
+                  child: textWidget(controller.newShowModel[index].news, index),
                 ),
               );
             },
           ),
-        ),
-      ],
+          heightBox(),
+          changePageWidget(controller.newModel.length, (pageIndex) {
+            scrollToTop();
+            controller.setNewsValue(pageIndex + 1);
+          }, controller.nowPageIndex.value),
+        ],
+      ),
     );
   }
 
@@ -90,5 +119,24 @@ class NewsPage extends ParentPage {
                 : FontWeight.normal,
           ),
         ));
+  }
+
+  Widget heightBox() {
+    if (controller.newShowModel.length <= 3) {
+      return SizedBox(
+        width: 0,
+        height: 300,
+      );
+    } else if (controller.newShowModel.length <= 6) {
+      return SizedBox(
+        width: 0,
+        height: 150,
+      );
+    } else {
+      return SizedBox(
+        width: 0,
+        height: 0,
+      );
+    }
   }
 }

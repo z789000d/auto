@@ -8,10 +8,13 @@ import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
 import '../../widget/bottom_bar_widget.dart';
+import '../../widget/change_page_widget.dart';
 import 'catalogue_item_list.dart';
 
 class CatalogueController extends GetxController {
   RxList<CatalogueModel> catalogueModel = <CatalogueModel>[].obs;
+  RxList<CatalogueModel> catalogueShowModel = <CatalogueModel>[].obs;
+  final nowPageIndex = 1.obs;
 
   final pageViewImage = <String>[
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
@@ -27,16 +30,27 @@ class CatalogueController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 14; i++) {
       catalogueModel.add(CatalogueModel(
           id: i.toString(), name: "型錄$i", images: pageViewImage));
     }
+    setCatalogueValue(1);
   }
 
   RxInt currentIndex = RxInt(-1);
 
   void setCurrentIndex(int index) {
     currentIndex.value = index;
+  }
+
+  void setCatalogueValue(int index) {
+    nowPageIndex.value = index - 1;
+    int startIndex = (index - 1) * 9;
+    int endIndex = startIndex + 8;
+    if (endIndex + 1 > catalogueModel.length) {
+      endIndex = catalogueModel.length - 1;
+    }
+    catalogueShowModel.value = catalogueModel.sublist(startIndex, endIndex + 1);
   }
 }
 
@@ -64,22 +78,31 @@ class CatalogueListPage extends ParentPage {
   }
 
   Widget productListImageWidget() {
-    return Obx(
-      () => GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 8,
-            childAspectRatio: Get.width.obs.value < 720
-                ? (Get.width.obs.value) / (Get.height.obs.value) * 2
-                : (Get.width.obs.value) / (Get.height.obs.value)),
-        itemCount: controller.pageViewImage.length,
-        itemBuilder: (context, index) {
-          return gridViewItem(index);
-        },
-      ),
-    );
+    return Obx(() {
+      return Column(
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 8,
+                childAspectRatio: Get.width.obs.value < 720
+                    ? (Get.width.obs.value) / (Get.height.obs.value) * 2
+                    : (Get.width.obs.value) / (Get.height.obs.value)),
+            itemCount: controller.catalogueShowModel.length,
+            itemBuilder: (context, index) {
+              return gridViewItem(index);
+            },
+          ),
+          heightBox(),
+          changePageWidget(controller.catalogueModel.length, (pageIndex) {
+            scrollToTop();
+            controller.setCatalogueValue(pageIndex + 1);
+          }, controller.nowPageIndex.value),
+        ],
+      );
+    });
   }
 
   Widget gridViewItem(index) {
@@ -93,9 +116,9 @@ class CatalogueListPage extends ParentPage {
         },
         child: GestureDetector(
           onTap: () {
-            print("aaaaaaa ${controller.catalogueModel[index]}");
+            print("aaaaaaa ${controller.catalogueShowModel[index]}");
             Get.to(CatalogueItemListPage(), arguments: {
-              'catalogueModel': controller.catalogueModel[index]
+              'catalogueModel': controller.catalogueShowModel[index]
             });
           },
           child: Container(
@@ -114,7 +137,7 @@ class CatalogueListPage extends ParentPage {
                 children: [
                   Expanded(
                       child: Image.network(
-                          controller.catalogueModel[index].images[0])),
+                          controller.catalogueShowModel[index].images[0])),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
@@ -125,7 +148,7 @@ class CatalogueListPage extends ParentPage {
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 20),
                       child: Text(
-                        controller.catalogueModel[index].name,
+                        controller.catalogueShowModel[index].name,
                         style: TextStyle(
                             fontSize: 20,
                             color: controller.currentIndex.value == index
@@ -139,5 +162,24 @@ class CatalogueListPage extends ParentPage {
         ),
       ),
     );
+  }
+
+  Widget heightBox() {
+    if (controller.catalogueShowModel.length <= 3) {
+      return SizedBox(
+        width: 0,
+        height: 300,
+      );
+    } else if (controller.catalogueShowModel.length <= 6) {
+      return SizedBox(
+        width: 0,
+        height: 150,
+      );
+    } else {
+      return SizedBox(
+        width: 0,
+        height: 0,
+      );
+    }
   }
 }

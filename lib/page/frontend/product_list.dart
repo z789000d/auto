@@ -8,6 +8,7 @@ import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../main.dart';
 import '../../widget/bottom_bar_widget.dart';
+import '../../widget/change_page_widget.dart';
 
 class ProductListController extends GetxController {
   RxList<ProductModel> productModel = <ProductModel>[].obs;
@@ -24,6 +25,8 @@ class ProductListController extends GetxController {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
   ];
+
+  final nowPageIndex = 1.obs;
 
   @override
   void onInit() {
@@ -49,6 +52,7 @@ class ProductListController extends GetxController {
   }
 
   void setGridValue(int index) {
+    nowPageIndex.value = index - 1;
     int startIndex = (index - 1) * 9;
     int endIndex = startIndex + 8;
     if (endIndex + 1 > productModel.length) {
@@ -104,38 +108,10 @@ class ProductListPage extends ParentPage {
             },
           ),
           heightBox(),
-          if (itemCount > 9)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List<Widget>.generate(
-                (itemCount ~/ 9) + 1,
-                    (pageIndex) {
-                  return GestureDetector(
-                    onTap: () {
-                      scrollToTop();
-                      controller.setGridValue(pageIndex + 1);
-                    },
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      margin: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${pageIndex + 1}',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+          changePageWidget(controller.productModel.length, (pageIndex) {
+            scrollToTop();
+            controller.setGridValue(pageIndex + 1);
+          }, controller.nowPageIndex.value),
         ],
       );
     });
@@ -143,61 +119,60 @@ class ProductListPage extends ParentPage {
 
   Widget gridViewItem(index) {
     return Obx(
-          () =>
-          MouseRegion(
-            onEnter: (event) {
-              controller.setCurrentIndex(index);
-            },
-            onExit: (event) {
-              controller.setCurrentIndex(-1);
-            },
-            child: GestureDetector(
-              onTap: () {
-                print("aaaaaaa ${controller.productShowModel[index]}");
-                Get.to(ProductDetailPage(), arguments: {
-                  'productModel': controller.productShowModel[index]
-                });
-              },
-              child: Container(
-                margin: EdgeInsets.all(40),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: controller.currentIndex.value == index
-                        ? Colors.blue
-                        : Colors.transparent,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(5), // 添加圆角
-                ),
-                child: Container(
-                  child: Column(
-                    children: [
-                      Expanded(
-                          child: Image.network(
-                              controller.productShowModel[index].images[0])),
-                      Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3),
+      () => MouseRegion(
+        onEnter: (event) {
+          controller.setCurrentIndex(index);
+        },
+        onExit: (event) {
+          controller.setCurrentIndex(-1);
+        },
+        child: GestureDetector(
+          onTap: () {
+            print("aaaaaaa ${controller.productShowModel[index]}");
+            Get.to(ProductDetailPage(), arguments: {
+              'productModel': controller.productShowModel[index]
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.all(40),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: controller.currentIndex.value == index
+                    ? Colors.blue
+                    : Colors.transparent,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(5), // 添加圆角
+            ),
+            child: Container(
+              child: Column(
+                children: [
+                  Expanded(
+                      child: Image.network(
+                          controller.productShowModel[index].images[0])),
+                  Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: controller.currentIndex.value == index
+                            ? Colors.blue
+                            : Colors.grey, // 添加圆角
+                      ),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        controller.productShowModel[index].name,
+                        style: TextStyle(
+                            fontSize: 20,
                             color: controller.currentIndex.value == index
-                                ? Colors.blue
-                                : Colors.grey, // 添加圆角
-                          ),
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(top: 20),
-                          child: Text(
-                            controller.productShowModel[index].name,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: controller.currentIndex.value == index
-                                    ? Colors.white
-                                    : Colors.black),
-                          )),
-                    ],
-                  ),
-                ),
+                                ? Colors.white
+                                : Colors.black),
+                      )),
+                ],
               ),
             ),
           ),
+        ),
+      ),
     );
   }
 

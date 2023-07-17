@@ -16,21 +16,27 @@ class BottomController extends GetxController {
 
   void clickButton(int index) {
     if (index == 0) {
+      Get.delete<PageControllerMixin>();
       Get.to(MyHomePage());
     }
     if (index == 1) {
+      Get.delete<AboutController>();
       Get.to(AboutUsPage());
     }
     if (index == 2) {
+      Get.delete<ProductListController>();
       Get.to(ProductListPage());
     }
     if (index == 3) {
+      Get.delete<NewsController>();
       Get.to(NewsPage());
     }
     if (index == 4) {
+      Get.delete<CatalogueController>();
       Get.to(CatalogueListPage());
     }
     if (index == 5) {
+      Get.delete<ContactUsController>();
       Get.to(ContactUsPage());
     }
   }

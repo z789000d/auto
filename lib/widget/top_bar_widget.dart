@@ -16,22 +16,29 @@ class TopBarController extends GetxController {
   }
 
   void clickButton(int index) {
+    print('$index');
     if (index == 0) {
+      Get.delete<PageControllerMixin>();
       Get.to(MyHomePage());
     }
     if (index == 1) {
+      Get.delete<AboutController>();
       Get.to(AboutUsPage());
     }
     if (index == 2) {
+      Get.delete<ProductListController>();
       Get.to(ProductListPage());
     }
     if (index == 3) {
+      Get.delete<NewsController>();
       Get.to(NewsPage());
     }
     if (index == 4) {
+      Get.delete<CatalogueController>();
       Get.to(CatalogueListPage());
     }
     if (index == 5) {
+      Get.delete<ContactUsController>();
       Get.to(ContactUsPage());
     }
   }
@@ -84,7 +91,6 @@ class TopBar extends StatelessWidget {
 
   Widget buildButton(String title, TopBarController controller, int index) {
     bool isHovered = controller.buttonStates[index];
-    print('改');
     return MouseRegion(
       onEnter: (_) {
         controller.updateButtonState(index, true);
