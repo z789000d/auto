@@ -24,7 +24,7 @@ class NewsController extends GetxController {
   void onInit() {
     super.onInit();
     for (var i = 0; i < 12; i++) {
-      newModel.add(NewsModel(news: "最新消息$i"));
+      newModel.add(NewsModel(date: "2023/7/11", news: "最新消息$i"));
     }
 
     setNewsValue(1);
@@ -97,7 +97,7 @@ class NewsPage extends ParentPage {
                       ),
                     ), // 添加底線
                   ),
-                  child: textWidget(controller.newShowModel[index].news, index),
+                  child: textWidget(controller.newShowModel[index], index),
                 ),
               );
             },
@@ -112,14 +112,34 @@ class NewsPage extends ParentPage {
     );
   }
 
-  Widget textWidget(String text, int index) {
-    return Obx(() => Text(
-          text,
-          style: TextStyle(
-            fontWeight: controller.hoveredIndex.value == index
-                ? FontWeight.bold
-                : FontWeight.normal,
-          ),
+  Widget textWidget(NewsModel newsModel, int index) {
+    return Obx(() => Row(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 30, right: 30),
+              child: Text(
+                newsModel.date,
+                style: TextStyle(
+                  fontWeight: controller.hoveredIndex.value == index
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  newsModel.news,
+                  style: TextStyle(
+                    fontWeight: controller.hoveredIndex.value == index
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ));
   }
 

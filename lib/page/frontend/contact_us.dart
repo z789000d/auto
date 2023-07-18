@@ -104,77 +104,79 @@ class ContactUsPage extends ParentPage {
 
   @override
   Widget childWidget() {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 20),
-          child: Text(
-            '聯絡我們',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.normal,
-              color: Colors.blue,
+    return LayoutBuilder(builder: (context, constraints) {
+      return Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              '聯絡我們',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.normal,
+                color: Colors.blue,
+              ),
             ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 30),
-          color: Colors.blue,
-          width: Get.height / 2,
-          height: Get.height / 2,
-          child: GoogleMap(
-            onMapCreated: controller.onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: controller.center,
-              zoom: 15.0,
+          Container(
+            margin: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 30),
+            color: Colors.blue,
+            width: Get.width / 1.5,
+            height: Get.height / 1.5,
+            child: GoogleMap(
+              onMapCreated: controller.onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: controller.center,
+                zoom: 15.0,
+              ),
+              markers: controller.markers,
             ),
-            markers: controller.markers,
           ),
-        ),
-        Container(
-          margin: EdgeInsets.all(20),
-          width: Get.width,
-          alignment: Alignment.centerLeft,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '鋸開自動化有限公司',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.blue,
+          Container(
+            margin: EdgeInsets.all(20),
+            width: Get.width,
+            alignment: Alignment.centerLeft,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '鋸開自動化有限公司',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.blue,
+                  ),
                 ),
-              ),
-              SizedBox(height: 30.0),
-              Text(
-                '公司地址:新竹市千甲路191號',
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                '電話:035-723504',
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                '傳真:035-745523',
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                '電子郵件:tinh@ms12.hinet.net',
-                textAlign: TextAlign.start,
-              ),
-              inputEdit()
-            ],
+                SizedBox(height: 30.0),
+                Text(
+                  '公司地址:新竹市千甲路191號',
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  '電話:035-723504',
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  '傳真:035-745523',
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  '電子郵件:tinh@ms12.hinet.net',
+                  textAlign: TextAlign.start,
+                ),
+                inputEdit()
+              ],
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 
   Widget inputEdit() {
@@ -426,7 +428,7 @@ class ContactUsPage extends ParentPage {
                   controller.sendEmail();
                 },
                 child: Container(
-                  margin: EdgeInsets.only(top: 20,left: 20),
+                  margin: EdgeInsets.only(top: 20, left: 20),
                   width: 80,
                   child: Text(
                     '送出',

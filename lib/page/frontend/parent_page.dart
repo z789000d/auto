@@ -43,6 +43,7 @@ class ParentPage extends StatelessWidget {
     return Drawer(
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
+        controller: ScrollController(),
         child: Column(
           children: <Widget>[
             DrawerHeader(
@@ -59,7 +60,7 @@ class ParentPage extends StatelessWidget {
             drawerItem(context, '聯絡我們', 5),
             SizedBox(
               width: 1,
-              height: Get.height/8,
+              height: Get.height/6,
             ),
             Container(
               alignment: Alignment.bottomLeft,
