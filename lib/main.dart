@@ -10,7 +10,6 @@ import 'package:web_auto/page/frontend/news_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
 
-
 void main() {
   runApp(const MyApp());
 }

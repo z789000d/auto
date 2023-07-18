@@ -9,37 +9,11 @@ import '../page/frontend/catalogue_list.dart';
 import '../page/frontend/contact_us.dart';
 import '../page/frontend/home_page.dart';
 import '../page/frontend/news_page.dart';
+import '../utils.dart';
 
 class BottomController extends GetxController {
   final buttonStates = List.generate(6, (_) => false).obs;
   final hoverIndex = RxInt(-1);
-
-  void clickButton(int index) {
-    if (index == 0) {
-      Get.delete<PageControllerMixin>();
-      Get.to(MyHomePage());
-    }
-    if (index == 1) {
-      Get.delete<AboutController>();
-      Get.to(AboutUsPage());
-    }
-    if (index == 2) {
-      Get.delete<ProductListController>();
-      Get.to(ProductListPage());
-    }
-    if (index == 3) {
-      Get.delete<NewsController>();
-      Get.to(NewsPage());
-    }
-    if (index == 4) {
-      Get.delete<CatalogueController>();
-      Get.to(CatalogueListPage());
-    }
-    if (index == 5) {
-      Get.delete<ContactUsController>();
-      Get.to(ContactUsPage());
-    }
-  }
 
   void updateButtonState(int index, bool isSelected) {
     buttonStates[index] = isSelected;
@@ -57,6 +31,12 @@ class BottomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Get.width < 800 ? Container() : bottomBar();
+    });
+  }
+
+  Widget bottomBar() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
@@ -125,7 +105,7 @@ class BottomWidget extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          bottomController.clickButton(index);
+          Utils.clickButton(index);
         },
         child: Obx(() {
           bool isHovered = bottomController.hoverIndex.value == index;

@@ -1,3 +1,12 @@
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:web_auto/page/frontend/about_us.dart';
+import 'package:web_auto/page/frontend/catalogue_list.dart';
+import 'package:web_auto/page/frontend/contact_us.dart';
+import 'package:web_auto/page/frontend/home_page.dart';
+import 'package:web_auto/page/frontend/news_page.dart';
+import 'package:web_auto/page/frontend/product_list.dart';
+
 class Utils {
   static String? getYouTubeVideoId(String videoUrl) {
     // YouTube 影片連結的正則表達式模式
@@ -15,6 +24,34 @@ class Utils {
     } else {
       // 非有效的 YouTube 影片連結
       return null;
+    }
+  }
+
+  static void clickButton(int index) {
+    print('$index');
+    if (index == 0) {
+      Get.delete<PageControllerMixin>();
+      Get.to(MyHomePage());
+    }
+    if (index == 1) {
+      Get.delete<AboutController>();
+      Get.to(AboutUsPage());
+    }
+    if (index == 2) {
+      Get.delete<ProductListController>();
+      Get.to(ProductListPage());
+    }
+    if (index == 3) {
+      Get.delete<NewsController>();
+      Get.to(NewsPage());
+    }
+    if (index == 4) {
+      Get.delete<CatalogueController>();
+      Get.to(CatalogueListPage());
+    }
+    if (index == 5) {
+      Get.delete<ContactUsController>();
+      Get.to(ContactUsPage());
     }
   }
 }

@@ -6,41 +6,15 @@ import '../page/frontend/about_us.dart';
 import '../page/frontend/catalogue_list.dart';
 import '../page/frontend/contact_us.dart';
 import '../page/frontend/home_page.dart';
+import '../page/frontend/parent_page.dart';
 import '../page/frontend/product_list.dart';
+import '../utils.dart';
 
 class TopBarController extends GetxController {
   final buttonStates = <bool>[false, false, false, false, false, false].obs;
 
   void updateButtonState(int index, bool isHovered) {
     buttonStates[index] = isHovered;
-  }
-
-  void clickButton(int index) {
-    print('$index');
-    if (index == 0) {
-      Get.delete<PageControllerMixin>();
-      Get.to(MyHomePage());
-    }
-    if (index == 1) {
-      Get.delete<AboutController>();
-      Get.to(AboutUsPage());
-    }
-    if (index == 2) {
-      Get.delete<ProductListController>();
-      Get.to(ProductListPage());
-    }
-    if (index == 3) {
-      Get.delete<NewsController>();
-      Get.to(NewsPage());
-    }
-    if (index == 4) {
-      Get.delete<CatalogueController>();
-      Get.to(CatalogueListPage());
-    }
-    if (index == 5) {
-      Get.delete<ContactUsController>();
-      Get.to(ContactUsPage());
-    }
   }
 }
 
@@ -51,7 +25,46 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return buildRowOfButtons();
+    return LayoutBuilder(builder: (context, constraints) {
+      return Get.width < 800 ? buildDrawer() : buildRowOfButtons();
+    });
+  }
+
+  Widget buildDrawer() {
+    return Container(
+      height: 150,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () {
+              scaffoldKey.currentState!.openDrawer();
+            },
+            child: Container(
+              padding: EdgeInsets.only(top: 10),
+              alignment: Alignment.center,
+              color: Colors.blue,
+              width: 150,
+              height: 150,
+              child: Icon(
+                Icons.list_outlined,
+                size: 40,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(right: 150),
+              color: Colors.blue,
+              alignment: Alignment.center,
+              child: Image(image: AssetImage('assets/images/logo.png')),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget buildRowOfButtons() {
@@ -105,7 +118,7 @@ class TopBar extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          controller.clickButton(index);
+          Utils.clickButton(index);
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,
