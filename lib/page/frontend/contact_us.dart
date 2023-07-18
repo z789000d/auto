@@ -13,7 +13,6 @@ import '../../widget/bottom_bar_widget.dart';
 import '../../widget/top_bar_widget.dart';
 
 class ContactUsController extends GetxController {
-
   late GoogleMapController mapController;
 
   final LatLng center = const LatLng(24.808042175428966, 121.0045145269872);
@@ -71,7 +70,10 @@ class ContactUsController extends GetxController {
     }
 
     showDialog('送出成功');
+    clearEdit();
+  }
 
+  void clearEdit() {
     companyNameController.text = "";
     companyWebController.text = "";
     companyCountryController.text = "";
@@ -403,18 +405,36 @@ class ContactUsPage extends ParentPage {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              controller.sendEmail();
-            },
-            child: Container(
-              margin: EdgeInsets.only(top: 20),
-              width: 80,
-              child: Text(
-                '送出',
-                textAlign: TextAlign.center,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  controller.clearEdit();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 20),
+                  width: 80,
+                  child: Text(
+                    '清除',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-            ),
+              GestureDetector(
+                onTap: () {
+                  controller.sendEmail();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 20,left: 20),
+                  width: 80,
+                  child: Text(
+                    '送出',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
