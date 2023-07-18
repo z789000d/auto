@@ -20,8 +20,9 @@ class TopBarController extends GetxController {
 
 class TopBar extends StatelessWidget {
   final TopBarController topBarController = Get.put(TopBarController());
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  TopBar({super.key});
+  TopBar(this.scaffoldKey, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -58,7 +58,6 @@ class HomeBackendPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    TopBar(),
                     Container(
                       height: 350,
                       width: Get.width / 1.5,

@@ -8,10 +8,10 @@ import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 
-final scaffoldKey = GlobalKey<ScaffoldState>();
 
 class ParentPage extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   ParentPage({super.key});
 
@@ -29,7 +29,7 @@ class ParentPage extends StatelessWidget {
                 controller: _scrollController,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  children: [TopBar(), childWidget(), BottomWidget()],
+                  children: [TopBar(scaffoldKey), childWidget(), BottomWidget()],
                 ),
               ),
             ),
@@ -88,8 +88,8 @@ class ParentPage extends StatelessWidget {
     return ListTile(
       title: Center(child: Text(title)),
       onTap: () {
+        scaffoldKey.currentState!.closeDrawer();
         Utils.clickButton(index);
-        Navigator.pop(context);
       },
     );
   }

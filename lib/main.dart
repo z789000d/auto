@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        initialRoute: '/',
+        initialRoute: '/MyHomePage',
         defaultTransition: Transition.native,
         transitionDuration: Duration.zero,
         // Set transition duration to zero
