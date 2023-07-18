@@ -59,4 +59,21 @@ class Utils {
       Get.to(HomeBackendPage());
     }
   }
+
+  static void clickButtonBacked(int index) {
+    print('$index');
+    if (index == 0) {
+      Get.delete<HomePageBackedController>();
+      Get.to(HomeBackendPage());
+    }
+    if (index == 1) {}
+    if (index == 2) {}
+    if (index == 3) {}
+    if (index == 4) {}
+    if (index == 5) {}
+    if (index == 6) {
+      Get.delete<PageControllerMixin>();
+      Get.to(MyHomePage());
+    }
+  }
 }

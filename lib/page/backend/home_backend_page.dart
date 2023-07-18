@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../widget/top_bar_backed_widget.dart';
+
 // 定义控制器类
 class HomePageBackedController extends GetxController {
   // 假设有一个包含数据的 List
@@ -34,6 +36,7 @@ class HomeBackendPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          TopBarBacked(),
           table(),
           Container(margin: EdgeInsets.all(25), child: Text('新增')),
         ],
