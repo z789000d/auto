@@ -11,7 +11,7 @@ import '../page/frontend/product_list.dart';
 import '../utils.dart';
 
 class TopBarController extends GetxController {
-  final buttonStates = <bool>[false, false, false, false, false, false].obs;
+  final buttonStates = <bool>[false, false, false, false, false, false,false].obs;
 
   void updateButtonState(int index, bool isHovered) {
     buttonStates[index] = isHovered;
@@ -96,6 +96,7 @@ class TopBar extends StatelessWidget {
                   buildButton('最新消息', topBarController, 3),
                   buildButton('電子型錄', topBarController, 4),
                   buildButton('聯絡我們', topBarController, 5),
+                  buildButton('後台', topBarController, 6),
                 ],
               ),
             ),

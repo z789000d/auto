@@ -58,6 +58,7 @@ class ParentPage extends StatelessWidget {
             drawerItem(context, '最新消息', 3),
             drawerItem(context, '電子型錄', 4),
             drawerItem(context, '聯絡我們', 5),
+            drawerItem(context, '後台', 6),
             SizedBox(
               width: 1,
               height: Get.height/6,
