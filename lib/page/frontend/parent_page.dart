@@ -11,14 +11,12 @@ import '../../widget/bottom_bar_widget.dart';
 
 class ParentPage extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   ParentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       drawer: drawer(context),
       body: LayoutBuilder(builder: (context, constraints) {
         return Column(
@@ -29,7 +27,7 @@ class ParentPage extends StatelessWidget {
                 controller: _scrollController,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  children: [TopBar(scaffoldKey), childWidget(), BottomWidget()],
+                  children: [TopBar(context), childWidget(), BottomWidget()],
                 ),
               ),
             ),
@@ -90,8 +88,8 @@ class ParentPage extends StatelessWidget {
     return ListTile(
       title: Center(child: Text(title)),
       onTap: () {
-        scaffoldKey.currentState!.closeDrawer();
         Utils.clickButton(index);
+        Scaffold.of(context).closeDrawer();
       },
     );
   }

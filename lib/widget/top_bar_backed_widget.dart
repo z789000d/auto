@@ -33,7 +33,7 @@ class TopBarBacked extends StatelessWidget {
   Widget buildRowOfButtons() {
     return Obx(
       () => Container(
-        color: Colors.blue,
+        color: Colors.grey,
         width: Get.width.obs.value,
         height: 150,
         padding: EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 30),
@@ -46,7 +46,7 @@ class TopBarBacked extends StatelessWidget {
               child: Image(image: AssetImage('assets/images/logo.png')),
             ),
             Container(
-              width: (Get.width / 1.5) < 600 ? 600 : Get.width / 1.5,
+              width: (Get.width / 1.5) < 800 ? 800 : Get.width / 1.5,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -58,7 +58,7 @@ class TopBarBacked extends StatelessWidget {
                   buildButton('最新消息後台', topBarController, 3),
                   buildButton('電子型錄後台', topBarController, 4),
                   buildButton('聯絡我們後台', topBarController, 5),
-                  buildButton('回主畫面後台', topBarController, 6),
+                  buildButton('回主畫面', topBarController, 6),
                 ],
               ),
             ),
@@ -97,7 +97,7 @@ class TopBarBacked extends StatelessWidget {
             Visibility(
               visible: isHovered,
               replacement: SizedBox(
-                width: 60,
+                width: 90,
                 height: 1,
               ),
               child: Container(

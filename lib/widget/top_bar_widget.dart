@@ -11,7 +11,8 @@ import '../page/frontend/product_list.dart';
 import '../utils.dart';
 
 class TopBarController extends GetxController {
-  final buttonStates = <bool>[false, false, false, false, false, false,false].obs;
+  final buttonStates =
+      <bool>[false, false, false, false, false, false, false].obs;
 
   void updateButtonState(int index, bool isHovered) {
     buttonStates[index] = isHovered;
@@ -20,9 +21,9 @@ class TopBarController extends GetxController {
 
 class TopBar extends StatelessWidget {
   final TopBarController topBarController = Get.put(TopBarController());
-  final GlobalKey<ScaffoldState> scaffoldKey;
+  final BuildContext context;
 
-  TopBar(this.scaffoldKey, {super.key});
+  TopBar(this.context, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class TopBar extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              scaffoldKey.currentState!.openDrawer();
+              Scaffold.of(context).openDrawer();
             },
             child: Container(
               padding: EdgeInsets.only(top: 10),

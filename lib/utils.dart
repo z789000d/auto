@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:web_auto/page/backend/about_us_backend_page.dart';
 import 'package:web_auto/page/backend/home_backend_page.dart';
 import 'package:web_auto/page/frontend/about_us.dart';
 import 'package:web_auto/page/frontend/catalogue_list.dart';
@@ -66,7 +67,10 @@ class Utils {
       Get.delete<HomePageBackedController>();
       Get.to(HomeBackendPage());
     }
-    if (index == 1) {}
+    if (index == 1) {
+      Get.delete<AboutUsBackendController>();
+      Get.to(AboutUsBackendPage());
+    }
     if (index == 2) {}
     if (index == 3) {}
     if (index == 4) {}
