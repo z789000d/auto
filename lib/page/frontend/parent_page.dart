@@ -8,7 +8,6 @@ import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 
-
 class ParentPage extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
@@ -27,7 +26,7 @@ class ParentPage extends StatelessWidget {
                 controller: _scrollController,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  children: [TopBar(context), childWidget(), BottomWidget()],
+                  children: [TopBar(), childWidget(), BottomWidget()],
                 ),
               ),
             ),
@@ -50,16 +49,16 @@ class ParentPage extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),
-            drawerItem(context, '首頁', 0),
-            drawerItem(context, '關於我們', 1),
-            drawerItem(context, '產品介紹', 2),
-            drawerItem(context, '最新消息', 3),
-            drawerItem(context, '電子型錄', 4),
-            drawerItem(context, '聯絡我們', 5),
-            drawerItem(context, '後台', 6),
+            drawerItem('首頁', 0),
+            drawerItem('關於我們', 1),
+            drawerItem('產品介紹', 2),
+            drawerItem('最新消息', 3),
+            drawerItem('電子型錄', 4),
+            drawerItem('聯絡我們', 5),
+            drawerItem('後台', 6),
             SizedBox(
               width: 1,
-              height: Get.height/6,
+              height: Get.height / 6,
             ),
             Container(
               alignment: Alignment.bottomLeft,
@@ -84,14 +83,16 @@ class ParentPage extends StatelessWidget {
     );
   }
 
-  Widget drawerItem(context, title, index) {
-    return ListTile(
-      title: Center(child: Text(title)),
-      onTap: () {
-        Utils.clickButton(index);
-        Scaffold.of(context).closeDrawer();
-      },
-    );
+  Widget drawerItem(title, index) {
+    return Builder(builder: (context) {
+      return ListTile(
+        title: Center(child: Text(title)),
+        onTap: () {
+          Utils.clickButton(index);
+          Scaffold.of(context).closeDrawer();
+        },
+      );
+    });
   }
 
   Widget childWidget() {

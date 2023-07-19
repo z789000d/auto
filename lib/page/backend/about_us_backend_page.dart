@@ -81,10 +81,29 @@ class AboutUsBackendPage extends StatelessWidget {
                   ),
                 ),
               ),
+              Container(
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black, // 设置边框颜色
+                    width: 1, // 设置边框宽度
+                  ),
+                ),
+                child: Text('修改'),
+              ),
             ],
           ),
-          table(),
-          Container(margin: EdgeInsets.all(25), child: Text('新增')),
+          Container(margin: EdgeInsets.all(10), child: table()),
+          Container(
+            margin: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black, // 设置边框颜色
+                width: 1, // 设置边框宽度
+              ),
+            ),
+            child: Text('新增'),
+          )
         ],
       )),
     );

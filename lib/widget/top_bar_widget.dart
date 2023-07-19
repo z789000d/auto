@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:web_auto/page/frontend/news_page.dart';
-
-import '../page/frontend/about_us.dart';
-import '../page/frontend/catalogue_list.dart';
-import '../page/frontend/contact_us.dart';
-import '../page/frontend/home_page.dart';
-import '../page/frontend/parent_page.dart';
-import '../page/frontend/product_list.dart';
 import '../utils.dart';
 
 class TopBarController extends GetxController {
@@ -21,9 +13,6 @@ class TopBarController extends GetxController {
 
 class TopBar extends StatelessWidget {
   final TopBarController topBarController = Get.put(TopBarController());
-  final BuildContext context;
-
-  TopBar(this.context, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,40 +22,42 @@ class TopBar extends StatelessWidget {
   }
 
   Widget buildDrawer() {
-    return Container(
-      height: 150,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Scaffold.of(context).openDrawer();
-            },
-            child: Container(
-              padding: EdgeInsets.only(top: 10),
-              alignment: Alignment.center,
-              color: Colors.blue,
-              width: 150,
-              height: 150,
-              child: Icon(
-                Icons.list_outlined,
-                size: 40,
-                color: Colors.white,
+    return Builder(builder: (context) {
+      return Container(
+        height: 150,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                alignment: Alignment.center,
+                color: Colors.blue,
+                width: 150,
+                height: 150,
+                child: Icon(
+                  Icons.list_outlined,
+                  size: 40,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(right: 150),
-              color: Colors.blue,
-              alignment: Alignment.center,
-              child: Image(image: AssetImage('assets/images/logo.png')),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(right: 150),
+                color: Colors.blue,
+                alignment: Alignment.center,
+                child: Image(image: AssetImage('assets/images/logo.png')),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget buildRowOfButtons() {

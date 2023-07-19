@@ -8,7 +8,7 @@ import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
-class HomePageBackedController extends GetxController {
+class NewsBackedController extends GetxController {
   // 假设有一个包含数据的 List
   RxList<Map<String, dynamic>> data = <Map<String, dynamic>>[].obs;
 
@@ -17,14 +17,13 @@ class HomePageBackedController extends GetxController {
     super.onInit();
     // 初始化数据
     for (int i = 0; i < 10; i++) {
-      data.add({'id': i, 'image': 'url$i', 'function': 'Function $i'});
+      data.add({'id': i, 'newsText': '最新消息$i', 'function': 'Function $i'});
     }
   }
 }
 
-class HomeBackendPage extends StatelessWidget {
-  final HomePageBackedController controller =
-      Get.put(HomePageBackedController());
+class NewsBackendPage extends StatelessWidget {
+  final NewsBackedController controller = Get.put(NewsBackedController());
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class HomeBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
-                      alignment: Alignment.center, child: Text('圖片')))),
+                      alignment: Alignment.center, child: Text('最新消息文字')))),
           DataColumn(
               label: Expanded(
                   child: Container(
@@ -76,7 +75,7 @@ class HomeBackendPage extends StatelessWidget {
           (index) => DataRow(
             cells: [
               DataCell(Text('ID: ${controller.data[index]['id']}')),
-              DataCell(Text('Image: ${controller.data[index]['image']}')),
+              DataCell(Text('newsText: ${controller.data[index]['newsText']}')),
               DataCell(Row(
                 children: [
                   Container(child: Text('修改')),
