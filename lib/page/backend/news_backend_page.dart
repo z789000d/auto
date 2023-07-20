@@ -89,6 +89,10 @@ class NewsBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('排序')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('id')))),
           DataColumn(
               label: Expanded(
@@ -103,6 +107,7 @@ class NewsBackendPage extends StatelessWidget {
           controller.data.length,
           (index) => DataRow(
             cells: [
+              DataCell(Text('第$index個')),
               DataCell(Text('ID: ${controller.data[index]['id']}')),
               DataCell(Text('newsText: ${controller.data[index]['newsText']}')),
               DataCell(Row(

@@ -5,40 +5,38 @@ import 'package:get/get.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../model/product_model.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
-class HomePageBackedController extends GetxController {
-  // 假设有一个包含数据的 List
-  RxList<Map<String, dynamic>> data = <Map<String, dynamic>>[].obs;
+class ProductImageBackedController extends GetxController {
+  Rx<ProductModel> productModel = ProductModel(
+          id: '',
+          category: '',
+          name: '',
+          images: [],
+          description: '',
+          videoLink: '')
+      .obs; // or
   final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
-    // 初始化数据
-    for (int i = 0; i < 10; i++) {
-      data.add({
-        'id': i,
-        'image':
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-        'function': 'Function $i'
-      });
-    }
   }
 
   void addData() {
-    data.add({
-      'id': data.length,
-      'image':
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-      'function': 'Function ${data.length}'
-    });
+    ProductModel productModelOriginal = productModel.value.copyWith();
+    productModelOriginal.images.add(
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU');
+    productModel.value = productModelOriginal;
     scrollToEnd();
   }
 
   void deleteData(int index) {
-    data.removeAt(index);
+    ProductModel productModelOriginal = productModel.value.copyWith();
+    productModelOriginal.images.removeAt(index);
+    productModel.value = productModelOriginal;
   }
 
   void scrollToEnd() {
@@ -52,14 +50,14 @@ class HomePageBackedController extends GetxController {
   }
 }
 
-class HomeBackendPage extends StatelessWidget {
-  final HomePageBackedController controller =
-      Get.put(HomePageBackedController());
+class ProductImageBackendPage extends StatelessWidget {
+  final ProductImageBackedController controller =
+      Get.put(ProductImageBackedController());
 
   @override
   Widget build(BuildContext context) {
     // 使用GetX来获取控制器实例
-
+    controller.productModel.value = Get.arguments['productModel']; // 獲取傳遞的參數
     return Scaffold(
       body: SingleChildScrollView(
           controller: controller.scrollController,
@@ -82,7 +80,7 @@ class HomeBackendPage extends StatelessWidget {
                       controller.addData();
                     },
                     child: Text('新增')),
-              )
+              ),
             ],
           )),
     );
@@ -92,7 +90,7 @@ class HomeBackendPage extends StatelessWidget {
     return Obx(
       () => DataTable(
         dividerThickness: 1,
-        // 设置分隔线的厚度,
+        // 设置分隔线的厚度
         dataRowMinHeight: 100,
         dataRowMaxHeight: 150,
         columns: [
@@ -114,14 +112,14 @@ class HomeBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.data.length,
+          controller.productModel.value.images.length,
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
-              DataCell(Text('ID: ${controller.data[index]['id']}')),
+              DataCell(Text('ID: ${controller.productModel.value.id}')),
               DataCell(
                 Image.network(
-                  controller.data[index]['image'],
+                  controller.productModel.value.images[index],
                   width: 120,
                   height: 120,
                 ),

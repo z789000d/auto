@@ -77,70 +77,70 @@ class AboutUsBackendPage extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        controller: controller.scrollController,
+          controller: controller.scrollController,
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TopBarBacked(),
-          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.all(20),
-                width: 80,
-                child: Text(
-                  '介紹:',
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  child: TextField(
-                    maxLines: 10,
-                    controller: controller.companyContentController.value,
-                    style: TextStyle(fontSize: 12.0),
-                    decoration: InputDecoration(
-                      hintText: '輸入介紹',
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(width: 1.0),
+              TopBarBacked(),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(20),
+                    width: 80,
+                    child: Text(
+                      '介紹:',
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.all(20),
+                      child: TextField(
+                        maxLines: 10,
+                        controller: controller.companyContentController.value,
+                        style: TextStyle(fontSize: 12.0),
+                        decoration: InputDecoration(
+                          hintText: '輸入介紹',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 6.0, horizontal: 10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(width: 1.0),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black, // 设置边框颜色
+                        width: 1, // 设置边框宽度
+                      ),
+                    ),
+                    child: Text('修改'),
+                  ),
+                ],
               ),
+              Container(margin: EdgeInsets.all(10), child: table()),
               Container(
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.black, // 设置边框颜色
                     width: 1, // 设置边框宽度
                   ),
                 ),
-                child: Text('修改'),
+                child: GestureDetector(
+                    onTap: () {
+                      controller.addData();
+                    },
+                    child: Text('新增')),
               ),
             ],
-          ),
-          Container(margin: EdgeInsets.all(10), child: table()),
-          Container(
-            margin: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.black, // 设置边框颜色
-                width: 1, // 设置边框宽度
-              ),
-            ),
-            child: GestureDetector(
-                onTap: () {
-                  controller.addData();
-                },
-                child: Text('新增')),
-          ),
-        ],
-      )),
+          )),
     );
   }
 
@@ -152,6 +152,10 @@ class AboutUsBackendPage extends StatelessWidget {
         dataRowMinHeight: 100,
         dataRowMaxHeight: 150,
         columns: [
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('排序')))),
           DataColumn(
               label: Expanded(
                   child: Container(
@@ -169,6 +173,7 @@ class AboutUsBackendPage extends StatelessWidget {
           controller.data.length,
           (index) => DataRow(
             cells: [
+              DataCell(Text('第$index個')),
               DataCell(Text('ID: ${controller.data[index]['id']}')),
               DataCell(
                 Image.network(

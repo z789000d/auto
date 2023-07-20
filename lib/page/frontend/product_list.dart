@@ -130,7 +130,6 @@ class ProductListPage extends ParentPage {
         },
         child: GestureDetector(
           onTap: () {
-            print("aaaaaaa ${controller.productShowModel[index]}");
             Get.to(ProductDetailPage(), arguments: {
               'productModel': controller.productShowModel[index]
             });

@@ -46,7 +46,7 @@ class TopBarBacked extends StatelessWidget {
               child: Image(image: AssetImage('assets/images/logo.png')),
             ),
             Container(
-              width: (Get.width / 1.5) < 800 ? 800 : Get.width / 1.5,
+              width: (Get.width / 1.5) < 800 ? 800 : Get.width / 1.2,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -88,10 +88,14 @@ class TopBarBacked extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
+            Container(
+              width: 100,
+              alignment: Alignment.center,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
             ),
             Visibility(

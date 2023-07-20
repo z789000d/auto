@@ -2,15 +2,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/page/backend/product_image_backend_page.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../model/product_model.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
 class ProductListBackendController extends GetxController {
-  // 假设有一个包含数据的 List
-  RxList<Map<String, dynamic>> data = <Map<String, dynamic>>[].obs;
+  RxList<ProductModel> productModel = <ProductModel>[].obs;
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -18,35 +19,38 @@ class ProductListBackendController extends GetxController {
     super.onInit();
     // 初始化数据
     for (int i = 0; i < 10; i++) {
-      data.add({
-        'id': i,
-        'category': '類別$i',
-        'image':
+      productModel.add(ProductModel(
+          id: '$i',
+          category: '類別$i',
+          name: '產品$i',
+          images: [
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-        'name': '產品$i',
-        'function': 'Function $i',
-        'description': '描述$i',
-        'videoLink': '連結$i'
-      });
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'
+          ],
+          description: '描述$i',
+          videoLink: '連結$i'));
     }
   }
 
   void addData() {
-    data.add({
-      'id': data.length,
-      'category': '類別${data.length}',
-      'image':
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-      'name': '產品${data.length}',
-      'function': 'Function ${data.length}',
-      'description': '描述${data.length}',
-      'videoLink': '連結${data.length}'
-    });
+    productModel.add(ProductModel(
+        id: '$productModel.length',
+        category: '類別${productModel.length}',
+        name: '產品${productModel.length}',
+        images: [
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'
+        ],
+        description: '描述${productModel.length}',
+        videoLink: '連結${productModel.length}'));
     scrollToEnd();
   }
 
   void deleteData(int index) {
-    data.removeAt(index);
+    productModel.removeAt(index);
   }
 
   void scrollToEnd() {
@@ -107,6 +111,10 @@ class ProductListBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('排序')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('id')))),
           DataColumn(
               label: Expanded(
@@ -134,23 +142,32 @@ class ProductListBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.data.length,
+          controller.productModel.length,
           (index) => DataRow(
             cells: [
-              DataCell(Text('ID: ${controller.data[index]['id']}')),
-              DataCell(Text('類別: ${controller.data[index]['category']}')),
+              DataCell(Text('第$index個')),
+              DataCell(Text('ID: ${controller.productModel[index].id}')),
+              DataCell(Text('類別: ${controller.productModel[index].category}')),
               DataCell(
-                Image.network(
-                  controller.data[index]['image'],
-                  width: 120,
-                  height: 120,
+                GestureDetector(
+                  onTap: () {
+                    Get.delete<ProductImageBackedController>();
+                    Get.to(ProductImageBackendPage(), arguments: {
+                      'productModel': controller.productModel[index]
+                    });
+                  },
+                  child: Image.network(
+                    controller.productModel[index].images[0],
+                    width: 120,
+                    height: 120,
+                  ),
                 ),
               ),
-              DataCell(Text('name: ${controller.data[index]['name']}')),
+              DataCell(Text('name: ${controller.productModel[index].name}')),
               DataCell(Text(
-                  'description: ${controller.data[index]['description']}')),
-              DataCell(
-                  Text('videoLink: ${controller.data[index]['videoLink']}')),
+                  'description: ${controller.productModel[index].description}')),
+              DataCell(Text(
+                  'videoLink: ${controller.productModel[index].videoLink}')),
               DataCell(Row(
                 children: [
                   Container(child: Text('修改')),
