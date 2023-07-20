@@ -5,6 +5,7 @@ import 'package:web_auto/page/backend/catalogue_backend_page.dart';
 import 'package:web_auto/page/backend/contact_us_backend_page.dart';
 import 'package:web_auto/page/backend/home_backend_page.dart';
 import 'package:web_auto/page/backend/news_backend_page.dart';
+import 'package:web_auto/page/backend/product_list_backend_page.dart';
 import 'package:web_auto/page/frontend/about_us.dart';
 import 'package:web_auto/page/frontend/catalogue_list.dart';
 import 'package:web_auto/page/frontend/contact_us.dart';
@@ -74,7 +75,10 @@ class Utils {
       Get.delete<AboutUsBackendController>();
       Get.to(AboutUsBackendPage());
     }
-    if (index == 2) {}
+    if (index == 2) {
+      Get.delete<ProductListBackendController>();
+      Get.to(ProductListBackendPage());
+    }
     if (index == 3) {
       Get.delete<NewsBackedController>();
       Get.to(NewsBackendPage());
