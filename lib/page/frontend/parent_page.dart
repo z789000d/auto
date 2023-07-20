@@ -9,21 +9,20 @@ import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 
 class ParentPage extends StatelessWidget {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   ParentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: drawer(context),
       body: LayoutBuilder(builder: (context, constraints) {
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
               child: SingleChildScrollView(
-                controller: _scrollController,
+                controller: scrollController,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [TopBar(), childWidget(), BottomWidget()],
@@ -49,13 +48,14 @@ class ParentPage extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),
-            drawerItem('首頁', 0),
-            drawerItem('關於我們', 1),
-            drawerItem('產品介紹', 2),
-            drawerItem('最新消息', 3),
-            drawerItem('電子型錄', 4),
-            drawerItem('聯絡我們', 5),
-            drawerItem('後台', 6),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 7, // 项目数量
+                itemBuilder: (context, index) {
+                  return drawerItem(context, index); // 这里可以根据index自行决定标题和操作
+                },
+              ),
+            ),
             SizedBox(
               width: 1,
               height: Get.height / 6,
@@ -83,16 +83,31 @@ class ParentPage extends StatelessWidget {
     );
   }
 
-  Widget drawerItem(title, index) {
-    return Builder(builder: (context) {
-      return ListTile(
-        title: Center(child: Text(title)),
-        onTap: () {
-          Utils.clickButton(index);
-          Scaffold.of(context).closeDrawer();
-        },
-      );
-    });
+  Widget drawerItem(context, index) {
+    var text = '';
+    if (index == 0) {
+      text = '首頁';
+    } else if (index == 1) {
+      text = '關於我們';
+    } else if (index == 2) {
+      text = '產品介紹';
+    } else if (index == 3) {
+      text = '最新消息';
+    } else if (index == 4) {
+      text = '電子型錄';
+    } else if (index == 5) {
+      text = '聯絡我們';
+    } else if (index == 6) {
+      text = '後台';
+    }
+
+    return ListTile(
+      title: Center(child: Text(text)),
+      onTap: () {
+        Utils.clickButton(index);
+        Navigator.of(context).pop(); // 关闭Drawer
+      },
+    );
   }
 
   Widget childWidget() {
@@ -100,7 +115,7 @@ class ParentPage extends StatelessWidget {
   }
 
   void scrollToTop() {
-    _scrollController.animateTo(
+    scrollController.animateTo(
       0,
       duration: Duration(milliseconds: 100),
       curve: Curves.easeInOut,

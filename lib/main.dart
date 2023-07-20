@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/page/backend/about_us_backend_page.dart';
+import 'package:web_auto/page/backend/catalogue_backend_page.dart';
+import 'package:web_auto/page/backend/contact_us_backend_page.dart';
 import 'package:web_auto/page/backend/home_backend_page.dart';
+import 'package:web_auto/page/backend/news_backend_page.dart';
 import 'package:web_auto/page/frontend/about_us.dart';
 import 'package:web_auto/page/frontend/catalogue_item_list.dart';
 import 'package:web_auto/page/frontend/catalogue_list.dart';
@@ -39,6 +43,10 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/AboutUsPage', page: () => AboutUsPage()),
           GetPage(name: '/ContactUsPage', page: () => ContactUsPage()),
           GetPage(name: '/HomeBackendPage', page: () => HomeBackendPage()),
+          GetPage(name: '/NewsBackendPage', page: () => NewsBackendPage()),
+          GetPage(name: '/ContactUsBackendPage', page: () => ContactUsBackendPage()),
+          GetPage(name: '/AboutUsBackendPage', page: () => AboutUsBackendPage()),
+          GetPage(name: '/CatalogueBackendPage', page: () => CatalogueBackendPage()),
         ],
         title: '鋸開自動化機械有限公司',
         theme: ThemeData(

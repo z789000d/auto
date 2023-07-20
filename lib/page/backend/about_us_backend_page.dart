@@ -12,6 +12,7 @@ class AboutUsBackendController extends GetxController {
   // 假设有一个包含数据的 List
   RxList<Map<String, dynamic>> data = <Map<String, dynamic>>[].obs;
   final companyContentController = TextEditingController().obs;
+  final ScrollController scrollController = ScrollController();
 
   RxString text = RxString(
       "鉅開公司創立於1993年專業製造、開發、設計自動化生產機械，範圍含括航太、汽車、電子、五金制品、娛樂、飲食等各行業生產器具。\n\n" +
@@ -25,7 +26,12 @@ class AboutUsBackendController extends GetxController {
     super.onInit();
     // 初始化数据
     for (int i = 0; i < 10; i++) {
-      data.add({'id': i, 'image': 'url$i', 'function': 'Function $i'});
+      data.add({
+        'id': i,
+        'image':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+        'function': 'Function $i'
+      });
     }
 
     companyContentController.value.text =
@@ -34,6 +40,30 @@ class AboutUsBackendController extends GetxController {
             "我們秉持奉行『以人為本，科技興業，品質第一，服務至上，不斷創新』，提供最人性化、最經濟效益、最高品質服務的信念生產。責任意識、創業精神、誠信和優質服務更是我公司企業文化的精髓。\n\n" +
             "鉅開公司以不斷創新和提供優質服務，並持續專精技術、引進精密加工設備、人文管理科學的方式，期與顧客永恆發展為主要的經營理念。滿足顧客要求創建最好的產品品質方針，是我公司至今仍保有廣大客戶群的最高指導原則。\n\n" +
             "合作廠家遍及歐美、中東、中國大陸、臺灣、韓國、日本及東南亞地區，產品深獲信賴好評。\n\n");
+  }
+
+  void addData() {
+    data.add({
+      'id': data.length,
+      'image':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+      'function': 'Function ${data.length}'
+    });
+    scrollToEnd();
+  }
+
+  void deleteData(int index) {
+    data.removeAt(index);
+  }
+
+  void scrollToEnd() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 }
 
@@ -47,6 +77,7 @@ class AboutUsBackendPage extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
+        controller: controller.scrollController,
           child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,8 +133,12 @@ class AboutUsBackendPage extends StatelessWidget {
                 width: 1, // 设置边框宽度
               ),
             ),
-            child: Text('新增'),
-          )
+            child: GestureDetector(
+                onTap: () {
+                  controller.addData();
+                },
+                child: Text('新增')),
+          ),
         ],
       )),
     );
@@ -112,7 +147,10 @@ class AboutUsBackendPage extends StatelessWidget {
   Widget table() {
     return Obx(
       () => DataTable(
-        dividerThickness: 1, // 设置分隔线的厚度
+        dividerThickness: 1,
+        // 设置分隔线的厚度
+        dataRowMinHeight: 100,
+        dataRowMaxHeight: 150,
         columns: [
           DataColumn(
               label: Expanded(
@@ -132,12 +170,23 @@ class AboutUsBackendPage extends StatelessWidget {
           (index) => DataRow(
             cells: [
               DataCell(Text('ID: ${controller.data[index]['id']}')),
-              DataCell(Text('Image: ${controller.data[index]['image']}')),
+              DataCell(
+                Image.network(
+                  controller.data[index]['image'],
+                  width: 120,
+                  height: 120,
+                ),
+              ),
               DataCell(Row(
                 children: [
                   Container(child: Text('修改')),
                   Container(
-                      margin: EdgeInsets.only(left: 20), child: Text('刪除')),
+                      margin: EdgeInsets.only(left: 20),
+                      child: GestureDetector(
+                          onTap: () {
+                            controller.deleteData(index);
+                          },
+                          child: Text('刪除'))),
                 ],
               )),
             ],
