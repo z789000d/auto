@@ -57,7 +57,19 @@ class ProductImageBackendPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 使用GetX来获取控制器实例
-    controller.productModel.value = Get.arguments['productModel']; // 獲取傳遞的參數
+    final productModel = Get.arguments != null
+        ? Get.arguments['productModel']
+        : ProductModel(
+            id: '',
+            category: '',
+            name: '',
+            images: [],
+            description: '',
+            videoLink: '',
+          );
+    controller.productModel.value = productModel;
+
+    // rest of your build method code
     return Scaffold(
       body: SingleChildScrollView(
           controller: controller.scrollController,

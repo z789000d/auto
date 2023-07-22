@@ -289,33 +289,33 @@ class ProductDetailPage extends ParentPage {
   }
 
   Widget listViewItem(index) {
-    return Obx(
-      () => MouseRegion(
-        onEnter: (event) {
-          controller.setCurrentIndex(index);
-        },
-        onExit: (event) {
-          controller.setCurrentIndex(-1);
-        },
-        child: GestureDetector(
-          onTap: () {
-            Get.to(ProductDetailPage(), arguments: {
-              'productModel': controller.productModelList[index]
-            });
+    return Container(
+      width: 200,
+      height: 200,
+      margin: EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: controller.currentIndex.value == index
+              ? Colors.blue
+              : Colors.transparent,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(5), // 添加圆角
+      ),
+      child: Obx(
+        () => MouseRegion(
+          onEnter: (event) {
+            controller.setCurrentIndex(index);
           },
-          child: Container(
-            width: 200,
-            height: 200,
-            margin: EdgeInsets.all(40),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: controller.currentIndex.value == index
-                    ? Colors.blue
-                    : Colors.transparent,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(5), // 添加圆角
-            ),
+          onExit: (event) {
+            controller.setCurrentIndex(-1);
+          },
+          child: GestureDetector(
+            onTap: () {
+              Get.to(ProductDetailPage(), arguments: {
+                'productModel': controller.productModelList[index]
+              });
+            },
             child: Container(
               child: Column(
                 children: [

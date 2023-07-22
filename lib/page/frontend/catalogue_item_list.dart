@@ -34,8 +34,12 @@ class CatalogueItemListPage extends ParentPage {
 
   @override
   Widget childWidget() {
-    controller.catalogueModel.value =
-        Get.arguments['catalogueModel']; // 獲取傳遞的參數
+    final catalogueModel = Get.arguments != null
+        ? Get.arguments['catalogueModel']
+        : CatalogueModel(id: '', name: '', images: []);
+
+    controller.catalogueModel.value = catalogueModel;
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [

@@ -147,12 +147,12 @@ class NewsPage extends ParentPage {
     if (controller.newShowModel.length <= 3) {
       return SizedBox(
         width: 0,
-        height: 300,
+        height: 350,
       );
     } else if (controller.newShowModel.length <= 6) {
       return SizedBox(
         width: 0,
-        height: 150,
+        height: 200,
       );
     } else {
       return SizedBox(
