@@ -7,6 +7,7 @@ import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../main.dart';
+import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 import '../../widget/change_page_widget.dart';
 
@@ -15,16 +16,7 @@ class ProductListController extends GetxController {
 
   RxList<ProductModel> productShowModel = <ProductModel>[].obs;
 
-  final pageViewImage = <String>[
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-  ];
+  final pageViewImage = Utils.testImage.obs;
 
   final nowPageIndex = 1.obs;
 

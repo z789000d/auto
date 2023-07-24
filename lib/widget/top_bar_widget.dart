@@ -31,6 +31,7 @@ class TopBar extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
+                print('open');
                 Scaffold.of(context).openDrawer();
               },
               child: Container(

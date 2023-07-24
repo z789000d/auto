@@ -2,15 +2,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/model/catalogue_model.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
 import '../../widget/top_bar_backed_widget.dart';
+import 'catalogue_image_backend_page.dart';
 
 // 定义控制器类
 class CatalogueBackendController extends GetxController {
   // 假设有一个包含数据的 List
-  RxList<Map<String, dynamic>> data = <Map<String, dynamic>>[].obs;
+  RxList<CatalogueModel> catalogueModel = <CatalogueModel>[].obs;
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -18,29 +20,35 @@ class CatalogueBackendController extends GetxController {
     super.onInit();
     // 初始化数据
     for (int i = 0; i < 10; i++) {
-      data.add({
-        'id': i,
-        'image':
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-        'text': '型錄$i',
-        'function': 'Function $i'
-      });
+      catalogueModel.add(CatalogueModel(
+        id: '$i',
+        name: '型錄$i',
+        images: [
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+        ],
+      ));
     }
   }
 
   void addData() {
-    data.add({
-      'id': data.length,
-      'image':
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-      'text': '型錄${data.length}',
-      'function': 'Function ${data.length}'
-    });
+    catalogueModel.add(CatalogueModel(
+        id: '$catalogueModel.length',
+        name: '產品${catalogueModel.length}',
+        images: [
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'
+        ]));
     scrollToEnd();
   }
 
   void deleteData(int index) {
-    data.removeAt(index);
+    catalogueModel.removeAt(index);
   }
 
   void scrollToEnd() {
@@ -60,8 +68,7 @@ class CatalogueBackendPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 使用GetX来获取控制器实例
-
+    // 使用GetX来获取控制器实例;
     return Scaffold(
       body: SingleChildScrollView(
           controller: controller.scrollController,
@@ -120,22 +127,53 @@ class CatalogueBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.data.length,
+          controller.catalogueModel.length,
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
-              DataCell(Text('ID: ${controller.data[index]['id']}')),
+              DataCell(Text('ID: ${controller.catalogueModel[index].id}')),
               DataCell(
-                Image.network(
-                  controller.data[index]['image'],
-                  width: 120,
-                  height: 120,
+                GestureDetector(
+                  onTap: () {
+                    Get.delete<CatalogueImageBackendController>();
+                    Get.to(CatalogueImageBackendPage(), arguments: {
+                      'catalogueModel': controller.catalogueModel[index]
+                    });
+                  },
+                  child: Image.network(
+                    controller.catalogueModel[index].images[0],
+                    width: 120,
+                    height: 120,
+                  ),
                 ),
               ),
-              DataCell(Text('text: ${controller.data[index]['text']}')),
+              DataCell(Text('text: ${controller.catalogueModel[index].name}')),
               DataCell(Row(
                 children: [
-                  Container(child: Text('修改')),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index > 0) {
+                            controller.catalogueModel.insert(
+                                index - 1, controller.catalogueModel.removeAt(index));
+                          }
+                        },
+                        child: Text('上升')),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index < controller.catalogueModel.length - 1) {
+                            controller.catalogueModel.insert(
+                                index + 1, controller.catalogueModel.removeAt(index));
+                          }
+                        },
+                        child: Text('下降')),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 20), child: Text('修改')),
                   Container(
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(

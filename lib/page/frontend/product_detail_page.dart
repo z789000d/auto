@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../../main.dart';
 import '../../model/product_model.dart';
@@ -26,22 +26,20 @@ class ProductDetailController extends GetxController {
 
   RxList<ProductModel> productModelList = <ProductModel>[].obs;
 
-  final pageViewImage = <String>[
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-  ];
+  final pageViewImage = Utils.testImage.obs;
 
   RxInt currentIndex = RxInt(-1);
 
   void setCurrentIndex(int index) {
     currentIndex.value = index;
   }
+
+  final ytController = YoutubePlayerController.fromVideoId(
+    videoId:
+        '${Utils.getYouTubeVideoId("https://www.youtube.com/watch?v=TpX9aAfgurU")}',
+    autoPlay: false,
+    params: const YoutubePlayerParams(showFullscreenButton: true),
+  );
 
   @override
   void onInit() {
@@ -71,7 +69,10 @@ class ProductDetailPage extends ParentPage {
 
   @override
   Widget childWidget() {
-    controller.productModel.value = Get.arguments['productModel']; // 獲取傳遞的參數
+    if (Get.arguments != null) {
+      controller.productModel.value = Get.arguments['productModel'];
+    }
+    // 獲取傳遞的參數
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -235,13 +236,11 @@ class ProductDetailPage extends ParentPage {
                 ),
               ),
               Container(
-                width: 320,
-                height: 180,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: HtmlWidget(
-                    '''<iframe width="560" height="315" src="https://www.youtube.com/embed/${Utils.getYouTubeVideoId("https://www.youtube.com/watch?v=TpX9aAfgurU")}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>''',
-                  ),
+                width: 400,
+                height: 225,
+                child: YoutubePlayer(
+                  controller: controller.ytController,
+                  aspectRatio: 16 / 9,
                 ),
               ),
             ],

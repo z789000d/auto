@@ -8,4 +8,11 @@ class CatalogueModel {
     required this.name,
     required this.images,
   });
+
+  CatalogueModel copyWith({String? id, String? name, List<String>? images}) {
+    return CatalogueModel(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        images: images ?? this.images);
+  }
 }

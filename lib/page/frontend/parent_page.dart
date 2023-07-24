@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +17,10 @@ class ParentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(builder: (context, constraints) {
-        return Column(
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        drawer: drawer(context),
+        body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
@@ -30,9 +33,9 @@ class ParentPage extends StatelessWidget {
               ),
             ),
           ],
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 
   Widget drawer(context) {
@@ -41,6 +44,7 @@ class ParentPage extends StatelessWidget {
         scrollDirection: Axis.vertical,
         controller: ScrollController(),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             DrawerHeader(
               child: Image(image: AssetImage('assets/images/logo.png')),
@@ -48,17 +52,16 @@ class ParentPage extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 7, // 项目数量
-                itemBuilder: (context, index) {
-                  return drawerItem(context, index); // 这里可以根据index自行决定标题和操作
-                },
-              ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: 7, // 项目数量
+              itemBuilder: (context, index) {
+                return drawerItem(context, index); // 这里可以根据index自行决定标题和操作
+              },
             ),
             SizedBox(
               width: 1,
-              height: Get.height / 6,
+              height: Get.height / 5,
             ),
             Container(
               alignment: Alignment.bottomLeft,
@@ -105,7 +108,7 @@ class ParentPage extends StatelessWidget {
       title: Center(child: Text(text)),
       onTap: () {
         Utils.clickButton(index);
-        Navigator.of(context).pop(); // 关闭Drawer
+        Scaffold.of(context).closeDrawer();
       },
     );
   }

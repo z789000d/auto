@@ -8,6 +8,7 @@ import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 
 class PageControllerMixin extends GetxController {
@@ -16,16 +17,7 @@ class PageControllerMixin extends GetxController {
   final homePageModel =
       HomePageModel(pageViewImages: [], productImages: []).obs;
 
-  final pageViewImage = <String>[
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-  ];
+  final pageViewImage = Utils.testImage.obs;
 
   RxInt currentIndex = RxInt(-1);
 
@@ -37,13 +29,12 @@ class PageControllerMixin extends GetxController {
   void onInit() {
     super.onInit();
     for (var i = 0; i < 9; i++) {
-      homePageModel.value.pageViewImages.add(
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU');
+      homePageModel.value.pageViewImages.add(Utils.testImage[0]);
       homePageModel.value.productImages.add(ProductModel(
           id: i.toString(),
           category: i.toString(),
           name: "產品$i",
-          images: pageViewImage,
+          images: Utils.testImage,
           description: "描述$i",
           videoLink: "連結$i"));
     }
@@ -52,7 +43,6 @@ class PageControllerMixin extends GetxController {
   @override
   void onClose() {
     super.onClose();
-
   }
 }
 
@@ -65,23 +55,25 @@ class MyHomePage extends ParentPage {
   Widget childWidget() {
     return Column(
       children: [
-        Container(
-          height: 350,
-          width: Get.width / 1.5,
-          child: CarouselSlider(
-            options: CarouselOptions(
-              onPageChanged: (index, reason) {
-                controller.currentPageIndex.value = index;
-              },
-              enlargeCenterPage: true,
-              scrollDirection: Axis.horizontal,
-              autoPlay: true,
-              autoPlayInterval: Duration(seconds: 4),
+        Obx(
+          () => Container(
+            height: 350,
+            width: Get.width / 1.5,
+            child: CarouselSlider(
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  controller.currentPageIndex.value = index;
+                },
+                enlargeCenterPage: true,
+                scrollDirection: Axis.horizontal,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 4),
+              ),
+              items: controller.homePageModel.value.pageViewImages.map((image) {
+                return Image.network(image);
+              }).toList(),
+              carouselController: controller.buttonCarouselController,
             ),
-            items: controller.homePageModel.value.pageViewImages.map((image) {
-              return Image.network(image);
-            }).toList(),
-            carouselController: controller.buttonCarouselController,
           ),
         ),
         Container(
@@ -112,10 +104,10 @@ class MyHomePage extends ParentPage {
           () => GridView.builder(
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
+                crossAxisCount: Get.width.obs.value < 800 ? 1 : 3,
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 8,
-                childAspectRatio: Get.width.obs.value < 720
+                childAspectRatio: Get.width.obs.value < 800
                     ? (Get.width.obs.value) / (Get.height.obs.value) * 2
                     : (Get.width.obs.value) / (Get.height.obs.value)),
             itemCount: controller.homePageModel.value.productImages.length,

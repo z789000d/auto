@@ -14,6 +14,18 @@ import 'package:web_auto/page/frontend/news_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
 
 class Utils {
+  static final testImage = <String>[
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+  ];
+
+
   static String? getYouTubeVideoId(String videoUrl) {
     // YouTube 影片連結的正則表達式模式
     RegExp regExp = RegExp(
@@ -37,7 +49,7 @@ class Utils {
     print('$index');
     if (index == 0) {
       Get.delete<PageControllerMixin>();
-      Get.to(HomeBackendPage());
+      Get.to(MyHomePage());
     }
     if (index == 1) {
       Get.delete<AboutController>();

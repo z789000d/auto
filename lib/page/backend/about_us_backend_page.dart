@@ -184,7 +184,30 @@ class AboutUsBackendPage extends StatelessWidget {
               ),
               DataCell(Row(
                 children: [
-                  Container(child: Text('修改')),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index > 0) {
+                            controller.data.insert(
+                                index - 1, controller.data.removeAt(index));
+                          }
+                        },
+                        child: Text('上升')),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index < controller.data.length - 1) {
+                            controller.data.insert(
+                                index + 1, controller.data.removeAt(index));
+                          }
+                        },
+                        child: Text('下降')),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 20), child: Text('修改')),
                   Container(
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(

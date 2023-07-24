@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/page/backend/about_us_backend_page.dart';
 import 'package:web_auto/page/backend/catalogue_backend_page.dart';
+import 'package:web_auto/page/backend/catalogue_image_backend_page.dart';
 import 'package:web_auto/page/backend/contact_us_backend_page.dart';
 import 'package:web_auto/page/backend/home_backend_page.dart';
 import 'package:web_auto/page/backend/news_backend_page.dart';
@@ -16,6 +17,7 @@ import 'package:web_auto/page/frontend/home_page.dart';
 import 'package:web_auto/page/frontend/news_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
+import 'package:web_auto/utils/MyCustomScrollBehavior.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+        scrollBehavior: MyCustomScrollBehavior(),
         initialRoute: '/MyHomePage',
         defaultTransition: Transition.native,
         transitionDuration: Duration.zero,
@@ -49,6 +52,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/ContactUsBackendPage', page: () => ContactUsBackendPage()),
           GetPage(name: '/AboutUsBackendPage', page: () => AboutUsBackendPage()),
           GetPage(name: '/CatalogueBackendPage', page: () => CatalogueBackendPage()),
+          GetPage(name: '/CatalogueImageBackendPage', page: () => CatalogueImageBackendPage()),
           GetPage(name: '/ProductListBackendPage', page: () => ProductListBackendPage()),
           GetPage(name: '/ProductImageBackendPage', page: () => ProductImageBackendPage()),
         ],

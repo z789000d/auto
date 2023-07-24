@@ -37,6 +37,9 @@ class HomePageBackedController extends GetxController {
     scrollToEnd();
   }
 
+  void dataReplace(int index,Map<String, dynamic> map) {
+  }
+
   void deleteData(int index) {
     data.removeAt(index);
   }
@@ -68,6 +71,7 @@ class HomeBackendPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopBarBacked(),
+              Container(margin: EdgeInsets.all(10), child: Text('首頁輪播圖')),
               Container(margin: EdgeInsets.all(10), child: table()),
               Container(
                 margin: EdgeInsets.all(15),
@@ -128,7 +132,30 @@ class HomeBackendPage extends StatelessWidget {
               ),
               DataCell(Row(
                 children: [
-                  Container(child: Text('修改')),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index > 0) {
+                            controller.data.insert(
+                                index - 1, controller.data.removeAt(index));
+                          }
+                        },
+                        child: Text('上升')),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index < controller.data.length - 1) {
+                            controller.data.insert(
+                                index + 1, controller.data.removeAt(index));
+                          }
+                        },
+                        child: Text('下降')),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 20), child: Text('修改')),
                   Container(
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(

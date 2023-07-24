@@ -34,11 +34,10 @@ class CatalogueItemListPage extends ParentPage {
 
   @override
   Widget childWidget() {
-    final catalogueModel = Get.arguments != null
-        ? Get.arguments['catalogueModel']
-        : CatalogueModel(id: '', name: '', images: []);
 
-    controller.catalogueModel.value = catalogueModel;
+    if (Get.arguments != null) {
+      controller.catalogueModel.value = Get.arguments['catalogueModel'];
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.max,

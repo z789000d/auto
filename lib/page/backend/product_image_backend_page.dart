@@ -138,7 +138,35 @@ class ProductImageBackendPage extends StatelessWidget {
               ),
               DataCell(Row(
                 children: [
-                  Container(child: Text('修改')),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index > 0) {
+                            controller.productModel.value.images.insert(
+                                index - 1,
+                                controller.productModel.value.images
+                                    .removeAt(index));
+                          }
+                        },
+                        child: Text('上升')),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (index <
+                              controller.productModel.value.images.length - 1) {
+                            controller.productModel.value.images.insert(
+                                index + 1,
+                                controller.productModel.value.images
+                                    .removeAt(index));
+                          }
+                        },
+                        child: Text('下降')),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 20), child: Text('修改')),
                   Container(
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(
