@@ -83,6 +83,12 @@ class AboutUsBackendPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopBarBacked(),
+              Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text(
+                    '關於我們',
+                    style: TextStyle(fontSize: 20),
+                  )),
               Row(
                 children: [
                   Container(

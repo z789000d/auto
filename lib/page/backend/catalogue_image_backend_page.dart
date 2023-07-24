@@ -51,8 +51,10 @@ class CatalogueImageBackendPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 使用GetX来获取控制器实例
-    controller.catalogueModel.value =
-        Get.arguments['catalogueModel']; // 獲取傳遞的參數
+    if (Get.arguments != null) {
+      controller.catalogueModel.value =
+          Get.arguments['catalogueModel']; // 獲取傳遞的參數
+    }
     return Scaffold(
       body: SingleChildScrollView(
           controller: controller.scrollController,
@@ -61,6 +63,12 @@ class CatalogueImageBackendPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopBarBacked(),
+              Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text(
+                    '電子型錄詳圖',
+                    style: TextStyle(fontSize: 20),
+                  )),
               Container(margin: EdgeInsets.all(10), child: table()),
               Container(
                 margin: EdgeInsets.all(15),

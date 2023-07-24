@@ -42,6 +42,12 @@ class ContactUsBackendPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TopBarBacked(),
+          Container(
+              margin: EdgeInsets.all(10),
+              child: Text(
+                '聯絡我們',
+                style: TextStyle(fontSize: 20),
+              )),
           Container(margin: EdgeInsets.all(10), child: table()),
           Container(
             margin: EdgeInsets.all(10),

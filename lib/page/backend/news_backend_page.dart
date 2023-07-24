@@ -61,6 +61,12 @@ class NewsBackendPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopBarBacked(),
+              Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text(
+                    '最新消息',
+                    style: TextStyle(fontSize: 20),
+                  )),
               Container(margin: EdgeInsets.all(10), child: table()),
               Container(
                 margin: EdgeInsets.all(15),

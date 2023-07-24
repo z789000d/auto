@@ -77,6 +77,12 @@ class CatalogueBackendPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopBarBacked(),
+              Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text(
+                    '電子型錄',
+                    style: TextStyle(fontSize: 20),
+                  )),
               Container(margin: EdgeInsets.all(10), child: table()),
               Container(
                 margin: EdgeInsets.all(15),
@@ -155,8 +161,8 @@ class CatalogueBackendPage extends StatelessWidget {
                     child: GestureDetector(
                         onTap: () {
                           if (index > 0) {
-                            controller.catalogueModel.insert(
-                                index - 1, controller.catalogueModel.removeAt(index));
+                            controller.catalogueModel.insert(index - 1,
+                                controller.catalogueModel.removeAt(index));
                           }
                         },
                         child: Text('上升')),
@@ -166,8 +172,8 @@ class CatalogueBackendPage extends StatelessWidget {
                     child: GestureDetector(
                         onTap: () {
                           if (index < controller.catalogueModel.length - 1) {
-                            controller.catalogueModel.insert(
-                                index + 1, controller.catalogueModel.removeAt(index));
+                            controller.catalogueModel.insert(index + 1,
+                                controller.catalogueModel.removeAt(index));
                           }
                         },
                         child: Text('下降')),

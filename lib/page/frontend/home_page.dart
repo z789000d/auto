@@ -29,7 +29,14 @@ class PageControllerMixin extends GetxController {
   void onInit() {
     super.onInit();
     for (var i = 0; i < 9; i++) {
-      homePageModel.value.pageViewImages.add(Utils.testImage[0]);
+      homePageModel.value.pageViewImages.add(ProductModel(
+          id: i.toString(),
+          category: i.toString(),
+          name: "產品$i",
+          images: Utils.testImage,
+          description: "描述$i",
+          videoLink: "連結$i"));
+
       homePageModel.value.productImages.add(ProductModel(
           id: i.toString(),
           category: i.toString(),
@@ -69,8 +76,9 @@ class MyHomePage extends ParentPage {
                 autoPlay: true,
                 autoPlayInterval: Duration(seconds: 4),
               ),
-              items: controller.homePageModel.value.pageViewImages.map((image) {
-                return Image.network(image);
+              items: controller.homePageModel.value.pageViewImages
+                  .map((productModel) {
+                return Image.network(productModel.images[0]);
               }).toList(),
               carouselController: controller.buttonCarouselController,
             ),

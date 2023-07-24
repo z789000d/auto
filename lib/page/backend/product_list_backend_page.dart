@@ -80,6 +80,12 @@ class ProductListBackendPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopBarBacked(),
+              Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text(
+                    '產品清單',
+                    style: TextStyle(fontSize: 20),
+                  )),
               Container(margin: EdgeInsets.all(10), child: table()),
               Container(
                 margin: EdgeInsets.all(15),
@@ -175,8 +181,8 @@ class ProductListBackendPage extends StatelessWidget {
                     child: GestureDetector(
                         onTap: () {
                           if (index > 0) {
-                            controller.productModel.insert(
-                                index - 1, controller.productModel.removeAt(index));
+                            controller.productModel.insert(index - 1,
+                                controller.productModel.removeAt(index));
                           }
                         },
                         child: Text('上升')),
@@ -186,8 +192,8 @@ class ProductListBackendPage extends StatelessWidget {
                     child: GestureDetector(
                         onTap: () {
                           if (index < controller.productModel.length - 1) {
-                            controller.productModel.insert(
-                                index + 1, controller.productModel.removeAt(index));
+                            controller.productModel.insert(index + 1,
+                                controller.productModel.removeAt(index));
                           }
                         },
                         child: Text('下降')),
