@@ -11,6 +11,8 @@ import '../page/frontend/home_page.dart';
 import '../page/frontend/news_page.dart';
 import '../utils.dart';
 
+final BottomController bottomController = Get.put(BottomController());
+
 class BottomController extends GetxController {
   final buttonStates = List.generate(6, (_) => false).obs;
   final hoverIndex = RxInt(-1);
@@ -25,8 +27,6 @@ class BottomController extends GetxController {
 }
 
 class BottomWidget extends StatelessWidget {
-  final BottomController bottomController = Get.put(BottomController());
-
   BottomWidget({super.key});
 
   @override

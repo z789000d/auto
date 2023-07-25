@@ -13,6 +13,7 @@ import 'package:web_auto/page/frontend/home_page.dart';
 import 'package:web_auto/page/frontend/login_page.dart';
 import 'package:web_auto/page/frontend/news_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
+import 'package:web_auto/widget/top_bar_widget.dart';
 
 class Utils {
   static final testImage = <String>[
@@ -76,7 +77,13 @@ class Utils {
       Get.to(HomeBackendPage());
     }
     if (index == 7) {
+      Get.delete<LoginController>();
       Get.to(LoginPage());
+    }
+    if (index == 8) {
+      Get.delete<LoginController>();
+      Get.to(LoginPage());
+      topBarController.setIsLogin('false');
     }
   }
 

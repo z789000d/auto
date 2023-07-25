@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/utils.dart';
-
+import 'package:web_auto/widget/top_bar_widget.dart';
+import 'dart:html' as html;
 import 'home_page.dart';
 
 class LoginController extends GetxController {
   RxString username = ''.obs;
   RxString password = ''.obs;
-  RxBool isLoggedIn = false.obs;
 
   void onUsernameChanged(String value) {
     username.value = value;
@@ -26,9 +26,9 @@ class LoginController extends GetxController {
           actions: [
             TextButton(
               onPressed: () {
+                topBarController.setIsLogin('true');
                 // 在這裡處理按下對話框的操作
                 Get.back(); // 關閉對話框
-                isLoggedIn.value = true; // 登入成功，將 isLoggedIn 設置為 true
                 Get.to(MyHomePage()); //回上一頁
               },
               child: Text('確定'),
@@ -86,7 +86,9 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: loginController.login,
+                onPressed: () {
+                  loginController.login();
+                },
                 child: Text('登入'),
               ),
             ],

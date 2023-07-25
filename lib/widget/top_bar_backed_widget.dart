@@ -10,6 +10,9 @@ import '../page/frontend/parent_page.dart';
 import '../page/frontend/product_list.dart';
 import '../utils.dart';
 
+final TopBarBackedController topBarController =
+    Get.put(TopBarBackedController());
+
 class TopBarBackedController extends GetxController {
   final buttonStates =
       <bool>[false, false, false, false, false, false, false].obs;
@@ -20,9 +23,6 @@ class TopBarBackedController extends GetxController {
 }
 
 class TopBarBacked extends StatelessWidget {
-  final TopBarBackedController topBarController =
-      Get.put(TopBarBackedController());
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {

@@ -2,21 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/page/frontend/login_page.dart';
 import '../utils.dart';
+import 'dart:html' as html;
+
+final TopBarController topBarController = Get.put(TopBarController());
 
 class TopBarController extends GetxController {
   final buttonStates =
-      <bool>[false, false, false, false, false, false, false, false].obs;
+      <bool>[false, false, false, false, false, false, false, false, false].obs;
+
+  RxBool isLoggedIn = false.obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    getIsLogin();
+  }
 
   void updateButtonState(int index, bool isHovered) {
     buttonStates[index] = isHovered;
   }
+
+  void getIsLogin() {
+    String savedData = html.window.localStorage['isLogin'] ?? "";
+    print('${savedData} bbbbb');
+    if (savedData == "true") {
+      isLoggedIn.value = true;
+    } else {
+      isLoggedIn.value = false;
+    }
+  }
+
+  void setIsLogin(String isLogin) {
+    html.window.localStorage['isLogin'] = isLogin;
+    isLoggedIn.value = isLogin == 'true' ? true : false;
+  }
 }
 
 class TopBar extends StatelessWidget {
-  final TopBarController topBarController =
-      Get.put(TopBarController());
-  final LoginController loginController = Get.put(LoginController());
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -92,9 +115,12 @@ class TopBar extends StatelessWidget {
                   buildButton('最新消息', topBarController, 3),
                   buildButton('電子型錄', topBarController, 4),
                   buildButton('聯絡我們', topBarController, 5),
-                  loginController.isLoggedIn.value
+                  topBarController.isLoggedIn.value
                       ? buildButton('後台', topBarController, 6)
                       : buildButton('登入', topBarController, 7),
+                  topBarController.isLoggedIn.value
+                      ? buildButton('登出', topBarController, 8)
+                      : Container()
                 ],
               ),
             ),
