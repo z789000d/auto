@@ -32,7 +32,7 @@ class FirstPage extends StatelessWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         // Delay the navigation until after the build is complete
         Future.delayed(Duration(seconds: 2), () {
-          Get.off(MyHomePage());
+          Get.offAll(MyHomePage());
         });
       });
       return Scaffold(
