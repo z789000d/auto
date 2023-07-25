@@ -75,6 +75,7 @@ class NewsPage extends ParentPage {
         children: [
           ListView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.newShowModel.length,
             itemBuilder: (context, index) {
               return MouseRegion(

@@ -34,7 +34,6 @@ class CatalogueItemListPage extends ParentPage {
 
   @override
   Widget childWidget() {
-
     if (Get.arguments != null) {
       controller.catalogueModel.value = Get.arguments['catalogueModel'];
     }
@@ -61,6 +60,7 @@ class CatalogueItemListPage extends ParentPage {
     return Obx(
       () => GridView.builder(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
             mainAxisSpacing: 20,

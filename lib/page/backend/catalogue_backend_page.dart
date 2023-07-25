@@ -39,7 +39,7 @@ class CatalogueBackendController extends GetxController {
 
   void addData() {
     catalogueModel.add(CatalogueModel(
-        id: '$catalogueModel.length',
+        id: '${catalogueModel.length}',
         name: '產品${catalogueModel.length}',
         images: [
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'

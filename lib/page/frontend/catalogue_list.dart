@@ -85,6 +85,7 @@ class CatalogueListPage extends ParentPage {
         children: [
           GridView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
                 mainAxisSpacing: 20,

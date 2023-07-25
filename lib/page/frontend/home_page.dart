@@ -111,6 +111,7 @@ class MyHomePage extends ParentPage {
         Obx(
           () => GridView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: Get.width.obs.value < 800 ? 1 : 3,
                 mainAxisSpacing: 20,

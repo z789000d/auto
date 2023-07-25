@@ -38,7 +38,7 @@ class ProductListBackendController extends GetxController {
 
   void addData() {
     productModel.add(ProductModel(
-        id: '$productModel.length',
+        id: '${productModel.length}',
         category: '類別${productModel.length}',
         name: '產品${productModel.length}',
         images: [
