@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/ProductListPage', page: () => ProductListPage()),
           GetPage(name: '/ProductDetailPage', page: () => ProductDetailPage()),
           GetPage(name: '/NewsPage', page: () => NewsPage()),
-          GetPage(name: '/CataloguePage', page: () => CatalogueListPage()),
+          GetPage(name: '/CatalogueListPage', page: () => CatalogueListPage()),
           GetPage(
               name: '/CatalogueItemListPage',
               page: () => CatalogueItemListPage()),

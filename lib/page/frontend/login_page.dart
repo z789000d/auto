@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/utils.dart';
 
+import 'home_page.dart';
+
 class LoginController extends GetxController {
   RxString username = ''.obs;
   RxString password = ''.obs;
@@ -17,7 +19,7 @@ class LoginController extends GetxController {
 
   void login() {
     // 在這裡處理登入邏輯，這裡只是示例，你可以根據實際情況進行處理
-    if (username.value == 'admin' && password.value == 'password') {
+    if (username.value == 'admin' && password.value == '00000000') {
       Get.dialog(
         AlertDialog(
           title: Text('登入成功'),
@@ -27,7 +29,7 @@ class LoginController extends GetxController {
                 // 在這裡處理按下對話框的操作
                 Get.back(); // 關閉對話框
                 isLoggedIn.value = true; // 登入成功，將 isLoggedIn 設置為 true
-                Utils.clickButton(0);
+                Get.to(MyHomePage()); //回上一頁
               },
               child: Text('確定'),
             ),
@@ -35,17 +37,19 @@ class LoginController extends GetxController {
         ),
       );
     } else {
-      AlertDialog(
-        title: Text('登入失敗 請檢查帳號密碼是否正確！'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // 在這裡處理按下對話框的操作
-              Get.back(); // 關閉對話框
-            },
-            child: Text('確定'),
-          ),
-        ],
+      Get.dialog(
+        AlertDialog(
+          title: Text('登入失敗 請檢查帳號密碼是否正確！'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // 在這裡處理按下對話框的操作
+                Get.back(); // 關閉對話框
+              },
+              child: Text('確定'),
+            ),
+          ],
+        ),
       );
     }
   }

@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/model/news_model.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
@@ -10,29 +11,55 @@ import '../../widget/top_bar_backed_widget.dart';
 // 定义控制器类
 class NewsBackedController extends GetxController {
   // 假设有一个包含数据的 List
-  RxList<Map<String, dynamic>> data = <Map<String, dynamic>>[].obs;
+  Rx<NewsModel> newsModel =
+      NewsModel(newsItemModel: [NewsItemModel(id: '', newsText: '')]).obs;
+
   final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
     // 初始化数据
+    newsModel.value.newsItemModel.clear();
     for (int i = 0; i < 10; i++) {
-      data.add({'id': i, 'newsText': '最新消息$i', 'function': 'Function $i'});
+      newsModel.value.newsItemModel
+          .add(NewsItemModel(id: '$i', newsText: '最新消息$i'));
     }
   }
 
   void addData() {
-    data.add({
-      'id': data.length,
-      'newsText': '最新消息${data.length}',
-      'function': 'Function ${data.length}'
-    });
+    NewsModel newsModelOriginal = newsModel.value.copyWith();
+    newsModelOriginal.newsItemModel.add(NewsItemModel(
+        id: '${newsModel.value.newsItemModel.length}',
+        newsText: '最新消息${newsModel.value.newsItemModel.length}'));
+
+    newsModel.value = newsModelOriginal;
+
     scrollToEnd();
   }
 
   void deleteData(int index) {
-    data.removeAt(index);
+    NewsModel newsModelOriginal = newsModel.value.copyWith();
+    newsModelOriginal.newsItemModel.removeAt(index);
+    newsModel.value = newsModelOriginal;
+  }
+
+  void dataUp(int index) {
+    if (index > 0) {
+      NewsModel newsModelOriginal = newsModel.value.copyWith();
+      newsModelOriginal.newsItemModel
+          .insert(index - 1, newsModelOriginal.newsItemModel.removeAt(index));
+      newsModel.value = newsModelOriginal;
+    }
+  }
+
+  void dataDown(int index) {
+    if (index < newsModel.value.newsItemModel.length - 1) {
+      NewsModel newsModelOriginal = newsModel.value.copyWith();
+      newsModelOriginal.newsItemModel
+          .insert(index + 1, newsModelOriginal.newsItemModel.removeAt(index));
+      newsModel.value = newsModelOriginal;
+    }
   }
 
   void scrollToEnd() {
@@ -110,22 +137,21 @@ class NewsBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.data.length,
+          controller.newsModel.value.newsItemModel.length,
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
-              DataCell(Text('ID: ${controller.data[index]['id']}')),
-              DataCell(Text('newsText: ${controller.data[index]['newsText']}')),
+              DataCell(Text(
+                  'ID: ${controller.newsModel.value.newsItemModel[index].id}')),
+              DataCell(Text(
+                  'newsText: ${controller.newsModel.value.newsItemModel[index].newsText}')),
               DataCell(Row(
                 children: [
                   Container(
                     margin: EdgeInsets.only(left: 20),
                     child: GestureDetector(
                         onTap: () {
-                          if (index > 0) {
-                            controller.data.insert(
-                                index - 1, controller.data.removeAt(index));
-                          }
+                          controller.dataUp(index);
                         },
                         child: Text('上升')),
                   ),
@@ -133,10 +159,7 @@ class NewsBackendPage extends StatelessWidget {
                     margin: EdgeInsets.only(left: 20),
                     child: GestureDetector(
                         onTap: () {
-                          if (index < controller.data.length - 1) {
-                            controller.data.insert(
-                                index + 1, controller.data.removeAt(index));
-                          }
+                          controller.dataDown(index);
                         },
                         child: Text('下降')),
                   ),

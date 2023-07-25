@@ -48,7 +48,6 @@ class Utils {
   static void clickButton(int index) {
     print('$index');
     if (index == 0) {
-
       Get.delete<PageControllerMixin>();
       Get.to(MyHomePage());
     }
