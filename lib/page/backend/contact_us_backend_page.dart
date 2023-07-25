@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/model/contact_us_model.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
@@ -14,16 +15,30 @@ class ContactUsBackendController extends GetxController {
   final phoneContentController = TextEditingController().obs;
   final faxContentController = TextEditingController().obs;
   final emailContentController = TextEditingController().obs;
+  Rx<ContactUsModel> contactUsModel = ContactUsModel(
+          companyText: '',
+          locationText: '',
+          phoneText: '',
+          faxText: '',
+          emailText: '')
+      .obs;
 
   @override
   void onInit() {
     super.onInit();
     // 初始化数据
-    companyContentController.value.text = "鋸開自動化有限公司";
-    locationContentController.value.text = "新竹市千甲路191號";
-    phoneContentController.value.text = "035-723504";
-    faxContentController.value.text = "035-745523";
-    emailContentController.value.text = "tinh@ms12.hinet.net";
+    contactUsModel.value = ContactUsModel(
+        companyText: '鋸開自動化有限公司',
+        locationText: '新竹市千甲路191號',
+        phoneText: '035-723504',
+        faxText: '035-745523',
+        emailText: 'tinh@ms12.hinet.net');
+
+    companyContentController.value.text = contactUsModel.value.companyText;
+    locationContentController.value.text = contactUsModel.value.locationText;
+    phoneContentController.value.text = contactUsModel.value.phoneText;
+    faxContentController.value.text = contactUsModel.value.faxText;
+    emailContentController.value.text = contactUsModel.value.emailText;
   }
 }
 

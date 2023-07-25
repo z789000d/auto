@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'dart:html' as html;
 
+import '../../model/contact_us_model.dart';
 import '../../widget/bottom_bar_widget.dart';
 import '../../widget/top_bar_widget.dart';
 
@@ -28,9 +29,24 @@ class ContactUsController extends GetxController {
   final companyEmailController = TextEditingController();
   final companyContentController = TextEditingController();
 
+  Rx<ContactUsModel> contactUsModel = ContactUsModel(
+          companyText: '',
+          locationText: '',
+          phoneText: '',
+          faxText: '',
+          emailText: '')
+      .obs;
+
   @override
   void onInit() {
     super.onInit();
+
+    contactUsModel.value = ContactUsModel(
+        companyText: '鋸開自動化有限公司',
+        locationText: '新竹市千甲路191號',
+        phoneText: '035-723504',
+        faxText: '035-745523',
+        emailText: 'tinh@ms12.hinet.net');
 
     markers.add(Marker(
       //add first marker
@@ -143,7 +159,7 @@ class ContactUsPage extends ParentPage {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '鋸開自動化有限公司',
+                  controller.contactUsModel.value.companyText,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.normal,
@@ -152,22 +168,22 @@ class ContactUsPage extends ParentPage {
                 ),
                 SizedBox(height: 30.0),
                 Text(
-                  '公司地址:新竹市千甲路191號',
+                  '公司地址:${controller.contactUsModel.value.locationText}',
                   textAlign: TextAlign.start,
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  '電話:035-723504',
+                  '電話:${controller.contactUsModel.value.phoneText}',
                   textAlign: TextAlign.start,
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  '傳真:035-745523',
+                  '傳真:${controller.contactUsModel.value.faxText}',
                   textAlign: TextAlign.start,
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  '電子郵件:tinh@ms12.hinet.net',
+                  '電子郵件:${controller.contactUsModel.value.emailText}',
                   textAlign: TextAlign.start,
                 ),
                 inputEdit()

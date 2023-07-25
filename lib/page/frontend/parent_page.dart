@@ -54,7 +54,7 @@ class ParentPage extends StatelessWidget {
             ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: 7, // 项目数量
+              itemCount: 9, // 项目数量
               itemBuilder: (context, index) {
                 return drawerItem(context, index); // 这里可以根据index自行决定标题和操作
               },
@@ -102,6 +102,19 @@ class ParentPage extends StatelessWidget {
       text = '聯絡我們';
     } else if (index == 6) {
       text = '後台';
+      if (!topBarController.isLoggedIn.value) {
+        return Container();
+      }
+    } else if (index == 7) {
+      text = '登入';
+      if (topBarController.isLoggedIn.value) {
+        return Container();
+      }
+    } else if (index == 8) {
+      text = '登出';
+      if (!topBarController.isLoggedIn.value) {
+        return Container();
+      }
     }
 
     return ListTile(
