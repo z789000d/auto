@@ -10,6 +10,7 @@ import 'package:web_auto/page/frontend/about_us.dart';
 import 'package:web_auto/page/frontend/catalogue_list.dart';
 import 'package:web_auto/page/frontend/contact_us.dart';
 import 'package:web_auto/page/frontend/home_page.dart';
+import 'package:web_auto/page/frontend/login_page.dart';
 import 'package:web_auto/page/frontend/news_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
 
@@ -24,7 +25,6 @@ class Utils {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
   ];
-
 
   static String? getYouTubeVideoId(String videoUrl) {
     // YouTube 影片連結的正則表達式模式
@@ -48,6 +48,7 @@ class Utils {
   static void clickButton(int index) {
     print('$index');
     if (index == 0) {
+
       Get.delete<PageControllerMixin>();
       Get.to(MyHomePage());
     }
@@ -74,6 +75,9 @@ class Utils {
     if (index == 6) {
       Get.delete<HomePageBackedController>();
       Get.to(HomeBackendPage());
+    }
+    if (index == 7) {
+      Get.to(LoginPage());
     }
   }
 

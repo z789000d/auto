@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/page/frontend/login_page.dart';
 import '../utils.dart';
 
 class TopBarController extends GetxController {
   final buttonStates =
-      <bool>[false, false, false, false, false, false, false].obs;
+      <bool>[false, false, false, false, false, false, false, false].obs;
 
   void updateButtonState(int index, bool isHovered) {
     buttonStates[index] = isHovered;
@@ -12,7 +13,9 @@ class TopBarController extends GetxController {
 }
 
 class TopBar extends StatelessWidget {
-  final TopBarController topBarController = Get.put(TopBarController());
+  final TopBarController topBarController =
+      Get.put(TopBarController());
+  final LoginController loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +92,9 @@ class TopBar extends StatelessWidget {
                   buildButton('最新消息', topBarController, 3),
                   buildButton('電子型錄', topBarController, 4),
                   buildButton('聯絡我們', topBarController, 5),
-                  buildButton('後台', topBarController, 6),
+                  loginController.isLoggedIn.value
+                      ? buildButton('後台', topBarController, 6)
+                      : buildButton('登入', topBarController, 7),
                 ],
               ),
             ),

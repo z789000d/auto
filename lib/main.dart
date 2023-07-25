@@ -14,6 +14,7 @@ import 'package:web_auto/page/frontend/catalogue_list.dart';
 import 'package:web_auto/page/frontend/contact_us.dart';
 import 'package:web_auto/page/frontend/firstPage.dart';
 import 'package:web_auto/page/frontend/home_page.dart';
+import 'package:web_auto/page/frontend/login_page.dart';
 import 'package:web_auto/page/frontend/news_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/CatalogueImageBackendPage', page: () => CatalogueImageBackendPage()),
           GetPage(name: '/ProductListBackendPage', page: () => ProductListBackendPage()),
           GetPage(name: '/ProductImageBackendPage', page: () => ProductImageBackendPage()),
+          GetPage(name: '/LoginPage', page: () => LoginPage()),
         ],
         title: '鋸開自動化機械有限公司',
         theme: ThemeData(
