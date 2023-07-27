@@ -31,8 +31,54 @@ class CatalogueController extends GetxController {
   void onInit() {
     super.onInit();
     for (var i = 0; i < 14; i++) {
-      catalogueModel.add(CatalogueModel(
-          id: i.toString(), name: "型錄$i", images: pageViewImage));
+      catalogueModel
+          .add(CatalogueModel(id: i.toString(), name: "型錄$i", images: [
+        CatalogueItemModel(
+            id: '1',
+            name: 'name1',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '2',
+            name: 'name2',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '3',
+            name: 'name3',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '4',
+            name: 'name4',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '5',
+            name: 'name5',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '6',
+            name: 'name6',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '7',
+            name: 'name7',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '8',
+            name: 'name8',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+        CatalogueItemModel(
+            id: '9',
+            name: 'name9',
+            images:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
+      ]));
     }
     setCatalogueValue(1);
   }
@@ -139,8 +185,8 @@ class CatalogueListPage extends ParentPage {
               child: Column(
                 children: [
                   Expanded(
-                      child: Image.network(
-                          controller.catalogueShowModel[index].images[0])),
+                      child: Image.network(controller
+                          .catalogueShowModel[index].images[0].images)),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),

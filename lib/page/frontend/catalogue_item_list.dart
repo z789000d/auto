@@ -102,8 +102,8 @@ class CatalogueItemListPage extends ParentPage {
               child: Column(
                 children: [
                   Expanded(
-                      child: Image.network(
-                          controller.catalogueModel.value.images[index])),
+                      child: Image.network(controller
+                          .catalogueModel.value.images[index].images)),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
@@ -114,7 +114,8 @@ class CatalogueItemListPage extends ParentPage {
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 20),
                       child: Text(
-                        '目錄 $index',
+                        '目錄 ${controller
+                            .catalogueModel.value.images[index].name}',
                         style: TextStyle(
                             fontSize: 20,
                             color: controller.currentIndex.value == index

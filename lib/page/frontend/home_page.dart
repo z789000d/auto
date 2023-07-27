@@ -2,12 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/model/bus_model.dart';
 import 'package:web_auto/model/home_page_model.dart';
 import 'package:web_auto/model/product_model.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../api/bus_api.dart';
 import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 
@@ -28,6 +30,11 @@ class PageControllerMixin extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    BusApi().getApi((model) {
+      print('aa ${model.data![0].city}');
+    });
+
     for (var i = 0; i < 9; i++) {
       homePageModel.value.pageViewImages.add(ProductModel(
           id: i.toString(),

@@ -21,8 +21,11 @@ class CatalogueImageBackendController extends GetxController {
 
   void addData() {
     CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
-    catalogueModelOriginal.images.add(
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU');
+    catalogueModelOriginal.images.add(CatalogueItemModel(
+        id: '${catalogueModelOriginal.images.length}',
+        name: 'name${catalogueModelOriginal.images.length}',
+        images:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'));
     catalogueModel.value = catalogueModelOriginal;
     scrollToEnd();
   }
@@ -31,6 +34,24 @@ class CatalogueImageBackendController extends GetxController {
     CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
     catalogueModelOriginal.images.removeAt(index);
     catalogueModel.value = catalogueModelOriginal;
+  }
+
+  void dataUp(int index) {
+    if (index > 0) {
+      CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
+      catalogueModelOriginal.images
+          .insert(index - 1, catalogueModelOriginal.images.removeAt(index));
+      catalogueModel.value = catalogueModelOriginal;
+    }
+  }
+
+  void dataDown(int index) {
+    if (index < catalogueModel.value.images.length - 1) {
+      CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
+      catalogueModelOriginal.images
+          .insert(index + 1, catalogueModelOriginal.images.removeAt(index));
+      catalogueModel.value = catalogueModelOriginal;
+    }
   }
 
   void scrollToEnd() {
@@ -112,6 +133,10 @@ class CatalogueImageBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('內容')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
@@ -119,41 +144,30 @@ class CatalogueImageBackendPage extends StatelessWidget {
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
-              DataCell(Text('ID: ${controller.catalogueModel.value.id}')),
+              DataCell(Text(
+                  'ID: ${controller.catalogueModel.value.images[index].id}')),
               DataCell(
                 Image.network(
-                  controller.catalogueModel.value.images[index],
+                  controller.catalogueModel.value.images[index].images,
                   width: 120,
                   height: 120,
                 ),
               ),
+              DataCell(Text(
+                  'ID: ${controller.catalogueModel.value.images[index].name}')),
               DataCell(Row(
                 children: [
                   Container(
                     margin: EdgeInsets.only(left: 20),
-                    child: GestureDetector(
-                        onTap: () {
-                          if (index > 0) {
-                            controller.catalogueModel.value.images.insert(
-                                index - 1,
-                                controller.catalogueModel.value.images
-                                    .removeAt(index));
-                          }
-                        },
-                        child: Text('上升')),
+                    child: GestureDetector(onTap: () {
+                      controller.dataUp(index);
+                    }, child: Text('上升')),
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 20),
                     child: GestureDetector(
                         onTap: () {
-                          if (index <
-                              controller.catalogueModel.value.images.length -
-                                  1) {
-                            controller.catalogueModel.value.images.insert(
-                                index + 1,
-                                controller.catalogueModel.value.images
-                                    .removeAt(index));
-                          }
+                          controller.dataDown(index);
                         },
                         child: Text('下降')),
                   ),
