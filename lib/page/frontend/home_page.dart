@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/api/home_page_api.dart';
 import 'package:web_auto/model/bus_model.dart';
 import 'package:web_auto/model/home_page_model.dart';
 import 'package:web_auto/model/product_model.dart';
@@ -16,9 +18,27 @@ import '../../widget/bottom_bar_widget.dart';
 class PageControllerMixin extends GetxController {
   final CarouselController buttonCarouselController = CarouselController();
   final currentPageIndex = 0.obs;
-  final homePageModel =
-      HomePageModel(pageViewImages: [], productImages: []).obs;
-
+  final homePageResponseModel = HomePageResponseModel(code: 0, data: []).obs;
+  final List<ProductData> homePageResponsePageViewImages = [
+    ProductData(
+        category: '',
+        name: '',
+        images: '',
+        description: '',
+        videoLink: '',
+        id: 0,
+        type: '')
+  ].obs;
+  final List<ProductData> homePageResponseProductImages = [
+    ProductData(
+        category: '',
+        name: '',
+        images: '',
+        description: '',
+        videoLink: '',
+        id: 0,
+        type: '')
+  ].obs;
   final pageViewImage = Utils.testImage.obs;
 
   RxInt currentIndex = RxInt(-1);
@@ -30,28 +50,22 @@ class PageControllerMixin extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    HomePageApi().postApi(HomePageRequestModel(action: '0'), (model) {
+      homePageResponseModel.value = model;
 
-    BusApi().getApi((model) {
-      print('aa ${model.data![0].city}');
+      homePageResponsePageViewImages
+        ..clear()
+        ..addAll(homePageResponseModel.value.data
+            .where((element) => element.type == 'pageViewImages'));
+
+      homePageResponseProductImages
+        ..clear()
+        ..addAll(homePageResponseModel.value.data
+            .where((element) => element.type == 'productImages'));
+
+      print('aaaa ${homePageResponsePageViewImages}');
+      print('bbb ${homePageResponseProductImages}');
     });
-
-    for (var i = 0; i < 9; i++) {
-      homePageModel.value.pageViewImages.add(ProductModel(
-          id: i.toString(),
-          category: i.toString(),
-          name: "產品$i",
-          images: Utils.testImage,
-          description: "描述$i",
-          videoLink: "連結$i"));
-
-      homePageModel.value.productImages.add(ProductModel(
-          id: i.toString(),
-          category: i.toString(),
-          name: "產品$i",
-          images: Utils.testImage,
-          description: "描述$i",
-          videoLink: "連結$i"));
-    }
   }
 
   @override
@@ -83,9 +97,13 @@ class MyHomePage extends ParentPage {
                 autoPlay: true,
                 autoPlayInterval: Duration(seconds: 4),
               ),
-              items: controller.homePageModel.value.pageViewImages
-                  .map((productModel) {
-                return Image.network(productModel.images[0]);
+              items:
+                  controller.homePageResponsePageViewImages.map((productModel) {
+                return CachedNetworkImage(
+                  imageUrl: productModel.images,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Container(),
+                );
               }).toList(),
               carouselController: controller.buttonCarouselController,
             ),
@@ -98,7 +116,7 @@ class MyHomePage extends ParentPage {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (int i = 0;
-                    i < controller.homePageModel.value.pageViewImages.length;
+                    i < controller.homePageResponsePageViewImages.length;
                     i++)
                   Container(
                     margin: EdgeInsets.all(4),
@@ -126,7 +144,7 @@ class MyHomePage extends ParentPage {
                 childAspectRatio: Get.width.obs.value < 800
                     ? (Get.width.obs.value) / (Get.height.obs.value) * 2
                     : (Get.width.obs.value) / (Get.height.obs.value)),
-            itemCount: controller.homePageModel.value.productImages.length,
+            itemCount: controller.homePageResponseProductImages.length,
             itemBuilder: (context, index) {
               return gridViewItem(index);
             },
@@ -149,7 +167,7 @@ class MyHomePage extends ParentPage {
           onTap: () {
             Get.to(ProductDetailPage(), arguments: {
               'productModel':
-                  controller.homePageModel.value.productImages[index]
+                  controller.homePageResponseProductImages[index].images
             });
           },
           child: Container(
@@ -167,8 +185,12 @@ class MyHomePage extends ParentPage {
               child: Column(
                 children: [
                   Expanded(
-                      child: Image.network(controller
-                          .homePageModel.value.productImages[index].images[0])),
+                      child: CachedNetworkImage(
+                    imageUrl:
+                        controller.homePageResponseProductImages[index].images,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Container(),
+                  )),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),

@@ -1,121 +1,169 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/model/product_model.dart';
 
+import '../../api/home_page_api.dart';
 import '../../model/home_page_model.dart';
 import '../../utils.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
 class HomePageBackedController extends GetxController {
-  final homePageModel =
-      HomePageModel(pageViewImages: [], productImages: []).obs;
+  final homePageResponseModel = HomePageResponseModel(code: 0, data: []).obs;
+  final List<ProductData> homePageResponsePageViewImages = [
+    ProductData(
+        category: '',
+        name: '',
+        images:
+            'https://www.taiyimaterial.com.tw/taie/product/bimg/pro_20180426104042.jpg',
+        description: '',
+        videoLink: '',
+        id: 0,
+        type: '')
+  ].obs;
+  final List<ProductData> homePageResponseProductImages = [
+    ProductData(
+        category: '',
+        name: '',
+        images:
+            'https://www.taiyimaterial.com.tw/taie/product/bimg/pro_20180426104042.jpg',
+        description: '',
+        videoLink: '',
+        id: 0,
+        type: '')
+  ].obs;
 
   final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
-    // 初始化数据
+    getHomeApi();
+  }
 
-    for (int i = 0; i < 10; i++) {
-      homePageModel.value.productImages.add(ProductModel(
-          id: '$i',
-          category: '類別$i',
-          name: '名稱$i',
-          images: Utils.testImage,
-          description: '描述$i',
-          videoLink: '影片$i'));
+  void getHomeApi() {
+    HomePageApi().postApi(HomePageRequestModel(action: '0'), (model) {
+      homePageResponseModel.value = model;
 
-      homePageModel.value.pageViewImages.add(ProductModel(
-          id: '$i',
-          category: '類別$i',
-          name: '名稱$i',
-          images: Utils.testImage,
-          description: '描述$i',
-          videoLink: '影片$i'));
-    }
+      homePageResponsePageViewImages
+        ..clear()
+        ..addAll(homePageResponseModel.value.data
+            .where((element) => element.type == 'pageViewImages'));
+
+      homePageResponseProductImages
+        ..clear()
+        ..addAll(homePageResponseModel.value.data
+            .where((element) => element.type == 'productImages'));
+    });
   }
 
   void addPageData() {
-    HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-    homePageModelOriginal.pageViewImages.add(ProductModel(
-        id: '${homePageModel.value.productImages.length}',
-        category: '類別${homePageModel.value.productImages.length}',
-        name: '名稱${homePageModel.value.productImages.length}',
-        images: Utils.testImage,
-        description: '描述${homePageModel.value.productImages.length}',
-        videoLink: '影片${homePageModel.value.productImages.length}'));
-
-    homePageModel.value = homePageModelOriginal;
-
+    HomePageApi().postApi(
+        HomePageRequestModel(
+          action: '1',
+          category: '類別',
+          name: '測試',
+          images: 'https://pic.616pic.com/ys_bnew_img/00/16/95/OjCm8gnt48.jpg',
+          description: '測試',
+          videoLink: '測試',
+          type: 'pageViewImages',
+        ), (model) {
+      getHomeApi();
+    });
     scrollToEnd();
   }
 
   void dataPageReplace(int index, Map<String, dynamic> map) {}
 
-  void deletePageData(int index) {
-    HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-    homePageModelOriginal.pageViewImages.removeAt(index);
-    homePageModel.value = homePageModelOriginal;
+  void deletePageData(int id) {
+    HomePageApi().postApi(
+        HomePageRequestModel(
+          action: '3',
+          id: id,
+        ), (model) {
+      getHomeApi();
+    });
   }
 
   void pageDataUp(int index) {
     if (index > 0) {
-      HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-      homePageModelOriginal.pageViewImages.insert(
-          index - 1, homePageModelOriginal.pageViewImages.removeAt(index));
-      homePageModel.value = homePageModelOriginal;
+      HomePageApi().postApi(
+          HomePageRequestModel(
+            action: '4',
+            id1: homePageResponsePageViewImages[index].id,
+            id2: homePageResponsePageViewImages[index - 1].id,
+          ), (model) {
+        getHomeApi();
+      });
     }
   }
 
   void pageDataDown(int index) {
-    if (index < homePageModel.value.pageViewImages.length - 1) {
-      HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-      homePageModelOriginal.pageViewImages.insert(
-          index + 1, homePageModelOriginal.pageViewImages.removeAt(index));
-      homePageModel.value = homePageModelOriginal;
+    if (index < homePageResponsePageViewImages.length - 1) {
+      HomePageApi().postApi(
+          HomePageRequestModel(
+            action: '4',
+            id1: homePageResponsePageViewImages[index].id,
+            id2: homePageResponsePageViewImages[index + 1].id,
+          ), (model) {
+        getHomeApi();
+      });
     }
   }
 
   void addProductData() {
-    HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-    homePageModelOriginal.productImages.add(ProductModel(
-        id: '${homePageModel.value.productImages.length}',
-        category: '類別${homePageModel.value.productImages.length}',
-        name: '名稱${homePageModel.value.productImages.length}',
-        images: Utils.testImage,
-        description: '描述${homePageModel.value.productImages.length}',
-        videoLink: '影片${homePageModel.value.productImages.length}'));
-    homePageModel.value = homePageModelOriginal;
-
+    HomePageApi().postApi(
+        HomePageRequestModel(
+          action: '1',
+          category: '類別',
+          name: '測試',
+          images: 'https://pic.616pic.com/ys_bnew_img/00/16/95/OjCm8gnt48.jpg',
+          description: '測試',
+          videoLink: '測試',
+          type: 'productImages',
+        ), (model) {
+      getHomeApi();
+    });
     scrollToEnd();
   }
 
   void dataProductReplace(int index, Map<String, dynamic> map) {}
 
-  void deleteProductData(int index) {
-    HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-    homePageModelOriginal.productImages.removeAt(index);
-    homePageModel.value = homePageModelOriginal;
+  void deleteProductData(int id) {
+    HomePageApi().postApi(
+        HomePageRequestModel(
+          action: '3',
+          id: id,
+        ), (model) {
+      getHomeApi();
+    });
   }
 
   void productDataUp(int index) {
     if (index > 0) {
-      HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-      homePageModelOriginal.productImages.insert(
-          index - 1, homePageModelOriginal.productImages.removeAt(index));
-      homePageModel.value = homePageModelOriginal;
+      HomePageApi().postApi(
+          HomePageRequestModel(
+            action: '4',
+            id1: homePageResponseProductImages[index].id,
+            id2: homePageResponseProductImages[index - 1].id,
+          ), (model) {
+        getHomeApi();
+      });
     }
   }
 
   void productDataDown(int index) {
-    if (index < homePageModel.value.productImages.length - 1) {
-      HomePageModel homePageModelOriginal = homePageModel.value.copyWith();
-      homePageModelOriginal.productImages.insert(
-          index + 1, homePageModelOriginal.productImages.removeAt(index));
-      homePageModel.value = homePageModelOriginal;
+    if (index < homePageResponseProductImages.length - 1) {
+      HomePageApi().postApi(
+          HomePageRequestModel(
+            action: '4',
+            id1: homePageResponseProductImages[index].id,
+            id2: homePageResponseProductImages[index + 1].id,
+          ), (model) {
+        getHomeApi();
+      });
     }
   }
 
@@ -247,18 +295,20 @@ class HomeBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.homePageModel.value.pageViewImages.length,
+          controller.homePageResponsePageViewImages.length,
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
               DataCell(Text(
-                  'ID: ${controller.homePageModel.value.pageViewImages[index].id}')),
+                  'ID: ${controller.homePageResponsePageViewImages[index].id}')),
               DataCell(
-                Image.network(
-                  controller
-                      .homePageModel.value.pageViewImages[index].images[0],
+                CachedNetworkImage(
+                  imageUrl:
+                      controller.homePageResponsePageViewImages[index].images,
                   width: 120,
                   height: 120,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Container(),
                 ),
               ),
               DataCell(Row(
@@ -285,7 +335,8 @@ class HomeBackendPage extends StatelessWidget {
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(
                           onTap: () {
-                            controller.deletePageData(index);
+                            controller.deletePageData(controller
+                                .homePageResponsePageViewImages[index].id);
                           },
                           child: Text('刪除'))),
                 ],
@@ -323,17 +374,20 @@ class HomeBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.homePageModel.value.productImages.length,
+          controller.homePageResponseProductImages.length,
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
               DataCell(Text(
-                  'ID: ${controller.homePageModel.value.productImages[index].id}')),
+                  'ID: ${controller.homePageResponseProductImages[index].id}')),
               DataCell(
-                Image.network(
-                  controller.homePageModel.value.productImages[index].images[0],
+                CachedNetworkImage(
+                  imageUrl:
+                      controller.homePageResponseProductImages[index].images,
                   width: 120,
                   height: 120,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Container(),
                 ),
               ),
               DataCell(Row(
@@ -360,7 +414,8 @@ class HomeBackendPage extends StatelessWidget {
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(
                           onTap: () {
-                            controller.deleteProductData(index);
+                            controller.deleteProductData(controller
+                                .homePageResponseProductImages[index].id);
                           },
                           child: Text('刪除'))),
                 ],
