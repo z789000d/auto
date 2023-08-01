@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +10,7 @@ import 'package:web_auto/model/product_model.dart';
 import '../../api/home_page_api.dart';
 import '../../model/home_page_model.dart';
 import '../../utils.dart';
+import '../../widget/EditDialog.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
@@ -75,7 +79,21 @@ class HomePageBackedController extends GetxController {
     scrollToEnd();
   }
 
-  void dataPageReplace(int index, Map<String, dynamic> map) {}
+  void dataPageImageReplace(int index, int id, String? url) {
+    Get.dialog(
+      EditDialog(textEditingController: null, url: url),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        Uint8List bytes = value;
+        HomePageApi().postFileApi(id,bytes, (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
 
   void deletePageData(int id) {
     HomePageApi().postApi(
@@ -299,16 +317,29 @@ class HomeBackendPage extends StatelessWidget {
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
-              DataCell(Text(
-                  'ID: ${controller.homePageResponsePageViewImages[index].id}')),
+              DataCell(Row(
+                children: [
+                  Text(
+                      'ID: ${controller.homePageResponsePageViewImages[index].id}'),
+                ],
+              )),
               DataCell(
-                CachedNetworkImage(
-                  imageUrl:
-                      controller.homePageResponsePageViewImages[index].images,
-                  width: 120,
-                  height: 120,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Container(),
+                GestureDetector(
+                  onTap: () {
+                    controller.dataPageImageReplace(
+                        index,
+                        controller.homePageResponsePageViewImages[index].id,
+                        controller
+                            .homePageResponsePageViewImages[index].images);
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        controller.homePageResponsePageViewImages[index].images,
+                    width: 120,
+                    height: 120,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Container(),
+                  ),
                 ),
               ),
               DataCell(Row(
@@ -329,8 +360,6 @@ class HomeBackendPage extends StatelessWidget {
                         },
                         child: Text('下降')),
                   ),
-                  Container(
-                      margin: EdgeInsets.only(left: 20), child: Text('修改')),
                   Container(
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(
@@ -408,8 +437,6 @@ class HomeBackendPage extends StatelessWidget {
                         },
                         child: Text('下降')),
                   ),
-                  Container(
-                      margin: EdgeInsets.only(left: 20), child: Text('修改')),
                   Container(
                       margin: EdgeInsets.only(left: 20),
                       child: GestureDetector(
