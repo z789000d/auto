@@ -1,0 +1,67 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class EditTextDialogController extends GetxController {
+  TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
+  void setText() {}
+}
+
+class EditTextDialog extends StatelessWidget {
+  final String? text;
+
+  EditTextDialog({this.text, super.key});
+
+  final EditTextDialogController controller =
+  Get.put(EditTextDialogController());
+
+  @override
+  Widget build(BuildContext context) {
+    controller.textEditingController.text = text!;
+    return AlertDialog(
+      title: Text('輸入內容'),
+      content: GestureDetector(
+        onTap: () {
+          controller.setText();
+        },
+        child: EditableText(
+          controller: controller.textEditingController,
+          backgroundCursorColor: Colors.blue,
+          style: TextStyle(fontSize: 16),
+          cursorColor: Colors.blue,
+          autofocus: true,
+          maxLines: 1,
+          keyboardType: TextInputType.text,
+          textAlign: TextAlign.left,
+          focusNode: FocusNode(),
+        ),
+      ),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            Get.back(result: controller.textEditingController.text);
+          },
+          child: Text('Confirm'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Get.back(result: 'Cancel'); // Return 'Cancel' as the result
+          },
+          child: Text('Cancel'),
+        ),
+      ],
+    );
+  }
+}

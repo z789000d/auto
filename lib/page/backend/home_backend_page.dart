@@ -6,11 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/model/product_model.dart';
+import 'package:web_auto/widget/edit_text_dialog.dart';
 
 import '../../api/home_page_api.dart';
 import '../../model/home_page_model.dart';
 import '../../utils.dart';
-import '../../widget/EditDialog.dart';
+import '../../widget/edit_image_dialog.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
@@ -79,16 +80,40 @@ class HomePageBackedController extends GetxController {
     scrollToEnd();
   }
 
+  void dataPageNameReplace(int index, int id) {
+    Get.dialog(
+      EditTextDialog(text: homePageResponsePageViewImages[index].name),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        HomePageApi().postApi(
+            HomePageRequestModel(
+                action: '2',
+                id: id,
+                category: homePageResponsePageViewImages[index].category,
+                name: value,
+                images: homePageResponsePageViewImages[index].images,
+                description: homePageResponsePageViewImages[index].description,
+                videoLink: homePageResponsePageViewImages[index].videoLink,
+                type: homePageResponsePageViewImages[index].type), (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
+
   void dataPageImageReplace(int index, int id, String? url) {
     Get.dialog(
-      EditDialog(textEditingController: null, url: url),
+      EditImageDialog(url: url),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
         print('User canceled.');
       } else {
         Uint8List bytes = value;
-        HomePageApi().postFileApi(id,bytes, (model) {
+        HomePageApi().postFileApi(id, bytes, (model) {
           getHomeApi();
         });
       }
@@ -147,7 +172,45 @@ class HomePageBackedController extends GetxController {
     scrollToEnd();
   }
 
-  void dataProductReplace(int index, Map<String, dynamic> map) {}
+  void dataProductNameReplace(int index, int id) {
+    Get.dialog(
+      EditTextDialog(text: homePageResponseProductImages[index].name),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        HomePageApi().postApi(
+            HomePageRequestModel(
+                action: '2',
+                id: id,
+                category: homePageResponseProductImages[index].category,
+                name: value,
+                images: homePageResponseProductImages[index].images,
+                description: homePageResponseProductImages[index].description,
+                videoLink: homePageResponseProductImages[index].videoLink,
+                type: homePageResponseProductImages[index].type), (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
+
+  void dataProductImageReplace(int index, int id, String? url) {
+    Get.dialog(
+      EditImageDialog(url: url),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        Uint8List bytes = value;
+        HomePageApi().postFileApi(id, bytes, (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
 
   void deleteProductData(int id) {
     HomePageApi().postApi(
@@ -310,6 +373,10 @@ class HomeBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('名稱')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
@@ -342,6 +409,18 @@ class HomeBackendPage extends StatelessWidget {
                   ),
                 ),
               ),
+              DataCell(Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      controller.dataPageNameReplace(index,
+                          controller.homePageResponsePageViewImages[index].id);
+                    },
+                    child: Text(
+                        '${controller.homePageResponsePageViewImages[index].name}'),
+                  ),
+                ],
+              )),
               DataCell(Row(
                 children: [
                   Container(
@@ -400,6 +479,10 @@ class HomeBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('名稱')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
@@ -410,15 +493,32 @@ class HomeBackendPage extends StatelessWidget {
               DataCell(Text(
                   'ID: ${controller.homePageResponseProductImages[index].id}')),
               DataCell(
-                CachedNetworkImage(
-                  imageUrl:
-                      controller.homePageResponseProductImages[index].images,
-                  width: 120,
-                  height: 120,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Container(),
+                GestureDetector(
+                  onTap: () {
+                    controller.dataPageImageReplace(
+                        index,
+                        controller.homePageResponsePageViewImages[index].id,
+                        controller
+                            .homePageResponsePageViewImages[index].images);
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        controller.homePageResponseProductImages[index].images,
+                    width: 120,
+                    height: 120,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Container(),
+                  ),
                 ),
               ),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.dataProductNameReplace(index,
+                      controller.homePageResponseProductImages[index].id);
+                },
+                child: Text(
+                    '${controller.homePageResponseProductImages[index].name}'),
+              )),
               DataCell(Row(
                 children: [
                   Container(
