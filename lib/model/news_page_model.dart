@@ -3,11 +3,15 @@ import 'package:web_auto/model/product_model.dart';
 class NewsPageRequestModel {
   String action;
   int? id;
+  int? id1;
+  int? id2;
   String? news;
 
   NewsPageRequestModel({
     required this.action,
     this.id,
+    this.id1,
+    this.id2,
     this.news,
   });
 
@@ -15,7 +19,9 @@ class NewsPageRequestModel {
     return {
       'action': action,
       'id': id,
-      'type': news,
+      'id1': id1,
+      'id2': id2,
+      'news': news,
     };
   }
 }

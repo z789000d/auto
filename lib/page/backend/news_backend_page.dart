@@ -6,6 +6,8 @@ import 'package:web_auto/model/news_page_model.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../api/news_page_api.dart';
+import '../../widget/edit_text_dialog.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
@@ -22,46 +24,73 @@ class NewsBackedController extends GetxController {
   void onInit() {
     super.onInit();
     // 初始化数据
+    getNewsApi();
+  }
+
+  void getNewsApi() {
     newsModel.value.data.clear();
-    for (int i = 0; i < 10; i++) {
-      newsModel.value.data.add(NewsData(id: i, news: '最新消息$i', date: ''));
+    NewsPageApi().postApi(NewsPageRequestModel(action: '0'), (model) {
+      newsModel.value = model;
+      print('aaaa ${newsModel.value.data.length}');
+    });
+  }
+
+  void addData() {
+    NewsPageApi().postApi(
+        NewsPageRequestModel(
+            action: '1', news: '消息${newsModel.value.data.length}'), (model) {
+      getNewsApi();
+    });
+    scrollToEnd();
+  }
+
+  void deleteData(int id) {
+    NewsPageApi().postApi(NewsPageRequestModel(action: '3', id: id), (model) {
+      getNewsApi();
+    });
+  }
+
+  void dataUp(int index) {
+    if (index > 0) {
+      NewsPageApi().postApi(
+          NewsPageRequestModel(
+            action: '4',
+            id1: newsModel.value.data[index].id,
+            id2: newsModel.value.data[index - 1].id,
+          ), (model) {
+        getNewsApi();
+      });
     }
   }
 
-  // void addData() {
-  //   NewsModel newsModelOriginal = newsModel.value.copyWith();
-  //   newsModelOriginal.newsItemModel.add(NewsItemModel(
-  //       id: '${newsModel.value.newsItemModel.length}',
-  //       newsText: '最新消息${newsModel.value.newsItemModel.length}'));
-  //
-  //   newsModel.value = newsModelOriginal;
-  //
-  //   scrollToEnd();
-  // }
+  void dataDown(int index) {
+    if (index < newsModel.value.data.length - 1) {
+      NewsPageApi().postApi(
+          NewsPageRequestModel(
+            action: '4',
+            id1: newsModel.value.data[index].id,
+            id2: newsModel.value.data[index + 1].id,
+          ), (model) {
+        getNewsApi();
+      });
+    }
+  }
 
-  // void deleteData(int index) {
-  //   NewsModel newsModelOriginal = newsModel.value.copyWith();
-  //   newsModelOriginal.newsItemModel.removeAt(index);
-  //   newsModel.value = newsModelOriginal;
-  // }
-  //
-  // void dataUp(int index) {
-  //   if (index > 0) {
-  //     NewsModel newsModelOriginal = newsModel.value.copyWith();
-  //     newsModelOriginal.newsItemModel
-  //         .insert(index - 1, newsModelOriginal.newsItemModel.removeAt(index));
-  //     newsModel.value = newsModelOriginal;
-  //   }
-  // }
-  //
-  // void dataDown(int index) {
-  //   if (index < newsModel.value.newsItemModel.length - 1) {
-  //     NewsModel newsModelOriginal = newsModel.value.copyWith();
-  //     newsModelOriginal.newsItemModel
-  //         .insert(index + 1, newsModelOriginal.newsItemModel.removeAt(index));
-  //     newsModel.value = newsModelOriginal;
-  //   }
-  // }
+  void replaceNews(int index, int id) {
+    Get.dialog(
+      EditTextDialog(text: newsModel.value.data[index].news),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        NewsPageApi().postApi(
+            NewsPageRequestModel(action: '2', id: id, news: value), (model) {
+          getNewsApi();
+        });
+      }
+    });
+  }
 
   void scrollToEnd() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -95,7 +124,7 @@ class NewsBackendPage extends StatelessWidget {
                     '最新消息',
                     style: TextStyle(fontSize: 20),
                   )),
-              // Container(margin: EdgeInsets.all(10), child: table()),
+              Container(margin: EdgeInsets.all(10), child: table()),
               Container(
                 margin: EdgeInsets.all(15),
                 decoration: BoxDecoration(
@@ -106,7 +135,7 @@ class NewsBackendPage extends StatelessWidget {
                 ),
                 child: GestureDetector(
                     onTap: () {
-                      // controller.addData();
+                      controller.addData();
                     },
                     child: Text('新增')),
               ),
@@ -115,70 +144,84 @@ class NewsBackendPage extends StatelessWidget {
     );
   }
 
-  // Widget table() {
-//   return Obx(
-//     () => DataTable(
-//       dividerThickness: 1, // 设置分隔线的厚度
-//       columns: [
-//         DataColumn(
-//             label: Expanded(
-//                 child: Container(
-//                     alignment: Alignment.center, child: Text('排序')))),
-//         DataColumn(
-//             label: Expanded(
-//                 child: Container(
-//                     alignment: Alignment.center, child: Text('id')))),
-//         DataColumn(
-//             label: Expanded(
-//                 child: Container(
-//                     alignment: Alignment.center, child: Text('最新消息文字')))),
-//         DataColumn(
-//             label: Expanded(
-//                 child: Container(
-//                     alignment: Alignment.center, child: Text('功能')))),
-//       ],
-//       rows: List<DataRow>.generate(
-//         controller.newsModel.value.newsItemModel.length,
-//         (index) => DataRow(
-//           cells: [
-//             DataCell(Text('第$index個')),
-//             DataCell(Text(
-//                 'ID: ${controller.newsModel.value.newsItemModel[index].id}')),
-//             DataCell(Text(
-//                 'newsText: ${controller.newsModel.value.newsItemModel[index].newsText}')),
-//             DataCell(Row(
-//               children: [
-//                 Container(
-//                   margin: EdgeInsets.only(left: 20),
-//                   child: GestureDetector(
-//                       onTap: () {
-//                         controller.dataUp(index);
-//                       },
-//                       child: Text('上升')),
-//                 ),
-//                 Container(
-//                   margin: EdgeInsets.only(left: 20),
-//                   child: GestureDetector(
-//                       onTap: () {
-//                         controller.dataDown(index);
-//                       },
-//                       child: Text('下降')),
-//                 ),
-//                 Container(
-//                     margin: EdgeInsets.only(left: 20), child: Text('修改')),
-//                 Container(
-//                     margin: EdgeInsets.only(left: 20),
-//                     child: GestureDetector(
-//                         onTap: () {
-//                           controller.deleteData(index);
-//                         },
-//                         child: Text('刪除'))),
-//               ],
-//             )),
-//           ],
-//         ),
-//       ),
-//     ),
-//   );
-//   }
+  Widget table() {
+    return Obx(
+          () =>
+          DataTable(
+            dividerThickness: 1, // 设置分隔线的厚度
+            columns: [
+              DataColumn(
+                  label: Expanded(
+                      child: Container(
+                          alignment: Alignment.center, child: Text('排序')))),
+              DataColumn(
+                  label: Expanded(
+                      child: Container(
+                          alignment: Alignment.center, child: Text('id')))),
+              DataColumn(
+                  label: Expanded(
+                      child: Container(
+                          alignment: Alignment.center, child: Text('日期')))),
+              DataColumn(
+                  label: Expanded(
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: Text('最新消息文字')))),
+              DataColumn(
+                  label: Expanded(
+                      child: Container(
+                          alignment: Alignment.center, child: Text('功能')))),
+            ],
+            rows: List<DataRow>.generate(
+              controller.newsModel.value.data.length,
+                  (index) =>
+                  DataRow(
+                    cells: [
+                      DataCell(Text('第$index個')),
+                      DataCell(
+                          Text('${controller.newsModel.value.data[index].id}')),
+                      DataCell(Text(
+                          '${controller.newsModel.value.data[index].date}')),
+                      DataCell(GestureDetector(onTap: () {
+                        controller.replaceNews(
+                            index, controller.newsModel.value.data[index].id);
+                      },
+                          child: Text('${controller.newsModel.value.data[index]
+                              .news}'))),
+                      DataCell(Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 20),
+                            child: GestureDetector(
+                                onTap: () {
+                                  controller.dataUp(index);
+                                },
+                                child: Text('上升')),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20),
+                            child: GestureDetector(
+                                onTap: () {
+                                  controller.dataDown(index);
+                                },
+                                child: Text('下降')),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(left: 20),
+                              child: Text('修改')),
+                          Container(
+                              margin: EdgeInsets.only(left: 20),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    controller.deleteData(index);
+                                  },
+                                  child: Text('刪除'))),
+                        ],
+                      )),
+                    ],
+                  ),
+            ),
+          ),
+    );
+  }
 }
