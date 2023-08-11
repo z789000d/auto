@@ -36,16 +36,19 @@ class EditTextDialog extends StatelessWidget {
         onTap: () {
           controller.setText();
         },
-        child: EditableText(
-          controller: controller.textEditingController,
-          backgroundCursorColor: Colors.blue,
-          style: TextStyle(fontSize: 16),
-          cursorColor: Colors.blue,
-          autofocus: true,
-          maxLines: 1,
-          keyboardType: TextInputType.text,
-          textAlign: TextAlign.left,
-          focusNode: FocusNode(),
+        child: Container(
+          width: 300,
+          child: EditableText(
+            controller: controller.textEditingController,
+            backgroundCursorColor: Colors.blue,
+            style: TextStyle(fontSize: 16),
+            cursorColor: Colors.blue,
+            autofocus: true,
+            maxLines: null,  // Allow unlimited lines for auto wrapping
+            keyboardType: TextInputType.text,
+            textAlign: TextAlign.left,
+            focusNode: FocusNode(),
+          ),
         ),
       ),
       actions: <Widget>[

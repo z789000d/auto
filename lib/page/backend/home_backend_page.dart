@@ -104,6 +104,54 @@ class HomePageBackedController extends GetxController {
     });
   }
 
+  void dataPageDescriptionReplace(int index, int id) {
+    Get.dialog(
+      EditTextDialog(text: homePageResponsePageViewImages[index].description),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        HomePageApi().postApi(
+            HomePageRequestModel(
+                action: '2',
+                id: id,
+                category: homePageResponsePageViewImages[index].category,
+                name: homePageResponsePageViewImages[index].name,
+                images: homePageResponsePageViewImages[index].images,
+                description: value,
+                videoLink: homePageResponsePageViewImages[index].videoLink,
+                type: homePageResponsePageViewImages[index].type), (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
+
+  void dataPageVideoLinkReplace(int index, int id) {
+    Get.dialog(
+      EditTextDialog(text: homePageResponsePageViewImages[index].videoLink),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        HomePageApi().postApi(
+            HomePageRequestModel(
+                action: '2',
+                id: id,
+                category: homePageResponsePageViewImages[index].category,
+                name: homePageResponsePageViewImages[index].name,
+                images: homePageResponsePageViewImages[index].images,
+                description: homePageResponsePageViewImages[index].description,
+                videoLink: value,
+                type: homePageResponsePageViewImages[index].type), (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
+
   void dataPageImageReplace(int index, int id, String? url) {
     Get.dialog(
       EditImageDialog(url: url),
@@ -212,6 +260,54 @@ class HomePageBackedController extends GetxController {
     });
   }
 
+  void dataProductDescriptionReplace(int index, int id) {
+    Get.dialog(
+      EditTextDialog(text: homePageResponseProductImages[index].description),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        HomePageApi().postApi(
+            HomePageRequestModel(
+                action: '2',
+                id: id,
+                category: homePageResponseProductImages[index].category,
+                name: homePageResponseProductImages[index].name,
+                images: homePageResponseProductImages[index].images,
+                description: value,
+                videoLink: homePageResponseProductImages[index].videoLink,
+                type: homePageResponseProductImages[index].type), (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
+
+  void dataProductVideoLinkReplace(int index, int id) {
+    Get.dialog(
+      EditTextDialog(text: homePageResponseProductImages[index].videoLink),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        HomePageApi().postApi(
+            HomePageRequestModel(
+                action: '2',
+                id: id,
+                category: homePageResponseProductImages[index].category,
+                name: homePageResponseProductImages[index].name,
+                images: homePageResponseProductImages[index].images,
+                description: homePageResponseProductImages[index].description,
+                videoLink: value,
+                type: homePageResponseProductImages[index].type), (model) {
+          getHomeApi();
+        });
+      }
+    });
+  }
+
   void deleteProductData(int id) {
     HomePageApi().postApi(
         HomePageRequestModel(
@@ -279,7 +375,6 @@ class HomeBackendPage extends StatelessWidget {
                 controller: ScrollController(),
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  width: Get.width < 1400 ? 1400 : Get.width,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,6 +472,14 @@ class HomeBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('描述')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('影片連結')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
@@ -416,8 +519,41 @@ class HomeBackendPage extends StatelessWidget {
                       controller.dataPageNameReplace(index,
                           controller.homePageResponsePageViewImages[index].id);
                     },
-                    child: Text(
-                        '${controller.homePageResponsePageViewImages[index].name}'),
+                    child: Container(
+                      constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+                      child: Text(
+                          '${controller.homePageResponsePageViewImages[index].name}'),
+                    ),
+                  ),
+                ],
+              )),
+              DataCell(Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      controller.dataPageDescriptionReplace(index,
+                          controller.homePageResponsePageViewImages[index].id);
+                    },
+                    child: Container(
+                      constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+                      child: Text(
+                          '${controller.homePageResponsePageViewImages[index].description}'),
+                    ),
+                  ),
+                ],
+              )),
+              DataCell(Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      controller.dataPageVideoLinkReplace(index,
+                          controller.homePageResponsePageViewImages[index].id);
+                    },
+                    child: Container(
+                      constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+                      child: Text(
+                          '${controller.homePageResponsePageViewImages[index].videoLink}'),
+                    ),
                   ),
                 ],
               )),
@@ -483,6 +619,14 @@ class HomeBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('描述')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('影片連結')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
@@ -516,8 +660,33 @@ class HomeBackendPage extends StatelessWidget {
                   controller.dataProductNameReplace(index,
                       controller.homePageResponseProductImages[index].id);
                 },
-                child: Text(
-                    '${controller.homePageResponseProductImages[index].name}'),
+                child: Container(
+                  constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+                  child: Text(
+                      '${controller.homePageResponseProductImages[index].name}'),
+                ),
+              )),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.dataProductDescriptionReplace(index,
+                      controller.homePageResponseProductImages[index].id);
+                },
+                child: Container(
+                  constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+                  child: Text(
+                      '${controller.homePageResponseProductImages[index].description}'),
+                ),
+              )),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.dataProductVideoLinkReplace(index,
+                      controller.homePageResponseProductImages[index].id);
+                },
+                child: Container(
+                  constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
+                  child: Text(
+                      '${controller.homePageResponseProductImages[index].videoLink}'),
+                ),
               )),
               DataCell(Row(
                 children: [
