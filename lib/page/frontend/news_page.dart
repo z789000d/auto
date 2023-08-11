@@ -2,46 +2,43 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/api/news_page_api.dart';
 import 'package:web_auto/model/news_page_model.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
-import '../../main.dart';
-import '../../model/product_model.dart';
-import '../../utils.dart';
-import '../../widget/bottom_bar_widget.dart';
 import '../../widget/change_page_widget.dart';
 
 class NewsController extends GetxController {
-  RxList<NewsModel> newModel = <NewsModel>[].obs;
-  RxList<NewsModel> newShowModel = <NewsModel>[].obs;
-
+  final newsPageResponseModel = NewsPageResponseModel(code: 0, data: []).obs;
+  RxList<NewsData> newShowModel = <NewsData>[].obs;
   final RxInt hoveredIndex = RxInt(-1);
   final nowPageIndex = 1.obs;
 
   @override
   void onInit() {
     super.onInit();
-    for (var i = 0; i < 12; i++) {
-      newModel.add(NewsModel(date: "2023/7/11", news: "最新消息$i"));
-    }
 
-    setNewsValue(1);
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
+    NewsPageApi().postApi(NewsPageRequestModel(action: '0'), (model) {
+      newsPageResponseModel.value = model;
+      setNewsValue(1);
+    });
   }
 
   void setNewsValue(int index) {
     nowPageIndex.value = index - 1;
     int startIndex = (index - 1) * 10;
     int endIndex = startIndex + 9;
-    if (endIndex + 1 > newModel.length) {
-      endIndex = newModel.length - 1;
+    if (endIndex + 1 > newsPageResponseModel.value.data.length) {
+      endIndex = newsPageResponseModel.value.data.length - 1;
     }
-    newShowModel.value = newModel.sublist(startIndex, endIndex + 1);
+    newShowModel.value =
+        newsPageResponseModel.value.data.sublist(startIndex, endIndex + 1);
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }
 
@@ -103,7 +100,8 @@ class NewsPage extends ParentPage {
             },
           ),
           heightBox(),
-          changePageWidget(controller.newModel.length, (pageIndex) {
+          changePageWidget(controller.newsPageResponseModel.value.data.length,
+              (pageIndex) {
             scrollToTop();
             controller.setNewsValue(pageIndex + 1);
           }, controller.nowPageIndex.value),
@@ -112,13 +110,13 @@ class NewsPage extends ParentPage {
     );
   }
 
-  Widget textWidget(NewsModel newsModel, int index) {
+  Widget textWidget(NewsData newsData, int index) {
     return Obx(() => Row(
           children: [
             Container(
               padding: EdgeInsets.only(left: 30, right: 30),
               child: Text(
-                newsModel.date,
+                newsData.date,
                 style: TextStyle(
                   fontWeight: controller.hoveredIndex.value == index
                       ? FontWeight.bold
@@ -130,7 +128,7 @@ class NewsPage extends ParentPage {
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  newsModel.news,
+                  newsData.news,
                   style: TextStyle(
                     fontWeight: controller.hoveredIndex.value == index
                         ? FontWeight.bold
