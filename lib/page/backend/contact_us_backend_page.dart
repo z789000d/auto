@@ -6,6 +6,7 @@ import 'package:web_auto/model/contact_us_model.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../api/contact_us_page_api.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
@@ -15,30 +16,50 @@ class ContactUsBackendController extends GetxController {
   final phoneContentController = TextEditingController().obs;
   final faxContentController = TextEditingController().obs;
   final emailContentController = TextEditingController().obs;
-  Rx<ContactUsModel> contactUsModel = ContactUsModel(
-          companyText: '',
-          locationText: '',
-          phoneText: '',
-          faxText: '',
-          emailText: '')
+  Rx<ContactUsResponseModel> contactUsModel = ContactUsResponseModel(
+          code: 0,
+          contactUsData: ContactUsData(
+              companyText: '',
+              locationText: '',
+              phoneText: '',
+              faxText: '',
+              emailText: ''))
       .obs;
 
   @override
   void onInit() {
     super.onInit();
     // 初始化数据
-    contactUsModel.value = ContactUsModel(
-        companyText: '鋸開自動化有限公司',
-        locationText: '新竹市千甲路191號',
-        phoneText: '035-723504',
-        faxText: '035-745523',
-        emailText: 'tinh@ms12.hinet.net');
+    getContactUsApi();
+  }
 
-    companyContentController.value.text = contactUsModel.value.companyText;
-    locationContentController.value.text = contactUsModel.value.locationText;
-    phoneContentController.value.text = contactUsModel.value.phoneText;
-    faxContentController.value.text = contactUsModel.value.faxText;
-    emailContentController.value.text = contactUsModel.value.emailText;
+  void getContactUsApi() {
+    ContactUsPageApi().postApi(ContactUsRequestModel(action: 0), (model) {
+      contactUsModel.value = model;
+      companyContentController.value.text =
+          contactUsModel.value.contactUsData.companyText!;
+      locationContentController.value.text =
+          contactUsModel.value.contactUsData.locationText!;
+      phoneContentController.value.text =
+          contactUsModel.value.contactUsData.phoneText!;
+      faxContentController.value.text =
+          contactUsModel.value.contactUsData.faxText!;
+      emailContentController.value.text =
+          contactUsModel.value.contactUsData.emailText!;
+    });
+  }
+
+  void replaceData() {
+    ContactUsPageApi().postApi(
+        ContactUsRequestModel(
+            action: 2,
+            companyText: companyContentController.value.text,
+            locationText: locationContentController.value.text,
+            phoneText: phoneContentController.value.text,
+            faxText: faxContentController.value.text,
+            emailText: emailContentController.value.text), (model) {
+      getContactUsApi();
+    });
   }
 }
 
@@ -72,7 +93,11 @@ class ContactUsBackendPage extends StatelessWidget {
                 width: 1, // 设置边框宽度
               ),
             ),
-            child: Text('修改'),
+            child: GestureDetector(
+                onTap: () {
+                  controller.replaceData();
+                },
+                child: Text('修改')),
           )
         ],
       )),
