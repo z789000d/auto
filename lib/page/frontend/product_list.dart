@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_auto/api/product_page_api.dart';
 import 'package:web_auto/model/product_model.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/page/frontend/product_detail_page.dart';
@@ -12,9 +13,8 @@ import '../../widget/bottom_bar_widget.dart';
 import '../../widget/change_page_widget.dart';
 
 class ProductListController extends GetxController {
-  RxList<ProductModel> productModel = <ProductModel>[].obs;
-
-  RxList<ProductModel> productShowModel = <ProductModel>[].obs;
+  final productPageResponseModel = ProductResponseModel(code: 0, data: []).obs;
+  RxList<ProductPageData> productShowModel = <ProductPageData>[].obs;
 
   final pageViewImage = Utils.testImage.obs;
 
@@ -24,17 +24,14 @@ class ProductListController extends GetxController {
   void onInit() {
     super.onInit();
 
-    for (var i = 0; i < 24; i++) {
-      productModel.add(ProductModel(
-          id: i.toString(),
-          category: i.toString(),
-          name: "產品$i",
-          images: pageViewImage,
-          description: "描述$i",
-          videoLink: "連結$i"));
-    }
+    getApi();
+  }
 
-    setGridValue(1);
+  void getApi() {
+    ProductPageApi().postApi(ProductRequestModel(action: '0'), (model) {
+      productPageResponseModel.value = model;
+      setGridValue(1);
+    });
   }
 
   RxInt currentIndex = RxInt(-1);
@@ -47,10 +44,11 @@ class ProductListController extends GetxController {
     nowPageIndex.value = index - 1;
     int startIndex = (index - 1) * 9;
     int endIndex = startIndex + 8;
-    if (endIndex + 1 > productModel.length) {
-      endIndex = productModel.length - 1;
+    if (endIndex + 1 > productPageResponseModel.value.data.length) {
+      endIndex = productPageResponseModel.value.data.length - 1;
     }
-    productShowModel.value = productModel.sublist(startIndex, endIndex + 1);
+    productShowModel.value =
+        productPageResponseModel.value.data.sublist(startIndex, endIndex + 1);
   }
 }
 
@@ -81,7 +79,8 @@ class ProductListPage extends ParentPage {
 
   Widget productListImageWidget() {
     return Obx(() {
-      final int itemCount = controller.productModel.length;
+      final int itemCount =
+          controller.productPageResponseModel.value.data.length;
       final int showItemCount = controller.productShowModel.length;
 
       return Column(
@@ -103,7 +102,9 @@ class ProductListPage extends ParentPage {
             },
           ),
           heightBox(),
-          changePageWidget(controller.productModel.length, (pageIndex) {
+          changePageWidget(
+              controller.productPageResponseModel.value.data.length,
+              (pageIndex) {
             scrollToTop();
             controller.setGridValue(pageIndex + 1);
           }, controller.nowPageIndex.value),
@@ -123,8 +124,10 @@ class ProductListPage extends ParentPage {
         },
         child: GestureDetector(
           onTap: () {
+            Get.delete<ProductDetailController>();
             Get.to(ProductDetailPage(), arguments: {
-              'productModel': controller.productShowModel[index]
+              'productModel': controller.productShowModel[index],
+              'productPageResponseModel': controller.productPageResponseModel.value
             });
           },
           child: Container(
@@ -142,8 +145,8 @@ class ProductListPage extends ParentPage {
               child: Column(
                 children: [
                   Expanded(
-                      child: Image.network(
-                          controller.productShowModel[index].images[0])),
+                      child: Image.network(controller
+                          .productShowModel[index].imageData[0].imageUrl!)),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),

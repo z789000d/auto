@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
+import 'package:web_auto/page/frontend/product_list.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -13,20 +14,17 @@ import '../../widget/bottom_bar_widget.dart';
 
 class ProductDetailController extends GetxController {
   final CarouselController buttonCarouselController = CarouselController();
-  Rx<ProductModel> productModel = ProductModel(
-          id: '',
-          category: '',
-          name: '',
-          images: [],
-          description: '',
-          videoLink: '')
+  final productPageResponseModel = ProductResponseModel(code: 0, data: []).obs;
+  final Rx<ProductPageData> productModel = ProductPageData(
+      id: 0,
+      category: '',
+      name: '',
+      imageData: [],
+      description: '',
+      videoLink: '')
       .obs;
 
   final currentPageIndex = 0.obs;
-
-  RxList<ProductModel> productModelList = <ProductModel>[].obs;
-
-  final pageViewImage = Utils.testImage.obs;
 
   RxInt currentIndex = RxInt(-1);
 
@@ -34,32 +32,18 @@ class ProductDetailController extends GetxController {
     currentIndex.value = index;
   }
 
-  final ytController = YoutubePlayerController.fromVideoId(
-    videoId:
-        '${Utils.getYouTubeVideoId("https://www.youtube.com/watch?v=TpX9aAfgurU")}',
-    autoPlay: false,
-    params: const YoutubePlayerParams(showFullscreenButton: true),
-  );
+  late final ytController;
 
   @override
   void onInit() {
     super.onInit();
-
-    for (var i = 0; i < 10; i++) {
-      productModelList.add(ProductModel(
-          id: i.toString(),
-          category: i.toString(),
-          name: "產品$i",
-          images: pageViewImage,
-          description: "描述$i",
-          videoLink: "連結$i"));
-    }
   }
 
   @override
   void onReady() {
     super.onReady();
   }
+
   @override
   void onClose() {
     super.onClose();
@@ -67,67 +51,80 @@ class ProductDetailController extends GetxController {
 }
 
 class ProductDetailPage extends ParentPage {
-  final ProductDetailController controller = Get.put(ProductDetailController());
-
   ProductDetailPage({super.key});
+
+  final ProductDetailController controller = Get.put(ProductDetailController());
 
   @override
   Widget childWidget() {
     if (Get.arguments != null) {
       controller.productModel.value = Get.arguments['productModel'];
+      controller.productPageResponseModel.value =
+      Get.arguments['productPageResponseModel'];
+
+      controller.ytController = YoutubePlayerController.fromVideoId(
+        videoId:
+        '${Utils.getYouTubeVideoId(
+            controller.productModel.value.videoLink)}',
+        autoPlay: false,
+        params: const YoutubePlayerParams(showFullscreenButton: true),
+      );
     }
-    // 獲取傳遞的參數
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Obx(
-          () => Container(
-            height: 350,
-            width: Get.width.obs.value / 1.5,
-            child: CarouselSlider(
-              options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  controller.currentPageIndex.value = index;
-                },
-                enlargeCenterPage: true,
-                scrollDirection: Axis.horizontal,
-                autoPlay: true,
-                autoPlayInterval: Duration(seconds: 4),
-              ),
-              items: controller.productModel.value.images.map((image) {
-                return Image.network(image);
-              }).toList(),
-              carouselController: controller.buttonCarouselController,
-            ),
-          ),
-        ),
-        Container(
-          height: 20,
-          child: Obx(
-            () => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (int i = 0;
-                    i < controller.productModel.value.images.length;
-                    i++)
-                  Container(
-                    margin: EdgeInsets.all(4),
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: i == controller.currentPageIndex.value
-                          ? Colors.blue
-                          : Colors.grey,
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Obx(
+                () =>
+                Container(
+                  height: 350,
+                  width: Get.width.obs.value / 1.5,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      onPageChanged: (index, reason) {
+                        controller.currentPageIndex.value = index;
+                      },
+                      enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 4),
                     ),
+                    items: controller.productModel.value.imageData.map((image) {
+                      return Image.network(image.imageUrl!);
+                    }).toList(),
+                    carouselController: controller.buttonCarouselController,
                   ),
-              ],
+                ),
+          ),
+          Container(
+            height: 20,
+            child: Obx(
+                  () =>
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0;
+                      i < controller.productModel.value.imageData.length;
+                      i++)
+                        Container(
+                          margin: EdgeInsets.all(4),
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: i == controller.currentPageIndex.value
+                                ? Colors.blue
+                                : Colors.grey,
+                          ),
+                        ),
+                    ],
+                  ),
             ),
           ),
-        ),
-        tableText(Get.context!),
-        buildProductList(),
-      ],
+          tableText(Get.context!),
+          buildProductList(),
+        ],
+      ),
     );
   }
 
@@ -281,7 +278,7 @@ class ProductDetailPage extends ParentPage {
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: controller.productModelList.length,
+            itemCount: controller.productPageResponseModel.value.data.length,
             itemBuilder: (BuildContext context, int index) {
               return listViewItem(index);
             },
@@ -306,47 +303,55 @@ class ProductDetailPage extends ParentPage {
         borderRadius: BorderRadius.circular(5), // 添加圆角
       ),
       child: Obx(
-        () => MouseRegion(
-          onEnter: (event) {
-            controller.setCurrentIndex(index);
-          },
-          onExit: (event) {
-            controller.setCurrentIndex(-1);
-          },
-          child: GestureDetector(
-            onTap: () {
-              Get.to(ProductDetailPage(), arguments: {
-                'productModel': controller.productModelList[index]
-              });
-            },
-            child: Container(
-              child: Column(
-                children: [
-                  Expanded(
-                      child: Image.network(
-                          controller.productModelList[index].images[0])),
-                  Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(3),
-                        color: controller.currentIndex.value == index
-                            ? Colors.blue
-                            : Colors.grey, // 添加圆角
-                      ),
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 20),
-                      child: Text(
-                        controller.productModelList[index].name,
-                        style: TextStyle(
-                            fontSize: 20,
+            () =>
+            MouseRegion(
+              onEnter: (event) {
+                controller.setCurrentIndex(index);
+              },
+              onExit: (event) {
+                controller.setCurrentIndex(-1);
+              },
+              child: GestureDetector(
+                onTap: () {
+                  Get.delete<ProductListController>();
+                  Get.to(ProductListPage(), arguments: {
+                    'productModel':
+                    controller.productPageResponseModel.value.data[index],
+                    'productPageResponseModel':
+                    controller.productPageResponseModel.value
+                  });
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: Image.network(
+                              controller.productPageResponseModel
+                                  .value.data[index].imageData[0].imageUrl!)),
+                      Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
                             color: controller.currentIndex.value == index
-                                ? Colors.white
-                                : Colors.black),
-                      )),
-                ],
+                                ? Colors.blue
+                                : Colors.grey, // 添加圆角
+                          ),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(top: 20),
+                          child: Text(
+                            controller
+                                .productPageResponseModel.value.data[index]
+                                .name,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: controller.currentIndex.value == index
+                                    ? Colors.white
+                                    : Colors.black),
+                          )),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
       ),
     );
   }
