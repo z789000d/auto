@@ -59,7 +59,7 @@ class ProductImageBackendPage extends StatelessWidget {
     // 使用GetX来获取控制器实例
     return Container();
     //   final productModel = Get.arguments != null
-    //       ? Get.arguments['productModel']
+    //       ? Get.arguments['productPageResponseModel']
     //       : ProductModel(
     //           id: '',
     //           category: '',
