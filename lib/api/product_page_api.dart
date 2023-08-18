@@ -19,4 +19,23 @@ class ProductPageApi {
     print('postApi ${response.data}');
     callback(ProductResponseModel.fromJson(json.decode(response.data)));
   }
+
+  void postFileApi(int id, Uint8List bytes,
+      void Function(ProductResponseModel model) callback) async {
+    var formData = FormData.fromMap({
+      'id': id,
+      'action': '9',
+      'file': MultipartFile.fromBytes(bytes, filename: 'testName.jpg'),
+    });
+
+    var response = await Dio().post(
+      'http://10.42.16.60/api/productPage.php',
+      data: formData,
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    print('AboutUsPageApi ${response.data}');
+    callback(ProductResponseModel.fromJson(json.decode(response.data)));
+  }
 }

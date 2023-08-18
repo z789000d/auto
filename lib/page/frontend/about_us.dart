@@ -68,28 +68,30 @@ class AboutUsPage extends ParentPage {
   }
 
   Widget aboutUsImageWidget() {
-    return Container(
-      margin: EdgeInsets.all(40),
-      child: GridView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.all(10),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 8,
-            childAspectRatio: Get.width.obs.value < 720
-                ? (Get.width.obs.value) / (Get.width.obs.value) * 2
-                : (Get.width.obs.value) / (Get.height.obs.value)),
-        itemCount: controller.aboutUsModel.value.aboutUsData.imageData.length,
-        itemBuilder: (context, index) {
-          return Obx(
-            () => Image.network(
-              controller
-                  .aboutUsModel.value.aboutUsData.imageData[index].imageUrl!,
-              fit: BoxFit.contain,
-            ),
-          );
-        },
+    return Obx(
+          () =>  Container(
+        margin: EdgeInsets.all(40),
+        child: GridView.builder(
+          shrinkWrap: true,
+          padding: EdgeInsets.all(10),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: Get.width.obs.value < 720 ? 1 : 3,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 8,
+              childAspectRatio: Get.width.obs.value < 720
+                  ? (Get.width.obs.value) / (Get.width.obs.value) * 2
+                  : (Get.width.obs.value) / (Get.height.obs.value)),
+          itemCount: controller.aboutUsModel.value.aboutUsData.imageData.length,
+          itemBuilder: (context, index) {
+            return Obx(
+              () => Image.network(
+                controller
+                    .aboutUsModel.value.aboutUsData.imageData[index].imageUrl!,
+                fit: BoxFit.contain,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

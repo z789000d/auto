@@ -185,10 +185,16 @@ class ProductListBackendPage extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     Get.delete<ProductImageBackedController>();
-                    Get.to(ProductImageBackendPage(), arguments: {
-                      'productPageResponseModel':
-                          controller.productPageResponseModel.value.data[index]
-                    });
+
+                    final ProductImageBackedController
+                        productImageBackedController =
+                        Get.put(ProductImageBackedController());
+
+                    productImageBackedController.productPageResponseModel
+                        .value = controller.productPageResponseModel.value;
+
+                    productImageBackedController.productIndex.value = index;
+                    Get.to(ProductImageBackendPage());
                   },
                   child: Image.network(
                     controller.productPageResponseModel.value.data[index]

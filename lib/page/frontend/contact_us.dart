@@ -30,7 +30,7 @@ class ContactUsController extends GetxController {
   final companyEmailController = TextEditingController();
   final companyContentController = TextEditingController();
 
-  Rx<ContactUsResponseModel> contactUsModel = ContactUsResponseModel(
+  final Rx<ContactUsResponseModel> contactUsModel = ContactUsResponseModel(
           code: 0,
           contactUsData: ContactUsData(
               companyText: '',
@@ -121,76 +121,78 @@ class ContactUsPage extends ParentPage {
   @override
   Widget childWidget() {
     return LayoutBuilder(builder: (context, constraints) {
-      return Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 20),
-            child: Text(
-              '聯絡我們',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.normal,
-                color: Colors.blue,
+      return Obx(
+        () => Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Text(
+                '聯絡我們',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.blue,
+                ),
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 30),
-            color: Colors.blue,
-            width: Get.width / 1.5,
-            height: Get.height / 1.5,
-            child: GoogleMap(
-              onMapCreated: controller.onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: controller.center,
-                zoom: 15.0,
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 30),
+              color: Colors.blue,
+              width: Get.width / 1.5,
+              height: Get.height / 1.5,
+              child: GoogleMap(
+                onMapCreated: controller.onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: controller.center,
+                  zoom: 15.0,
+                ),
+                markers: controller.markers,
               ),
-              markers: controller.markers,
             ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20),
-            width: Get.width,
-            alignment: Alignment.centerLeft,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  controller.contactUsModel.value.contactUsData.companyText!,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.blue,
+            Container(
+              margin: EdgeInsets.all(20),
+              width: Get.width,
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.contactUsModel.value.contactUsData.companyText!,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.blue,
+                    ),
                   ),
-                ),
-                SizedBox(height: 30.0),
-                Text(
-                  '公司地址:${controller.contactUsModel.value.contactUsData.locationText}',
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  '電話:${controller.contactUsModel.value.contactUsData.phoneText}',
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  '傳真:${controller.contactUsModel.value.contactUsData.faxText}',
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  '電子郵件:${controller.contactUsModel.value.contactUsData.emailText}',
-                  textAlign: TextAlign.start,
-                ),
-                inputEdit()
-              ],
+                  SizedBox(height: 30.0),
+                  Text(
+                    '公司地址:${controller.contactUsModel.value.contactUsData.locationText}',
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    '電話:${controller.contactUsModel.value.contactUsData.phoneText}',
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    '傳真:${controller.contactUsModel.value.contactUsData.faxText}',
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    '電子郵件:${controller.contactUsModel.value.contactUsData.emailText}',
+                    textAlign: TextAlign.start,
+                  ),
+                  inputEdit()
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     });
   }

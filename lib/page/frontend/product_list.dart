@@ -125,10 +125,15 @@ class ProductListPage extends ParentPage {
         child: GestureDetector(
           onTap: () {
             Get.delete<ProductDetailController>();
-            Get.to(ProductDetailPage(), arguments: {
-              'productModel': controller.productShowModel[index],
-              'productPageResponseModel': controller.productPageResponseModel.value
-            });
+
+            final ProductDetailController productDetailController =
+                Get.put(ProductDetailController());
+
+            productDetailController.productModel.value =
+                controller.productPageResponseModel.value.data[index];
+            productDetailController.productPageResponseModel.value =
+                controller.productPageResponseModel.value;
+            Get.to(ProductDetailPage());
           },
           child: Container(
             margin: EdgeInsets.all(40),

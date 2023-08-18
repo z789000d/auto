@@ -16,12 +16,12 @@ class ProductDetailController extends GetxController {
   final CarouselController buttonCarouselController = CarouselController();
   final productPageResponseModel = ProductResponseModel(code: 0, data: []).obs;
   final Rx<ProductPageData> productModel = ProductPageData(
-      id: 0,
-      category: '',
-      name: '',
-      imageData: [],
-      description: '',
-      videoLink: '')
+          id: 0,
+          category: '',
+          name: '',
+          imageData: [],
+          description: '',
+          videoLink: '')
       .obs;
 
   final currentPageIndex = 0.obs;
@@ -32,11 +32,20 @@ class ProductDetailController extends GetxController {
     currentIndex.value = index;
   }
 
-  late final ytController;
+  var ytController = YoutubePlayerController.fromVideoId(
+    videoId: '',
+    autoPlay: false,
+    params: const YoutubePlayerParams(showFullscreenButton: true),
+  ).obs;
 
   @override
   void onInit() {
     super.onInit();
+    ytController.value = YoutubePlayerController.fromVideoId(
+      videoId: '${Utils.getYouTubeVideoId(productModel.value.videoLink)}',
+      autoPlay: false,
+      params: const YoutubePlayerParams(showFullscreenButton: true),
+    );
   }
 
   @override
@@ -57,68 +66,53 @@ class ProductDetailPage extends ParentPage {
 
   @override
   Widget childWidget() {
-    if (Get.arguments != null) {
-      controller.productModel.value = Get.arguments['productModel'];
-      controller.productPageResponseModel.value =
-      Get.arguments['productPageResponseModel'];
-
-      controller.ytController = YoutubePlayerController.fromVideoId(
-        videoId:
-        '${Utils.getYouTubeVideoId(
-            controller.productModel.value.videoLink)}',
-        autoPlay: false,
-        params: const YoutubePlayerParams(showFullscreenButton: true),
-      );
-    }
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Obx(
-                () =>
-                Container(
-                  height: 350,
-                  width: Get.width.obs.value / 1.5,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      onPageChanged: (index, reason) {
-                        controller.currentPageIndex.value = index;
-                      },
-                      enlargeCenterPage: true,
-                      scrollDirection: Axis.horizontal,
-                      autoPlay: true,
-                      autoPlayInterval: Duration(seconds: 4),
-                    ),
-                    items: controller.productModel.value.imageData.map((image) {
-                      return Image.network(image.imageUrl!);
-                    }).toList(),
-                    carouselController: controller.buttonCarouselController,
-                  ),
+            () => Container(
+              height: 350,
+              width: Get.width.obs.value / 1.5,
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  onPageChanged: (index, reason) {
+                    controller.currentPageIndex.value = index;
+                  },
+                  enlargeCenterPage: true,
+                  scrollDirection: Axis.horizontal,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 4),
                 ),
+                items: controller.productModel.value.imageData.map((image) {
+                  return Image.network(image.imageUrl!);
+                }).toList(),
+                carouselController: controller.buttonCarouselController,
+              ),
+            ),
           ),
           Container(
             height: 20,
             child: Obx(
-                  () =>
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0;
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0;
                       i < controller.productModel.value.imageData.length;
                       i++)
-                        Container(
-                          margin: EdgeInsets.all(4),
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: i == controller.currentPageIndex.value
-                                ? Colors.blue
-                                : Colors.grey,
-                          ),
-                        ),
-                    ],
-                  ),
+                    Container(
+                      margin: EdgeInsets.all(4),
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: i == controller.currentPageIndex.value
+                            ? Colors.blue
+                            : Colors.grey,
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
           tableText(Get.context!),
@@ -240,7 +234,7 @@ class ProductDetailPage extends ParentPage {
                 width: 400,
                 height: 225,
                 child: YoutubePlayer(
-                  controller: controller.ytController,
+                  controller: controller.ytController.value,
                   aspectRatio: 16 / 9,
                 ),
               ),
@@ -303,55 +297,57 @@ class ProductDetailPage extends ParentPage {
         borderRadius: BorderRadius.circular(5), // 添加圆角
       ),
       child: Obx(
-            () =>
-            MouseRegion(
-              onEnter: (event) {
-                controller.setCurrentIndex(index);
-              },
-              onExit: (event) {
-                controller.setCurrentIndex(-1);
-              },
-              child: GestureDetector(
-                onTap: () {
-                  Get.delete<ProductListController>();
-                  Get.to(ProductListPage(), arguments: {
-                    'productModel':
-                    controller.productPageResponseModel.value.data[index],
-                    'productPageResponseModel':
-                    controller.productPageResponseModel.value
-                  });
-                },
-                child: Container(
-                  child: Column(
-                    children: [
-                      Expanded(
-                          child: Image.network(
-                              controller.productPageResponseModel
-                                  .value.data[index].imageData[0].imageUrl!)),
-                      Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3),
+        () => MouseRegion(
+          onEnter: (event) {
+            controller.setCurrentIndex(index);
+          },
+          onExit: (event) {
+            controller.setCurrentIndex(-1);
+          },
+          child: GestureDetector(
+            onTap: () {
+              Get.delete<ProductListController>();
+
+              final ProductDetailController productDetailController =
+                  Get.put(ProductDetailController());
+
+              productDetailController.productPageResponseModel.value =
+                  controller.productPageResponseModel.value;
+              productDetailController.productPageResponseModel.value =
+                  controller.productPageResponseModel.value;
+              Get.to(ProductDetailPage());
+
+              Get.to(ProductListPage());
+            },
+            child: Container(
+              child: Column(
+                children: [
+                  Expanded(
+                      child: Image.network(controller.productPageResponseModel
+                          .value.data[index].imageData[0].imageUrl!)),
+                  Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: controller.currentIndex.value == index
+                            ? Colors.blue
+                            : Colors.grey, // 添加圆角
+                      ),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        controller
+                            .productPageResponseModel.value.data[index].name,
+                        style: TextStyle(
+                            fontSize: 20,
                             color: controller.currentIndex.value == index
-                                ? Colors.blue
-                                : Colors.grey, // 添加圆角
-                          ),
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(top: 20),
-                          child: Text(
-                            controller
-                                .productPageResponseModel.value.data[index]
-                                .name,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: controller.currentIndex.value == index
-                                    ? Colors.white
-                                    : Colors.black),
-                          )),
-                    ],
-                  ),
-                ),
+                                ? Colors.white
+                                : Colors.black),
+                      )),
+                ],
               ),
             ),
+          ),
+        ),
       ),
     );
   }

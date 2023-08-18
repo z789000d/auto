@@ -5,7 +5,7 @@ class ProductRequestModel {
   int? id;
   int? id1;
   int? id2;
-  String? imageId;
+  int? imageId;
   String? imageUrl;
   String? category;
   String? name;
