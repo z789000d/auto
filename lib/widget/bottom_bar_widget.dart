@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
 
+import '../api/contact_us_page_api.dart';
+import '../model/contact_us_model.dart';
 import '../page/frontend/about_us.dart';
 import '../page/frontend/catalogue_list.dart';
 import '../page/frontend/contact_us.dart';
@@ -16,6 +18,23 @@ final BottomController bottomController = Get.put(BottomController());
 class BottomController extends GetxController {
   final buttonStates = List.generate(6, (_) => false).obs;
   final hoverIndex = RxInt(-1);
+  final Rx<ContactUsResponseModel> contactUsModel = ContactUsResponseModel(
+          code: 0,
+          contactUsData: ContactUsData(
+              companyText: '',
+              locationText: '',
+              phoneText: '',
+              faxText: '',
+              emailText: ''))
+      .obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    ContactUsPageApi().postApi(ContactUsRequestModel(action: 0), (model) {
+      contactUsModel.value = model;
+    });
+  }
 
   void updateButtonState(int index, bool isSelected) {
     buttonStates[index] = isSelected;
@@ -28,6 +47,8 @@ class BottomController extends GetxController {
 
 class BottomWidget extends StatelessWidget {
   BottomWidget({super.key});
+
+  final ContactUsController controller = Get.put(ContactUsController());
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +66,23 @@ class BottomWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('公司地址:新竹市千甲路191號'),
-                SizedBox(height: 8.0),
-                Text('電話:035-723504'),
-                SizedBox(height: 8.0),
-                Text('傳真:035-745523'),
-                SizedBox(height: 8.0),
-                Text('電子郵件:tinh@ms12.hinet.net')
-              ],
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      '公司地址:${controller.contactUsModel.value.contactUsData.locationText}'),
+                  SizedBox(height: 8.0),
+                  Text(
+                      '電話:${controller.contactUsModel.value.contactUsData.phoneText}'),
+                  SizedBox(height: 8.0),
+                  Text(
+                      '傳真:${controller.contactUsModel.value.contactUsData.faxText}'),
+                  SizedBox(height: 8.0),
+                  Text(
+                      '電子郵件:${controller.contactUsModel.value.contactUsData.emailText}')
+                ],
+              ),
             ),
           ),
           SizedBox(width: 8.0),

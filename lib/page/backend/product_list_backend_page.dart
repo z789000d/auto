@@ -8,6 +8,7 @@ import 'package:web_auto/widget/top_bar_widget.dart';
 
 import '../../api/product_page_api.dart';
 import '../../model/product_model.dart';
+import '../../widget/edit_text_dialog.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
@@ -24,6 +25,103 @@ class ProductListBackendController extends GetxController {
   void getApi() {
     ProductPageApi().postApi(ProductRequestModel(action: '0'), (model) {
       productPageResponseModel.value = model;
+    });
+  }
+
+  void replaceCategory(int index) {
+    Get.dialog(
+      EditTextDialog(text: productPageResponseModel.value.data[index].category),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        ProductPageApi().postApi(
+            ProductRequestModel(
+                action: '5',
+                id: productPageResponseModel.value.data[index].id,
+                category: value,
+                name: productPageResponseModel.value.data[index].name,
+                description:
+                    productPageResponseModel.value.data[index].description,
+                videoLink: productPageResponseModel
+                    .value.data[index].videoLink), (model) {
+          getApi();
+        });
+      }
+    });
+  }
+
+  void replaceName(int index) {
+    Get.dialog(
+      EditTextDialog(text: productPageResponseModel.value.data[index].name),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        print('aaaaaa ${value}');
+        ProductPageApi().postApi(
+            ProductRequestModel(
+                action: '5',
+                id: productPageResponseModel.value.data[index].id,
+                category: productPageResponseModel.value.data[index].category,
+                name: value,
+                description:
+                    productPageResponseModel.value.data[index].description,
+                videoLink: productPageResponseModel
+                    .value.data[index].videoLink), (model) {
+          getApi();
+        });
+      }
+    });
+  }
+
+  void replaceDescription(int index) {
+    Get.dialog(
+      EditTextDialog(
+          text: productPageResponseModel.value.data[index].description),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        ProductPageApi().postApi(
+            ProductRequestModel(
+                action: '5',
+                id: productPageResponseModel.value.data[index].id,
+                category: productPageResponseModel.value.data[index].category,
+                name: productPageResponseModel.value.data[index].name,
+                description: value,
+                videoLink: productPageResponseModel
+                    .value.data[index].videoLink), (model) {
+          getApi();
+        });
+      }
+    });
+  }
+
+  void replaceVideoLink(int index) {
+    Get.dialog(
+      EditTextDialog(
+          text: productPageResponseModel.value.data[index].videoLink),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        ProductPageApi().postApi(
+            ProductRequestModel(
+                action: '5',
+                id: productPageResponseModel.value.data[index].id,
+                category: productPageResponseModel.value.data[index].category,
+                name: productPageResponseModel.value.data[index].name,
+                description:
+                    productPageResponseModel.value.data[index].description,
+                videoLink: value), (model) {
+          getApi();
+        });
+      }
     });
   }
 
@@ -178,9 +276,14 @@ class ProductListBackendPage extends StatelessWidget {
             cells: [
               DataCell(Text('第$index個')),
               DataCell(Text(
-                  'ID: ${controller.productPageResponseModel.value.data[index].id}')),
-              DataCell(Text(
-                  '類別: ${controller.productPageResponseModel.value.data[index].category}')),
+                  '${controller.productPageResponseModel.value.data[index].id}')),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.replaceCategory(index);
+                },
+                child: Text(
+                    '${controller.productPageResponseModel.value.data[index].category}'),
+              )),
               DataCell(
                 GestureDetector(
                   onTap: () {
@@ -204,12 +307,27 @@ class ProductListBackendPage extends StatelessWidget {
                   ),
                 ),
               ),
-              DataCell(Text(
-                  'name: ${controller.productPageResponseModel.value.data[index].name}')),
-              DataCell(Text(
-                  'description: ${controller.productPageResponseModel.value.data[index].description}')),
-              DataCell(Text(
-                  'videoLink: ${controller.productPageResponseModel.value.data[index].videoLink}')),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.replaceName(index);
+                },
+                child: Text(
+                    '${controller.productPageResponseModel.value.data[index].name}'),
+              )),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.replaceDescription(index);
+                },
+                child: Text(
+                    '${controller.productPageResponseModel.value.data[index].description}'),
+              )),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.replaceVideoLink(index);
+                },
+                child: Text(
+                    '${controller.productPageResponseModel.value.data[index].videoLink}'),
+              )),
               DataCell(Row(
                 children: [
                   Container(
