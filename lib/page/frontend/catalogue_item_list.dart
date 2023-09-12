@@ -10,8 +10,8 @@ import 'package:web_auto/widget/top_bar_widget.dart';
 import '../../widget/bottom_bar_widget.dart';
 
 class CatalogueItemController extends GetxController {
-  Rx<CatalogueModel> catalogueModel =
-      CatalogueModel(id: '', name: '', images: []).obs;
+  final Rx<CataloguePageData> catalogueModel =
+      CataloguePageData(id: 0, name: '', imageData: []).obs;
 
   final currentPageIndex = 0.obs;
 
@@ -34,10 +34,6 @@ class CatalogueItemListPage extends ParentPage {
 
   @override
   Widget childWidget() {
-    if (Get.arguments != null) {
-      controller.catalogueModel.value = Get.arguments['catalogueModel'];
-    }
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -68,7 +64,7 @@ class CatalogueItemListPage extends ParentPage {
             childAspectRatio: Get.width.obs.value < 720
                 ? (Get.width.obs.value) / (Get.width) * 2
                 : (Get.width.obs.value) / (Get.height.obs.value)),
-        itemCount: controller.catalogueModel.value.images.length,
+        itemCount: controller.catalogueModel.value.imageData.length,
         itemBuilder: (context, index) {
           return gridViewItem(index);
         },
@@ -103,7 +99,7 @@ class CatalogueItemListPage extends ParentPage {
                 children: [
                   Expanded(
                       child: Image.network(controller
-                          .catalogueModel.value.images[index].images)),
+                          .catalogueModel.value.imageData[index].imageUrl!)),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
@@ -114,8 +110,7 @@ class CatalogueItemListPage extends ParentPage {
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 20),
                       child: Text(
-                        '目錄 ${controller
-                            .catalogueModel.value.images[index].name}',
+                        '目錄 ${controller.catalogueModel.value.name}',
                         style: TextStyle(
                             fontSize: 20,
                             color: controller.currentIndex.value == index

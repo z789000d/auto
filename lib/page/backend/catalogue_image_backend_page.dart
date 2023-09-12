@@ -1,57 +1,102 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/model/catalogue_model.dart';
-import 'package:web_auto/widget/bottom_bar_widget.dart';
-import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../api/catalogue_page_api.dart';
+import '../../widget/edit_image_dialog.dart';
 import '../../widget/top_bar_backed_widget.dart';
 
 // 定义控制器类
 class CatalogueImageBackendController extends GetxController {
-  Rx<CatalogueModel> catalogueModel =
-      CatalogueModel(id: '', name: '', images: []).obs; // or
+  final cataloguePageResponseModel =
+      CatalogueResponseModel(code: 0, data: []).obs;
+  final catalogueIndex = 0.obs;
   final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
+    getApi();
+  }
+
+  void getApi() {
+    CataloguePageApi().postApi(CatalogueRequestModel(action: '0'), (model) {
+      cataloguePageResponseModel.value = model;
+    });
   }
 
   void addData() {
-    CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
-    catalogueModelOriginal.images.add(CatalogueItemModel(
-        id: '${catalogueModelOriginal.images.length}',
-        name: 'name${catalogueModelOriginal.images.length}',
-        images:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'));
-    catalogueModel.value = catalogueModelOriginal;
-    scrollToEnd();
+    CataloguePageApi().postApi(
+        CatalogueRequestModel(
+            action: '2',
+            imageUrl:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+            imageId: cataloguePageResponseModel
+                .value.data[catalogueIndex.value].id), (model) {
+      getApi();
+    });
   }
 
   void deleteData(int index) {
-    CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
-    catalogueModelOriginal.images.removeAt(index);
-    catalogueModel.value = catalogueModelOriginal;
+    CataloguePageApi().postApi(
+        CatalogueRequestModel(
+            action: '4',
+            id: cataloguePageResponseModel.value.data[catalogueIndex.value]
+                .imageData[index].id), (model) {
+      getApi();
+    });
   }
 
   void dataUp(int index) {
     if (index > 0) {
-      CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
-      catalogueModelOriginal.images
-          .insert(index - 1, catalogueModelOriginal.images.removeAt(index));
-      catalogueModel.value = catalogueModelOriginal;
+      CataloguePageApi().postApi(
+          CatalogueRequestModel(
+            action: '8',
+            id1: cataloguePageResponseModel
+                .value.data[catalogueIndex.value].imageData[index].id,
+            id2: cataloguePageResponseModel
+                .value.data[catalogueIndex.value].imageData[index - 1].id,
+          ), (model) {
+        getApi();
+      });
     }
   }
 
   void dataDown(int index) {
-    if (index < catalogueModel.value.images.length - 1) {
-      CatalogueModel catalogueModelOriginal = catalogueModel.value.copyWith();
-      catalogueModelOriginal.images
-          .insert(index + 1, catalogueModelOriginal.images.removeAt(index));
-      catalogueModel.value = catalogueModelOriginal;
+    if (index <
+        cataloguePageResponseModel
+                .value.data[catalogueIndex.value].imageData.length -
+            1) {
+      CataloguePageApi().postApi(
+          CatalogueRequestModel(
+            action: '8',
+            id1: cataloguePageResponseModel
+                .value.data[catalogueIndex.value].imageData[index].id,
+            id2: cataloguePageResponseModel
+                .value.data[catalogueIndex.value].imageData[index + 1].id,
+          ), (model) {
+        getApi();
+      });
     }
+  }
+
+  void dataImageReplace(int index, int id, String? url) {
+    Get.dialog(
+      EditImageDialog(url: url),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        Uint8List bytes = value;
+        CataloguePageApi().postFileApi(id, bytes, (model) {
+          getApi();
+        });
+      }
+    });
   }
 
   void scrollToEnd() {
@@ -71,11 +116,6 @@ class CatalogueImageBackendPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 使用GetX来获取控制器实例
-    if (Get.arguments != null) {
-      controller.catalogueModel.value =
-          Get.arguments['catalogueModel']; // 獲取傳遞的參數
-    }
     return Scaffold(
       body: SingleChildScrollView(
           controller: controller.scrollController,
@@ -140,28 +180,54 @@ class CatalogueImageBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.catalogueModel.value.images.length,
+          controller.cataloguePageResponseModel.value
+              .data[controller.catalogueIndex.value].imageData.length,
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
               DataCell(Text(
-                  'ID: ${controller.catalogueModel.value.images[index].id}')),
+                  'ID: ${controller.cataloguePageResponseModel.value.data[controller.catalogueIndex.value].imageData[index].id}')),
               DataCell(
-                Image.network(
-                  controller.catalogueModel.value.images[index].images,
-                  width: 120,
-                  height: 120,
+                GestureDetector(
+                  onTap: () {
+                    controller.dataImageReplace(
+                        index,
+                        controller
+                            .cataloguePageResponseModel
+                            .value
+                            .data[controller.catalogueIndex.value]
+                            .imageData[index]
+                            .id!,
+                        controller
+                            .cataloguePageResponseModel
+                            .value
+                            .data[controller.catalogueIndex.value]
+                            .imageData[index]
+                            .imageUrl);
+                  },
+                  child: Image.network(
+                    controller
+                        .cataloguePageResponseModel
+                        .value
+                        .data[controller.catalogueIndex.value]
+                        .imageData[index]
+                        .imageUrl!,
+                    width: 120,
+                    height: 120,
+                  ),
                 ),
               ),
               DataCell(Text(
-                  'ID: ${controller.catalogueModel.value.images[index].name}')),
+                  'ImageID: ${controller.cataloguePageResponseModel.value.data[controller.catalogueIndex.value].imageData[index].imageId}')),
               DataCell(Row(
                 children: [
                   Container(
                     margin: EdgeInsets.only(left: 20),
-                    child: GestureDetector(onTap: () {
-                      controller.dataUp(index);
-                    }, child: Text('上升')),
+                    child: GestureDetector(
+                        onTap: () {
+                          controller.dataUp(index);
+                        },
+                        child: Text('上升')),
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 20),

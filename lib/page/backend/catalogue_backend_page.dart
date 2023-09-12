@@ -3,133 +3,97 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/model/catalogue_model.dart';
-import 'package:web_auto/widget/bottom_bar_widget.dart';
-import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../api/catalogue_page_api.dart';
+import '../../widget/edit_text_dialog.dart';
 import '../../widget/top_bar_backed_widget.dart';
 import 'catalogue_image_backend_page.dart';
 
 // 定义控制器类
 class CatalogueBackendController extends GetxController {
   // 假设有一个包含数据的 List
-  RxList<CatalogueModel> catalogueModel = <CatalogueModel>[].obs;
+  final catalogueResponseModel = CatalogueResponseModel(code: 0, data: []).obs;
   final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
-    // 初始化数据
-    for (int i = 0; i < 10; i++) {
-      catalogueModel.add(CatalogueModel(
-        id: '$i',
-        name: '型錄$i',
-        images: [
-          CatalogueItemModel(
-              id: '1',
-              name: 'name1',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '2',
-              name: 'name2',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '3',
-              name: 'name3',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '4',
-              name: 'name4',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '5',
-              name: 'name5',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '6',
-              name: 'name6',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '7',
-              name: 'name7',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '8',
-              name: 'name8',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '9',
-              name: 'name9',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        ],
-      ));
-    }
+    getApi();
+  }
+
+  void getApi() {
+    CataloguePageApi().postApi(CatalogueRequestModel(action: '0'), (model) {
+      catalogueResponseModel.value = model;
+    });
   }
 
   void addData() {
-    catalogueModel.add(CatalogueModel(
-        id: '${catalogueModel.length}',
-        name: '產品${catalogueModel.length}',
-        images: [
-          CatalogueItemModel(
-              id: '1',
-              name: 'name1',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '2',
-              name: 'name2',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '3',
-              name: 'name3',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '4',
-              name: 'name4',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '5',
-              name: 'name5',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '6',
-              name: 'name6',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '7',
-              name: 'name7',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '8',
-              name: 'name8',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-          CatalogueItemModel(
-              id: '9',
-              name: 'name9',
-              images:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        ]));
+    CataloguePageApi().postApi(
+        CatalogueRequestModel(
+          action: '1',
+          name: '型錄${catalogueResponseModel.value.data.length}',
+          imageUrl:
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
+        ), (model) {
+      getApi();
+    });
+
     scrollToEnd();
   }
 
   void deleteData(int index) {
-    catalogueModel.removeAt(index);
+    CataloguePageApi().postApi(
+        CatalogueRequestModel(
+            action: '3',
+            id: catalogueResponseModel.value.data[index].id), (model) {
+      getApi();
+    });
+  }
+
+  void dataUp(int index) {
+    if (index > 0) {
+      CataloguePageApi().postApi(
+          CatalogueRequestModel(
+            action: '7',
+            id1: catalogueResponseModel.value.data[index].id,
+            id2: catalogueResponseModel.value.data[index - 1].id,
+          ), (model) {
+        getApi();
+      });
+    }
+  }
+
+  void dataDown(int index) {
+    if (index < catalogueResponseModel.value.data.length - 1) {
+      CataloguePageApi().postApi(
+          CatalogueRequestModel(
+            action: '7',
+            id1: catalogueResponseModel.value.data[index].id,
+            id2: catalogueResponseModel.value.data[index + 1].id,
+          ), (model) {
+        getApi();
+      });
+    }
+  }
+
+  void replaceName(int index) {
+    Get.dialog(
+      EditTextDialog(text: catalogueResponseModel.value.data[index].name),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        CataloguePageApi().postApi(
+            CatalogueRequestModel(
+              action: '5',
+              id: catalogueResponseModel.value.data[index].id,
+              name: catalogueResponseModel.value.data[index].name,
+            ), (model) {
+          getApi();
+        });
+      }
+    });
   }
 
   void scrollToEnd() {
@@ -214,37 +178,50 @@ class CatalogueBackendPage extends StatelessWidget {
                       alignment: Alignment.center, child: Text('功能')))),
         ],
         rows: List<DataRow>.generate(
-          controller.catalogueModel.length,
+          controller.catalogueResponseModel.value.data.length,
           (index) => DataRow(
             cells: [
               DataCell(Text('第$index個')),
-              DataCell(Text('ID: ${controller.catalogueModel[index].id}')),
+              DataCell(Text(
+                  'ID: ${controller.catalogueResponseModel.value.data[index].id}')),
               DataCell(
                 GestureDetector(
                   onTap: () {
                     Get.delete<CatalogueImageBackendController>();
-                    Get.to(CatalogueImageBackendPage(), arguments: {
-                      'catalogueModel': controller.catalogueModel[index]
-                    });
+
+                    final CatalogueImageBackendController
+                        catalogueImageBackendController =
+                        Get.put(CatalogueImageBackendController());
+
+                    catalogueImageBackendController.cataloguePageResponseModel
+                        .value = controller.catalogueResponseModel.value;
+
+                    catalogueImageBackendController.catalogueIndex.value =
+                        index;
+                    Get.to(CatalogueImageBackendPage());
                   },
                   child: Image.network(
-                    controller.catalogueModel[index].images[0].images,
+                    controller.catalogueResponseModel.value.data[index]
+                        .imageData[0].imageUrl!,
                     width: 120,
                     height: 120,
                   ),
                 ),
               ),
-              DataCell(Text('text: ${controller.catalogueModel[index].name}')),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.replaceName(index);
+                },
+                child: Text(
+                    'text: ${controller.catalogueResponseModel.value.data[index].name}'),
+              )),
               DataCell(Row(
                 children: [
                   Container(
                     margin: EdgeInsets.only(left: 20),
                     child: GestureDetector(
                         onTap: () {
-                          if (index > 0) {
-                            controller.catalogueModel.insert(index - 1,
-                                controller.catalogueModel.removeAt(index));
-                          }
+                          controller.dataUp(index);
                         },
                         child: Text('上升')),
                   ),
@@ -252,10 +229,7 @@ class CatalogueBackendPage extends StatelessWidget {
                     margin: EdgeInsets.only(left: 20),
                     child: GestureDetector(
                         onTap: () {
-                          if (index < controller.catalogueModel.length - 1) {
-                            controller.catalogueModel.insert(index + 1,
-                                controller.catalogueModel.removeAt(index));
-                          }
+                          controller.dataDown(index);
                         },
                         child: Text('下降')),
                   ),

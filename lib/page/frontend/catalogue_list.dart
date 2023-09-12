@@ -7,83 +7,30 @@ import 'package:web_auto/model/product_model.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../api/catalogue_page_api.dart';
 import '../../widget/bottom_bar_widget.dart';
 import '../../widget/change_page_widget.dart';
 import 'catalogue_item_list.dart';
 
 class CatalogueController extends GetxController {
-  RxList<CatalogueModel> catalogueModel = <CatalogueModel>[].obs;
-  RxList<CatalogueModel> catalogueShowModel = <CatalogueModel>[].obs;
-  final nowPageIndex = 1.obs;
+  final catalogueResponseModel = CatalogueResponseModel(code: 0, data: []).obs;
+  RxList<CataloguePageData> catalogueShowModel = <CataloguePageData>[].obs;
 
-  final pageViewImage = <String>[
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
-  ];
+  final nowPageIndex = 1.obs;
+  RxInt currentIndex = RxInt(-1);
 
   @override
   void onInit() {
     super.onInit();
-    for (var i = 0; i < 14; i++) {
-      catalogueModel
-          .add(CatalogueModel(id: i.toString(), name: "型錄$i", images: [
-        CatalogueItemModel(
-            id: '1',
-            name: 'name1',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '2',
-            name: 'name2',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '3',
-            name: 'name3',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '4',
-            name: 'name4',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '5',
-            name: 'name5',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '6',
-            name: 'name6',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '7',
-            name: 'name7',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '8',
-            name: 'name8',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-        CatalogueItemModel(
-            id: '9',
-            name: 'name9',
-            images:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU'),
-      ]));
-    }
-    setCatalogueValue(1);
+    getApi();
   }
 
-  RxInt currentIndex = RxInt(-1);
+  void getApi() {
+    CataloguePageApi().postApi(CatalogueRequestModel(action: '0'), (model) {
+      catalogueResponseModel.value = model;
+      setCatalogueValue(1);
+    });
+  }
 
   void setCurrentIndex(int index) {
     currentIndex.value = index;
@@ -93,10 +40,11 @@ class CatalogueController extends GetxController {
     nowPageIndex.value = index - 1;
     int startIndex = (index - 1) * 9;
     int endIndex = startIndex + 8;
-    if (endIndex + 1 > catalogueModel.length) {
-      endIndex = catalogueModel.length - 1;
+    if (endIndex + 1 > catalogueResponseModel.value.data.length) {
+      endIndex = catalogueResponseModel.value.data.length - 1;
     }
-    catalogueShowModel.value = catalogueModel.sublist(startIndex, endIndex + 1);
+    catalogueShowModel.value =
+        catalogueResponseModel.value.data.sublist(startIndex, endIndex + 1);
   }
 }
 
@@ -145,7 +93,8 @@ class CatalogueListPage extends ParentPage {
             },
           ),
           heightBox(),
-          changePageWidget(controller.catalogueModel.length, (pageIndex) {
+          changePageWidget(controller.catalogueResponseModel.value.data.length,
+              (pageIndex) {
             scrollToTop();
             controller.setCatalogueValue(pageIndex + 1);
           }, controller.nowPageIndex.value),
@@ -165,10 +114,15 @@ class CatalogueListPage extends ParentPage {
         },
         child: GestureDetector(
           onTap: () {
-            print("aaaaaaa ${controller.catalogueShowModel[index]}");
-            Get.to(CatalogueItemListPage(), arguments: {
-              'catalogueModel': controller.catalogueShowModel[index]
-            });
+            Get.delete<CatalogueItemController>();
+
+            final CatalogueItemController catalogueItemController =
+                Get.put(CatalogueItemController());
+
+            catalogueItemController.catalogueModel.value =
+                controller.catalogueShowModel[index];
+
+            Get.to(CatalogueItemListPage());
           },
           child: Container(
             margin: EdgeInsets.all(40),
@@ -186,7 +140,7 @@ class CatalogueListPage extends ParentPage {
                 children: [
                   Expanded(
                       child: Image.network(controller
-                          .catalogueShowModel[index].images[0].images)),
+                          .catalogueShowModel[index].imageData[0].imageUrl!)),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),

@@ -246,39 +246,44 @@ class ProductDetailPage extends ParentPage {
   }
 
   Widget buildProductList() {
-    return Column(
-      children: [
-        Container(
-          child: Padding(
-            padding: EdgeInsets.all(15),
-            child: Text(
-              '相關產品:',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+    return Visibility(
+      visible: controller.productPageResponseModel.value.data.isNotEmpty
+          ? true
+          : false,
+      child: Column(
+        children: [
+          Container(
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Text(
+                '相關產品:',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
+          Container(
+            margin: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(5), // 添加圆角
             ),
-            borderRadius: BorderRadius.circular(5), // 添加圆角
+            height: 210,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.productPageResponseModel.value.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return listViewItem(index);
+              },
+            ),
           ),
-          height: 210,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.productPageResponseModel.value.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return listViewItem(index);
-            },
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

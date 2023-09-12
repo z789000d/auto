@@ -165,10 +165,27 @@ class MyHomePage extends ParentPage {
         },
         child: GestureDetector(
           onTap: () {
-            Get.to(ProductDetailPage(), arguments: {
-              'productModel':
-                  controller.homePageResponseProductImages[index].images
-            });
+            Get.delete<ProductDetailController>();
+
+            final ProductDetailController productDetailController =
+                Get.put(ProductDetailController());
+
+            productDetailController.productModel.value = ProductPageData(
+                category:
+                    controller.homePageResponseProductImages[index].category,
+                name: controller.homePageResponseProductImages[index].name,
+                imageData: [
+                  ProductImageData(
+                      imageUrl: controller
+                          .homePageResponseProductImages[index].images)
+                ],
+                description:
+                    controller.homePageResponseProductImages[index].description,
+                videoLink:
+                    controller.homePageResponseProductImages[index].videoLink,
+                id: controller.homePageResponseProductImages[index].id);
+
+            Get.to(ProductDetailPage());
           },
           child: Container(
             margin: EdgeInsets.all(40),
