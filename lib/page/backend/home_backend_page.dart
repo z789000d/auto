@@ -68,7 +68,7 @@ class HomePageBackedController extends GetxController {
     HomePageApi().postApi(
         HomePageRequestModel(
           action: '1',
-          category: '類別',
+          category: '全部',
           name: '測試',
           images: 'https://pic.616pic.com/ys_bnew_img/00/16/95/OjCm8gnt48.jpg',
           description: '測試',

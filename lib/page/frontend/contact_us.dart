@@ -67,7 +67,7 @@ class ContactUsController extends GetxController {
     super.onClose();
   }
 
-  void sendEmail() {
+  Future<void> sendEmail() async {
     if (companyNameController.value.text == "") {
       showDialog('請輸入公司名稱');
       return;
@@ -84,9 +84,19 @@ class ContactUsController extends GetxController {
       showDialog('請輸入內容');
       return;
     }
+    sendMessage();
 
-    showDialog('送出成功');
+    showDialog('送出成功 ');
+
     clearEdit();
+  }
+
+  Future<void> sendMessage() async {
+    final Uri _url = Uri.parse('mailto:z7890009@gmail.com?subject=News&body=New%20plugin');
+
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 
   void clearEdit() {

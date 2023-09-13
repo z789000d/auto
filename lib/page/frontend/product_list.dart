@@ -34,10 +34,32 @@ class ProductListController extends GetxController {
     });
   }
 
+  void getApiFromType(String category) {
+    ProductPageApi().postApi(ProductRequestModel(action: '0'), (model) {
+      productPageResponseModel.value = model;
+      productPageResponseModel.value.data = model.data
+          .where((element) => element.category.contains(category))
+          .toList();
+      setGridValue(1);
+    });
+  }
+
   RxInt currentIndex = RxInt(-1);
+
+  RxInt categoryIndex = RxInt(-1);
+
+  RxInt nowCategoryIndex = RxInt(0);
 
   void setCurrentIndex(int index) {
     currentIndex.value = index;
+  }
+
+  void setCategoryIndex(int index) {
+    categoryIndex.value = index;
+  }
+
+  void setNowCategoryIndex(int index) {
+    nowCategoryIndex.value = index;
   }
 
   void setGridValue(int index) {
@@ -72,8 +94,93 @@ class ProductListPage extends ParentPage {
           ),
         ),
         SizedBox(height: 20),
+        categoryWidget(),
         productListImageWidget(),
       ],
+    );
+  }
+
+  Widget categoryWidget() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 40, top: 10, bottom: 10, right: 40),
+          child: Row(
+            children: [
+              Container(
+                height: 30,
+                alignment: Alignment.center,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: Utils.category.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return categoryItemWidget(index);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget categoryItemWidget(index) {
+    return Obx(
+      () => MouseRegion(
+        onEnter: (event) {
+          controller.setCategoryIndex(index);
+          print('aaaaa ${controller.categoryIndex.value} ${index}');
+        },
+        onExit: (event) {
+          controller.setCategoryIndex(-1);
+          print('aaaaa ${index}');
+        },
+        child: GestureDetector(
+          onTap: () {
+            if (index == 0) {
+              controller.getApi();
+            } else {
+              controller.getApiFromType(Utils.category[index]);
+            }
+            controller.setNowCategoryIndex(index);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              // 设置圆角半径
+              color: controller.nowCategoryIndex == index
+                  ? Colors.red
+                  : ((controller.categoryIndex.value == index)
+                      ? Colors.blue
+                      : Colors.white),
+              border: Border.all(
+                color: Colors.black, // 边框颜色
+                width: 1, // 边框宽度
+              ),
+            ),
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: Text(
+              Utils.category[index],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: controller.nowCategoryIndex == index
+                    ? Colors.white
+                    : ((controller.categoryIndex.value == index)
+                        ? Colors.white
+                        : Colors.black),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

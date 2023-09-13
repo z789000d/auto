@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/page/backend/product_image_backend_page.dart';
 import 'package:web_auto/widget/bottom_bar_widget.dart';
+import 'package:web_auto/widget/edit_category_dialog.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
 import '../../api/product_page_api.dart';
@@ -29,8 +30,12 @@ class ProductListBackendController extends GetxController {
   }
 
   void replaceCategory(int index) {
+    final EditCategoryDialogController controller =
+        Get.put(EditCategoryDialogController());
+    controller.categoryList.value =
+        productPageResponseModel.value.data[index].category;
     Get.dialog(
-      EditTextDialog(text: productPageResponseModel.value.data[index].category),
+      EditCategoryDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -129,7 +134,7 @@ class ProductListBackendController extends GetxController {
     ProductPageApi().postApi(
         ProductRequestModel(
             action: '1',
-            category: '類別${productPageResponseModel.value.data.length}',
+            category: '全部',
             name: '產品${productPageResponseModel.value.data.length}',
             imageUrl:
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',

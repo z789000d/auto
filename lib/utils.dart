@@ -16,6 +16,16 @@ import 'package:web_auto/page/frontend/product_list.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
 class Utils {
+  static final category = <String>[
+    '全部',
+    '自動化機械',
+    '端子專用機',
+    '自動化配件',
+    '零件加工',
+    '模具製作',
+    '銅管製品',
+    '代工製品',
+  ];
   static final testImage = <String>[
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
