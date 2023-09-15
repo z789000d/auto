@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/page/frontend/product_list.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
+import '../../api/product_page_api.dart';
 import '../../main.dart';
 import '../../model/product_model.dart';
 import '../../utils.dart';
@@ -41,11 +43,31 @@ class ProductDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    EasyLoading.show();
     ytController.value = YoutubePlayerController.fromVideoId(
       videoId: '${Utils.getYouTubeVideoId(productModel.value.videoLink)}',
       autoPlay: false,
       params: const YoutubePlayerParams(showFullscreenButton: true),
     );
+    getApiFromType(productModel.value.category);
+    EasyLoading.dismiss();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (productModel.value.category == '') {
+        Utils.clickButton(2);
+      }
+    });
+  }
+
+  void getApiFromType(String category) {
+    EasyLoading.show();
+    ProductPageApi().postApi(ProductRequestModel(action: '0'), (model) {
+      productPageResponseModel.value = model;
+      productPageResponseModel.value.data = model.data
+          .where((element) => element.category.contains(category))
+          .toList();
+      EasyLoading.dismiss();
+    });
   }
 
   @override
@@ -116,6 +138,18 @@ class ProductDetailPage extends ParentPage {
             ),
           ),
           tableText(Get.context!),
+          Container(
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Text(
+                '相關產品:',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           buildProductList(),
         ],
       ),
@@ -150,6 +184,7 @@ class ProductDetailPage extends ParentPage {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   child: Text(
+                    softWrap: false,
                     controller.productModel.value.name,
                     style: TextStyle(
                       fontSize: 14,
@@ -178,6 +213,8 @@ class ProductDetailPage extends ParentPage {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   child: Text(
+                    textAlign: TextAlign.start,
+                    softWrap: false,
                     controller.productModel.value.category,
                     style: TextStyle(
                       fontSize: 14,
@@ -206,6 +243,7 @@ class ProductDetailPage extends ParentPage {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   child: Text(
+                    softWrap: false,
                     controller.productModel.value.description,
                     style: TextStyle(
                       fontSize: 14,
@@ -231,8 +269,8 @@ class ProductDetailPage extends ParentPage {
                 ),
               ),
               Container(
-                width: 400,
-                height: 225,
+                width: Get.width / 3,
+                height: ((Get.width / 3) * 9) / 16,
                 child: YoutubePlayer(
                   controller: controller.ytController.value,
                   aspectRatio: 16 / 9,
@@ -253,18 +291,7 @@ class ProductDetailPage extends ParentPage {
       child: Column(
         children: [
           Container(
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: Text(
-                '相關產品:',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          Container(
+            width: Get.width,
             margin: EdgeInsets.all(20),
             decoration: BoxDecoration(
               border: Border.all(
@@ -288,21 +315,21 @@ class ProductDetailPage extends ParentPage {
   }
 
   Widget listViewItem(index) {
-    return Container(
-      width: 200,
-      height: 200,
-      margin: EdgeInsets.all(40),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: controller.currentIndex.value == index
-              ? Colors.blue
-              : Colors.transparent,
-          width: 2,
+    return Obx(
+      () => Container(
+        width: 200,
+        height: 200,
+        margin: EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: controller.currentIndex.value == index
+                ? Colors.blue
+                : Colors.transparent,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(5), // 添加圆角
         ),
-        borderRadius: BorderRadius.circular(5), // 添加圆角
-      ),
-      child: Obx(
-        () => MouseRegion(
+        child: MouseRegion(
           onEnter: (event) {
             controller.setCurrentIndex(index);
           },

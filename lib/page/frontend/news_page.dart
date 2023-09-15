@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/api/news_page_api.dart';
 import 'package:web_auto/model/news_page_model.dart';
@@ -18,10 +19,11 @@ class NewsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    EasyLoading.show();
     NewsPageApi().postApi(NewsPageRequestModel(action: '0'), (model) {
       newsPageResponseModel.value = model;
       setNewsValue(1);
+      EasyLoading.dismiss();
     });
   }
 

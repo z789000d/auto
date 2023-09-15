@@ -7,6 +7,7 @@ import 'package:web_auto/model/product_model.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
 import 'package:web_auto/widget/top_bar_widget.dart';
 
+import '../../utils.dart';
 import '../../widget/bottom_bar_widget.dart';
 
 class CatalogueItemController extends GetxController {
@@ -24,6 +25,11 @@ class CatalogueItemController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (catalogueModel.value.name == '') {
+        Utils.clickButton(4);
+      }
+    });
   }
 }
 

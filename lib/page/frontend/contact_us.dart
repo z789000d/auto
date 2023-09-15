@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,9 +44,10 @@ class ContactUsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    EasyLoading.show();
     ContactUsPageApi().postApi(ContactUsRequestModel(action: 0), (model) {
       contactUsModel.value = model;
+      EasyLoading.dismiss();
     });
 
     markers.add(Marker(
@@ -86,13 +88,12 @@ class ContactUsController extends GetxController {
     }
     sendMessage();
 
-    showDialog('送出成功 ');
-
     clearEdit();
   }
 
   Future<void> sendMessage() async {
-    final Uri _url = Uri.parse('mailto:z7890009@gmail.com?subject=News&body=New%20plugin');
+    final Uri _url = Uri.parse(
+        'mailto:z7890009@gmail.com?subject=News&body=公司名稱:${companyNameController.value.text}\n國家:${companyCountryController.value.text}\nemail:${companyEmailController.value.text}\n內容:${companyContentController.value.text}%20plugin');
 
     if (!await launchUrl(_url)) {
       throw Exception('Could not launch $_url');

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/api/product_page_api.dart';
 import 'package:web_auto/model/product_model.dart';
@@ -28,19 +29,23 @@ class ProductListController extends GetxController {
   }
 
   void getApi() {
+    EasyLoading.show();
     ProductPageApi().postApi(ProductRequestModel(action: '0'), (model) {
       productPageResponseModel.value = model;
       setGridValue(1);
+      EasyLoading.dismiss();
     });
   }
 
   void getApiFromType(String category) {
+    EasyLoading.show();
     ProductPageApi().postApi(ProductRequestModel(action: '0'), (model) {
       productPageResponseModel.value = model;
       productPageResponseModel.value.data = model.data
           .where((element) => element.category.contains(category))
           .toList();
       setGridValue(1);
+      EasyLoading.dismiss();
     });
   }
 
@@ -86,7 +91,7 @@ class ProductListPage extends ParentPage {
       children: [
         SizedBox(height: 20),
         Text(
-          '產品介紹',
+          '產品列表',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.normal,
@@ -110,8 +115,9 @@ class ProductListPage extends ParentPage {
           child: Row(
             children: [
               Container(
+                width: Get.width / 1.2,
                 height: 30,
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,

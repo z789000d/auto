@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/api/about_us_page_api.dart';
 import 'package:web_auto/page/frontend/parent_page.dart';
@@ -17,9 +18,10 @@ class AboutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    EasyLoading.show();
     AboutUsPageApi().postApi(AboutUsRequestModel(action: 0), (model) {
       aboutUsModel.value = model;
+      EasyLoading.dismiss();
     });
   }
 }

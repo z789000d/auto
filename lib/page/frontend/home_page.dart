@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/api/home_page_api.dart';
 import 'package:web_auto/model/bus_model.dart';
@@ -50,6 +51,7 @@ class PageControllerMixin extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    EasyLoading.show();
     HomePageApi().postApi(HomePageRequestModel(action: '0'), (model) {
       homePageResponseModel.value = model;
 
@@ -65,6 +67,7 @@ class PageControllerMixin extends GetxController {
 
       print('aaaa ${homePageResponsePageViewImages}');
       print('bbb ${homePageResponseProductImages}');
+      EasyLoading.dismiss();
     });
   }
 

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/model/catalogue_model.dart';
 import 'package:web_auto/model/product_model.dart';
@@ -26,9 +27,11 @@ class CatalogueController extends GetxController {
   }
 
   void getApi() {
+    EasyLoading.show();
     CataloguePageApi().postApi(CatalogueRequestModel(action: '0'), (model) {
       catalogueResponseModel.value = model;
       setCatalogueValue(1);
+      EasyLoading.dismiss();
     });
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:web_auto/page/backend/about_us_backend_page.dart';
 import 'package:web_auto/page/backend/catalogue_backend_page.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         scrollBehavior: MyCustomScrollBehavior(),
-        initialRoute: '/MyHomePage',
+        initialRoute: '/FirstPage',
         defaultTransition: Transition.native,
         transitionDuration: Duration.zero,
         // Set transition duration to zero
@@ -50,19 +51,30 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/ContactUsPage', page: () => ContactUsPage()),
           GetPage(name: '/HomeBackendPage', page: () => HomeBackendPage()),
           GetPage(name: '/NewsBackendPage', page: () => NewsBackendPage()),
-          GetPage(name: '/ContactUsBackendPage', page: () => ContactUsBackendPage()),
-          GetPage(name: '/AboutUsBackendPage', page: () => AboutUsBackendPage()),
-          GetPage(name: '/CatalogueBackendPage', page: () => CatalogueBackendPage()),
-          GetPage(name: '/CatalogueImageBackendPage', page: () => CatalogueImageBackendPage()),
-          GetPage(name: '/ProductListBackendPage', page: () => ProductListBackendPage()),
-          GetPage(name: '/ProductImageBackendPage', page: () => ProductImageBackendPage()),
+          GetPage(
+              name: '/ContactUsBackendPage',
+              page: () => ContactUsBackendPage()),
+          GetPage(
+              name: '/AboutUsBackendPage', page: () => AboutUsBackendPage()),
+          GetPage(
+              name: '/CatalogueBackendPage',
+              page: () => CatalogueBackendPage()),
+          GetPage(
+              name: '/CatalogueImageBackendPage',
+              page: () => CatalogueImageBackendPage()),
+          GetPage(
+              name: '/ProductListBackendPage',
+              page: () => ProductListBackendPage()),
+          GetPage(
+              name: '/ProductImageBackendPage',
+              page: () => ProductImageBackendPage()),
           GetPage(name: '/LoginPage', page: () => LoginPage()),
         ],
+        builder: EasyLoading.init(),
         title: '鋸開自動化機械有限公司',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
-        ),
-        home: MyHomePage());
+        ));
   }
 }

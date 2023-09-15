@@ -25,10 +25,19 @@ class ParentPage extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
                 controller: scrollController,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  children: [TopBar(), childWidget(), BottomWidget()],
+                  children: [
+                    TopBar(),
+                    Container(
+                        constraints: BoxConstraints(
+                          minHeight: Get.height / 1.3,
+                        ),
+                        child: childWidget()),
+                    BottomWidget()
+                  ],
                 ),
               ),
             ),
