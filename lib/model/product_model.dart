@@ -12,6 +12,7 @@ class ProductRequestModel {
   String? images;
   String? description;
   String? videoLink;
+  String? spec;
   String? type;
 
   ProductRequestModel({
@@ -26,6 +27,7 @@ class ProductRequestModel {
     this.images,
     this.description,
     this.videoLink,
+    this.spec,
     this.type,
   });
 
@@ -42,6 +44,7 @@ class ProductRequestModel {
       'images': images,
       'description': description,
       'videoLink': videoLink,
+      'spec': spec,
       'type': type,
     };
   }
@@ -77,6 +80,7 @@ class ProductPageData {
   String name;
   String description;
   String videoLink;
+  String spec;
   List<ProductImageData> imageData;
 
   ProductPageData({
@@ -85,6 +89,7 @@ class ProductPageData {
     required this.imageData,
     required this.description,
     required this.videoLink,
+    required this.spec,
     required this.id,
   });
 
@@ -97,6 +102,7 @@ class ProductPageData {
           .toList(),
       description: json['description'],
       videoLink: json['videoLink'],
+      spec: json['spec'],
       id: json['id'],
     );
   }

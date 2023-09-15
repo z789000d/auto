@@ -49,6 +49,7 @@ class ProductListBackendController extends GetxController {
                 name: productPageResponseModel.value.data[index].name,
                 description:
                     productPageResponseModel.value.data[index].description,
+                spec: productPageResponseModel.value.data[index].spec,
                 videoLink: productPageResponseModel
                     .value.data[index].videoLink), (model) {
           getApi();
@@ -58,8 +59,12 @@ class ProductListBackendController extends GetxController {
   }
 
   void replaceName(int index) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        productPageResponseModel.value.data[index].name;
     Get.dialog(
-      EditTextDialog(text: productPageResponseModel.value.data[index].name),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -74,6 +79,7 @@ class ProductListBackendController extends GetxController {
                 name: value,
                 description:
                     productPageResponseModel.value.data[index].description,
+                spec: productPageResponseModel.value.data[index].spec,
                 videoLink: productPageResponseModel
                     .value.data[index].videoLink), (model) {
           getApi();
@@ -83,9 +89,12 @@ class ProductListBackendController extends GetxController {
   }
 
   void replaceDescription(int index) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        productPageResponseModel.value.data[index].description;
     Get.dialog(
-      EditTextDialog(
-          text: productPageResponseModel.value.data[index].description),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -98,6 +107,7 @@ class ProductListBackendController extends GetxController {
                 category: productPageResponseModel.value.data[index].category,
                 name: productPageResponseModel.value.data[index].name,
                 description: value,
+                spec: productPageResponseModel.value.data[index].spec,
                 videoLink: productPageResponseModel
                     .value.data[index].videoLink), (model) {
           getApi();
@@ -106,10 +116,13 @@ class ProductListBackendController extends GetxController {
     });
   }
 
-  void replaceVideoLink(int index) {
+  void replaceSpec(int index) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        productPageResponseModel.value.data[index].spec;
     Get.dialog(
-      EditTextDialog(
-          text: productPageResponseModel.value.data[index].videoLink),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -123,6 +136,36 @@ class ProductListBackendController extends GetxController {
                 name: productPageResponseModel.value.data[index].name,
                 description:
                     productPageResponseModel.value.data[index].description,
+                spec: value,
+                videoLink: productPageResponseModel
+                    .value.data[index].videoLink), (model) {
+          getApi();
+        });
+      }
+    });
+  }
+
+  void replaceVideoLink(int index) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        productPageResponseModel.value.data[index].videoLink;
+    Get.dialog(
+      EditTextDialog(),
+      barrierDismissible: false,
+    ).then((value) {
+      if (value == 'Cancel') {
+        print('User canceled.');
+      } else {
+        ProductPageApi().postApi(
+            ProductRequestModel(
+                action: '5',
+                id: productPageResponseModel.value.data[index].id,
+                category: productPageResponseModel.value.data[index].category,
+                name: productPageResponseModel.value.data[index].name,
+                description:
+                    productPageResponseModel.value.data[index].description,
+                spec: productPageResponseModel.value.data[index].spec,
                 videoLink: value), (model) {
           getApi();
         });
@@ -139,6 +182,7 @@ class ProductListBackendController extends GetxController {
             imageUrl:
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3s80ly3CKpK3MJGixmucGYCLfU0am5SteQ&usqp=CAU',
             description: '描述${productPageResponseModel.value.data.length}',
+            spec: '規格${productPageResponseModel.value.data.length}',
             videoLink: '連結${productPageResponseModel.value.data.length}'),
         (model) {
       getApi();
@@ -269,6 +313,10 @@ class ProductListBackendPage extends StatelessWidget {
           DataColumn(
               label: Expanded(
                   child: Container(
+                      alignment: Alignment.center, child: Text('規格')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
                       alignment: Alignment.center, child: Text('影片連結')))),
           DataColumn(
               label: Expanded(
@@ -325,6 +373,13 @@ class ProductListBackendPage extends StatelessWidget {
                 },
                 child: Text(
                     '${controller.productPageResponseModel.value.data[index].description}'),
+              )),
+              DataCell(GestureDetector(
+                onTap: () {
+                  controller.replaceSpec(index);
+                },
+                child: Text(
+                    '${controller.productPageResponseModel.value.data[index].spec}'),
               )),
               DataCell(GestureDetector(
                 onTap: () {

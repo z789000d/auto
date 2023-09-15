@@ -81,8 +81,12 @@ class HomePageBackedController extends GetxController {
   }
 
   void dataPageNameReplace(int index, int id) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        homePageResponsePageViewImages[index].name;
     Get.dialog(
-      EditTextDialog(text: homePageResponsePageViewImages[index].name),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -105,8 +109,12 @@ class HomePageBackedController extends GetxController {
   }
 
   void dataPageDescriptionReplace(int index, int id) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        homePageResponsePageViewImages[index].description;
     Get.dialog(
-      EditTextDialog(text: homePageResponsePageViewImages[index].description),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -129,8 +137,12 @@ class HomePageBackedController extends GetxController {
   }
 
   void dataPageVideoLinkReplace(int index, int id) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        homePageResponsePageViewImages[index].videoLink;
     Get.dialog(
-      EditTextDialog(text: homePageResponsePageViewImages[index].videoLink),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -221,8 +233,11 @@ class HomePageBackedController extends GetxController {
   }
 
   void dataProductNameReplace(int index, int id) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text = homePageResponseProductImages[index].name;
     Get.dialog(
-      EditTextDialog(text: homePageResponseProductImages[index].name),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -261,8 +276,12 @@ class HomePageBackedController extends GetxController {
   }
 
   void dataProductDescriptionReplace(int index, int id) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        homePageResponseProductImages[index].description;
     Get.dialog(
-      EditTextDialog(text: homePageResponseProductImages[index].description),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -285,8 +304,12 @@ class HomePageBackedController extends GetxController {
   }
 
   void dataProductVideoLinkReplace(int index, int id) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        homePageResponseProductImages[index].videoLink;
     Get.dialog(
-      EditTextDialog(text: homePageResponseProductImages[index].videoLink),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {

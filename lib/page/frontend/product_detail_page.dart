@@ -23,7 +23,8 @@ class ProductDetailController extends GetxController {
           name: '',
           imageData: [],
           description: '',
-          videoLink: '')
+          videoLink: '',
+          spec: '')
       .obs;
 
   final currentPageIndex = 0.obs;
@@ -169,6 +170,7 @@ class ProductDetailPage extends ParentPage {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
+                width: 120,
                 child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
@@ -198,6 +200,7 @@ class ProductDetailPage extends ParentPage {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
+                width: 120,
                 child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
@@ -228,6 +231,7 @@ class ProductDetailPage extends ParentPage {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
+                width: 120,
                 child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
@@ -257,6 +261,37 @@ class ProductDetailPage extends ParentPage {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
+                width: 120,
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Text(
+                    '規格:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    softWrap: false,
+                    controller.productModel.value.spec,
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                width: 120,
                 child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(

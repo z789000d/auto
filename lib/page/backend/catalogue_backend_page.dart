@@ -77,8 +77,12 @@ class CatalogueBackendController extends GetxController {
   }
 
   void replaceName(int index) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text =
+        catalogueResponseModel.value.data[index].name;
     Get.dialog(
-      EditTextDialog(text: catalogueResponseModel.value.data[index].name),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {

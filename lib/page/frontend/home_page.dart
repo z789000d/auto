@@ -186,6 +186,7 @@ class MyHomePage extends ParentPage {
                     controller.homePageResponseProductImages[index].description,
                 videoLink:
                     controller.homePageResponseProductImages[index].videoLink,
+                spec: '',
                 id: controller.homePageResponseProductImages[index].id);
 
             Get.to(ProductDetailPage());

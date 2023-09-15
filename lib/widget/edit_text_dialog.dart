@@ -20,16 +20,11 @@ class EditTextDialogController extends GetxController {
 }
 
 class EditTextDialog extends StatelessWidget {
-  final String? text;
-
-  EditTextDialog({this.text, super.key});
-
   final EditTextDialogController controller =
-  Get.put(EditTextDialogController());
+      Get.put(EditTextDialogController());
 
   @override
   Widget build(BuildContext context) {
-    controller.textEditingController.text = text!;
     return AlertDialog(
       title: Text('輸入內容'),
       content: GestureDetector(
@@ -39,13 +34,15 @@ class EditTextDialog extends StatelessWidget {
         child: Container(
           width: 300,
           child: EditableText(
+            // 使用GlobalKey
             controller: controller.textEditingController,
             backgroundCursorColor: Colors.blue,
             style: TextStyle(fontSize: 16),
             cursorColor: Colors.blue,
             autofocus: true,
-            maxLines: null,  // Allow unlimited lines for auto wrapping
-            keyboardType: TextInputType.text,
+            maxLines: null,
+            // Allow unlimited lines for auto wrapping
+            keyboardType: TextInputType.multiline,
             textAlign: TextAlign.left,
             focusNode: FocusNode(),
           ),

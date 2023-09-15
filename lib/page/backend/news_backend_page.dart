@@ -77,8 +77,11 @@ class NewsBackedController extends GetxController {
   }
 
   void replaceNews(int index, int id) {
+    final EditTextDialogController controller =
+        Get.put(EditTextDialogController());
+    controller.textEditingController.text = newsModel.value.data[index].news;
     Get.dialog(
-      EditTextDialog(text: newsModel.value.data[index].news),
+      EditTextDialog(),
       barrierDismissible: false,
     ).then((value) {
       if (value == 'Cancel') {
@@ -146,82 +149,77 @@ class NewsBackendPage extends StatelessWidget {
 
   Widget table() {
     return Obx(
-          () =>
-          DataTable(
-            dividerThickness: 1, // 设置分隔线的厚度
-            columns: [
-              DataColumn(
-                  label: Expanded(
-                      child: Container(
-                          alignment: Alignment.center, child: Text('排序')))),
-              DataColumn(
-                  label: Expanded(
-                      child: Container(
-                          alignment: Alignment.center, child: Text('id')))),
-              DataColumn(
-                  label: Expanded(
-                      child: Container(
-                          alignment: Alignment.center, child: Text('日期')))),
-              DataColumn(
-                  label: Expanded(
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: Text('最新消息文字')))),
-              DataColumn(
-                  label: Expanded(
-                      child: Container(
-                          alignment: Alignment.center, child: Text('功能')))),
-            ],
-            rows: List<DataRow>.generate(
-              controller.newsModel.value.data.length,
-                  (index) =>
-                  DataRow(
-                    cells: [
-                      DataCell(Text('第$index個')),
-                      DataCell(
-                          Text('${controller.newsModel.value.data[index].id}')),
-                      DataCell(Text(
-                          '${controller.newsModel.value.data[index].date}')),
-                      DataCell(GestureDetector(onTap: () {
-                        controller.replaceNews(
-                            index, controller.newsModel.value.data[index].id);
-                      },
-                          child: Text('${controller.newsModel.value.data[index]
-                              .news}'))),
-                      DataCell(Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(left: 20),
-                            child: GestureDetector(
-                                onTap: () {
-                                  controller.dataUp(index);
-                                },
-                                child: Text('上升')),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 20),
-                            child: GestureDetector(
-                                onTap: () {
-                                  controller.dataDown(index);
-                                },
-                                child: Text('下降')),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(left: 20),
-                              child: Text('修改')),
-                          Container(
-                              margin: EdgeInsets.only(left: 20),
-                              child: GestureDetector(
-                                  onTap: () {
-                                    controller.deleteData(index);
-                                  },
-                                  child: Text('刪除'))),
-                        ],
-                      )),
-                    ],
+      () => DataTable(
+        dividerThickness: 1, // 设置分隔线的厚度
+        columns: [
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('排序')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('id')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('日期')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('最新消息文字')))),
+          DataColumn(
+              label: Expanded(
+                  child: Container(
+                      alignment: Alignment.center, child: Text('功能')))),
+        ],
+        rows: List<DataRow>.generate(
+          controller.newsModel.value.data.length,
+          (index) => DataRow(
+            cells: [
+              DataCell(Text('第$index個')),
+              DataCell(Text('${controller.newsModel.value.data[index].id}')),
+              DataCell(Text('${controller.newsModel.value.data[index].date}')),
+              DataCell(GestureDetector(
+                  onTap: () {
+                    controller.replaceNews(
+                        index, controller.newsModel.value.data[index].id);
+                  },
+                  child:
+                      Text('${controller.newsModel.value.data[index].news}'))),
+              DataCell(Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          controller.dataUp(index);
+                        },
+                        child: Text('上升')),
                   ),
-            ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          controller.dataDown(index);
+                        },
+                        child: Text('下降')),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 20), child: Text('修改')),
+                  Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: GestureDetector(
+                          onTap: () {
+                            controller.deleteData(index);
+                          },
+                          child: Text('刪除'))),
+                ],
+              )),
+            ],
           ),
+        ),
+      ),
     );
   }
 }
