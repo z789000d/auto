@@ -36,28 +36,32 @@ class FirstPage extends StatelessWidget {
           Get.offAll(MyHomePage());
         });
       });
-      return Scaffold(
-          body: Center(
-        child: Container(
-          color: Colors.blue,
-          width: Get.width,
-          height: Get.height,
-          child: Obx(
-            () => AnimatedOpacity(
-              duration: Duration(milliseconds: 1000),
-              opacity: controller.isVisible.value ? 1 : 0,
-              child: ClipOval(
-                child: Image(
-                  image: AssetImage('assets/images/logo.png'),
-                  width: 300,
-                  height: 300,
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return Scaffold(
+              body: Center(
+            child: Container(
+              color: Colors.blue,
+              width: Get.width,
+              height: Get.height,
+              child: Obx(
+                () => AnimatedOpacity(
+                  duration: Duration(milliseconds: 1000),
+                  opacity: controller.isVisible.value ? 1 : 0,
+                  child: ClipOval(
+                    child: Image(
+                      image: AssetImage('assets/images/logo.png'),
+                      width: 300,
+                      height: 300,
+                    ),
+                  ),
+                  curve: Curves.ease,
                 ),
               ),
-              curve: Curves.ease,
             ),
-          ),
-        ),
-      ));
+          ));
+        },
+      );
     });
   }
 }
